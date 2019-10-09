@@ -1,4 +1,4 @@
-package com.jongber.projectp;
+package com.jongber.projectp.test;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -35,7 +35,7 @@ public class TestSpriteAnim extends ApplicationAdapter {
             }
         }
 
-        animation = new Animation(1f/4f,animationFrames);
+        animation = new Animation(1f/4f, animationFrames);
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         camera.zoom = 0.3f;

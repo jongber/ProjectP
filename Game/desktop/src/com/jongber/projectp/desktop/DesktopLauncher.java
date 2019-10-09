@@ -2,8 +2,7 @@ package com.jongber.projectp.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.jongber.projectp.MyGdxGame;
-import com.jongber.projectp.TestSpriteAnim;
+import com.jongber.projectp.test.TestSpriteAnim;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

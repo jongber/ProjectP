@@ -56,7 +56,9 @@ project(":core") {
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        
+        compile 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+        compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.8'
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
     }
 }
 
