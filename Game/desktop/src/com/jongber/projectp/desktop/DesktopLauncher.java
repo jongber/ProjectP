@@ -2,6 +2,7 @@ package com.jongber.projectp.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.jongber.projectp.test.JsonLoad;
 import com.jongber.projectp.test.TestSpriteAnim;
 
 public class DesktopLauncher {
@@ -15,6 +16,7 @@ public class DesktopLauncher {
 
         config.height = 720;
 		//new LwjglApplication(new MyGdxGame(), config);
-		new LwjglApplication(new TestSpriteAnim(), config);
+		new LwjglApplication(new JsonLoad(), config);
+
 	}
 }

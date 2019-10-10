@@ -6,6 +6,7 @@ public class MainApp extends ApplicationAdapter {
 
     @Override
     public void create () {
+        
     }
 
     @Override

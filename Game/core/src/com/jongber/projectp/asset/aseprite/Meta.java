@@ -8,9 +8,9 @@ public class Meta {
     public String version;
     public String image;
     public String format;
-    public xy size;
+    public wh size;
     public int scale;
     public List<Tag> frameTags;
     public List<Layer> layers;
-    public Map<String, String> slices;
+    public List<String> slices;
 }

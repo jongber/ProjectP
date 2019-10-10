@@ -7,6 +7,6 @@ public class Frame {
     public boolean rotated;
     public boolean trimmed;
     public xywh spriteSourceSize;
-    public xy sourceSize;
+    public wh sourceSize;
     public int duration;
 }
