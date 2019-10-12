@@ -51,6 +51,15 @@ project(":desktop") {
 project(":core") {
     apply plugin: "java"
 
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        jcenter()
+        google()
+    }
+    
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile 'com.fasterxml.jackson.core:jackson-core:2.9.8'
