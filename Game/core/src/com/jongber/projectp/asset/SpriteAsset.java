@@ -1,12 +1,38 @@
 package com.jongber.projectp.asset;
 
+
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.jongber.projectp.asset.aseprite.AsepriteJson;
-import com.jongber.projectp.asset.aseprite.Frame;
+
+import java.util.HashMap;
+import java.util.Set;
 
 public class SpriteAsset {
-    public String tag;
-    public Texture texture;
-    public TextureRegion[] regions;
+
+    private String name;
+    private Texture texture;
+    private HashMap<String, AnimationAsset> anims = new HashMap();
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
+
+    public void addAnimation(String tag, AnimationAsset anim) {
+        anims.put(tag, anim);
+    }
+
+    public AnimationAsset getAnimation(String name) {
+        return this.anims.get(name);
+    }
+
+    public Set<String> getFrameNames() {
+        return this.anims.keySet();
+    }
+
+    public void dispose() {
+        this.texture.dispose();
+    }
 }

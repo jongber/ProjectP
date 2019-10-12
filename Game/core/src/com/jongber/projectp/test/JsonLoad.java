@@ -1,35 +1,46 @@
 package com.jongber.projectp.test;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.jongber.projectp.asset.AssetLoader;
+import com.jongber.projectp.asset.SpriteAsset;
 import com.jongber.projectp.asset.aseprite.AsepriteJson;
-import com.jongber.projectp.asset.aseprite.Frame;
+import com.jongber.projectp.graphics.VFAnimation;
 
 public class JsonLoad extends ApplicationAdapter {
+    SpriteBatch batch;
+    SpriteAsset asset;
+    VFAnimation animation;
 
     @Override
     public void create () {
+        batch = new SpriteBatch();
+
         AsepriteJson json = AsepriteJson.load("object/hero.json");
-        createAsset(json);
+        asset = AssetLoader.loadSprite("hero", json);
+        this.animation = new VFAnimation(this.asset.getAnimation("Idle"), VFAnimation.PlayMode.LOOP);
     }
 
     @Override
     public void render() {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        batch.begin();
+
+        TextureRegion region = this.animation.getNext(Gdx.graphics.getDeltaTime());
+        batch.draw(region, 10, 10);
+
+        batch.end();
     }
 
     @Override
     public void dispose() {
+        this.batch.dispose();
+        this.asset.dispose();
     }
 
-    private void createAsset(AsepriteJson json) {
-
-        Texture texture = new Texture(json.getImgPath());
-        TextureRegion[] regions = new TextureRegion[json.frames.size()];
-
-        for (int i = 0; i < regions.length; ++i) {
-            Frame f = json.frames.get(i);
-            regions[i] = new TextureRegion(texture, f.frame.x, f.frame.y, f.frame.w, f.frame.h);
-        }
-    }
 }
