@@ -1,0 +1,28 @@
+{ "frames": [
+   {
+    "filename": "Stage1_sky.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 256, "h": 144 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 256, "h": 144 },
+    "sourceSize": { "w": 256, "h": 144 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.15-x64",
+  "image": "Stage1.png",
+  "format": "RGBA8888",
+  "size": { "w": 256, "h": 144 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "background", "opacity": 255, "blendMode": "normal" },
+   { "name": "P_pivot_128_72", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
