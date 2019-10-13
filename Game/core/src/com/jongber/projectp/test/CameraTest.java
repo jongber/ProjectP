@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jongber.projectp.asset.AssetLoader;
@@ -21,6 +22,9 @@ public class CameraTest extends ApplicationAdapter {
     private SpriteAsset asset;
     private VFAnimation animation;
 
+    private float ratio;
+    private Vector3 cameraPos = new Vector3();
+
     @Override
     public void create () {
         this.batch = new SpriteBatch();
@@ -33,16 +37,23 @@ public class CameraTest extends ApplicationAdapter {
         this.animation = new VFAnimation(this.asset.getAnimation("Attack1"), VFAnimation.PlayMode.LOOP);
 
         int height = Gdx.graphics.getHeight();
-        float ratio = height / (64 * 3);
+        this.cameraPos.z = this.ratio = height / (64 * 3);
 
-        this.camera.zoom = 1/ratio;
     }
 
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        Gdx.app.log("DEBUG", "camera[" + camera.position + "]");
+        Gdx.app.log("DEBUG", "camera[" + cameraPos + "]");
+        this.camera.position.x = cameraPos.x;
+        this.camera.position.y = cameraPos.y;
+        this.camera.zoom = 1/cameraPos.z;
+
+        if (this.cameraPos.z > 1.0f) {
+            this.cameraPos.z -= 0.01f;
+        }
+
         this.camera.update();
 
         this.batch.setProjectionMatrix(camera.combined);
