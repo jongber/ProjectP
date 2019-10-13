@@ -2,11 +2,14 @@ package com.jongber.projectp.asset;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.jongber.projectp.asset.aseprite.AsepriteJson;
 import com.jongber.projectp.asset.aseprite.Frame;
 import com.jongber.projectp.asset.aseprite.FrameTag;
+import com.jongber.projectp.asset.aseprite.Layer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AssetLoader {
@@ -16,11 +19,11 @@ public class AssetLoader {
         SpriteAsset asset = new SpriteAsset();
 
         Texture texture = new Texture(json.getImgPath());
-        List<TextureRegion> regions = new ArrayList<>();
+        TextureRegion[] regions = new TextureRegion[json.frames.size()];
 
         for (int i = 0; i < json.frames.size(); ++i) {
             Frame f = json.frames.get(i);
-            regions.add(new TextureRegion(texture, f.frame.x, f.frame.y, f.frame.w, f.frame.h));
+            regions[i] = new TextureRegion(texture, f.frame.x, f.frame.y, f.frame.w, f.frame.h);
         }
 
         asset.setName(name);
@@ -35,10 +38,20 @@ public class AssetLoader {
             int to = tag.to + 1;
 
             List<Frame> frameSlice = json.frames.subList(from, to);
-            TextureRegion[] regionSlice = regions.subList(from, to).toArray(new TextureRegion[to - from]);
+            TextureRegion[] regionSlice = Arrays.copyOfRange(regions, from, to);
 
             AnimationAsset anim = new AnimationAsset(tag.name, regionSlice, frameSlice);
             asset.addAnimation(tag.name, anim);
+        }
+
+        //// y좌표축 방향이 다름..
+        int height = regions[0].getRegionHeight();
+
+        for (Layer layer : json.meta.layers) {
+            if (layer.name.startsWith("P_pivot")) {
+                String[] split = layer.name.split("_");
+                asset.setPivot(new Vector2(Integer.parseInt(split[2]), height - Integer.parseInt(split[3])));
+            }
         }
 
         return asset;

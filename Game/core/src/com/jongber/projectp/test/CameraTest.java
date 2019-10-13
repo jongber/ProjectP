@@ -73,7 +73,7 @@ public class CameraTest extends ApplicationAdapter implements InputProcessor {
 
         TextureRegion region = this.animation.getNext(Gdx.graphics.getDeltaTime());
         batch.draw(region, 0, 0);
-
+        batch.draw(region, -asset.getPivotX(), -asset.getPivotY());
 
         this.font.draw(batch, "Hello world", 0,0);
         this.batch.end();
