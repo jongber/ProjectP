@@ -29,6 +29,7 @@ public class AssetLoader {
         asset.setName(name);
         asset.setTexture(texture);
 
+        //// *set animation sequence
         for (FrameTag tag : json.meta.frameTags) {
 
             if (tag.name.startsWith("E_"))
@@ -44,9 +45,9 @@ public class AssetLoader {
             asset.addAnimation(tag.name, anim);
         }
 
+        //// *set pivot point
         //// y좌표축 방향이 다름..
         int height = regions[0].getRegionHeight();
-
         for (Layer layer : json.meta.layers) {
             if (layer.name.startsWith("P_pivot")) {
                 String[] split = layer.name.split("_");

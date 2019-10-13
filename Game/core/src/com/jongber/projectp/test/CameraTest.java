@@ -1,5 +1,4 @@
 package com.jongber.projectp.test;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -9,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -30,13 +30,16 @@ public class CameraTest extends ApplicationAdapter implements InputProcessor {
 
     private float ratio;
     private Vector3 cameraPos = new Vector3();
+    private Stage stage;
 
+    private SpriteBatch hudBatch;
     BitmapFont font;
 
     @Override
     public void create () {
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
+        this.hudBatch = new SpriteBatch();
         //viewport = new FillViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(), camera);
         viewport = new FillViewport(160, 90, camera);
         viewport.apply();
@@ -58,13 +61,13 @@ public class CameraTest extends ApplicationAdapter implements InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Gdx.app.log("DEBUG", "camera[" + cameraPos + "]");
-        this.camera.position.x = cameraPos.x;
-        this.camera.position.y = cameraPos.y;
-        this.camera.zoom = 1 * cameraPos.z;
-
-        if (this.cameraPos.z > 1.0f) {
-            this.cameraPos.z -= 0.005f;
-        }
+//        this.camera.position.x = cameraPos.x;
+//        this.camera.position.y = cameraPos.y;
+//        this.camera.zoom = 1 * cameraPos.z;
+//
+//        if (this.cameraPos.z > 1.0f) {
+//            this.cameraPos.z -= 0.005f;
+//        }
 
         this.camera.update();
 
@@ -73,16 +76,20 @@ public class CameraTest extends ApplicationAdapter implements InputProcessor {
 
         TextureRegion region = this.animation.getNext(Gdx.graphics.getDeltaTime());
         batch.draw(region, 0, 0);
-        batch.draw(region, -asset.getPivotX(), -asset.getPivotY());
 
         this.font.draw(batch, "Hello world", 0,0);
         this.batch.end();
+
+        this.hudBatch.begin();
+        this.font.draw(hudBatch, "Hello world", 0, 20);
+        this.hudBatch.end();
     }
 
     @Override
     public void dispose() {
         this.batch.dispose();
         this.font.dispose();
+        this.hudBatch.dispose();
     }
 
     @Override
