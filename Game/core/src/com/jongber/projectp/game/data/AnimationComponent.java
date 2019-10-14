@@ -1,9 +1,7 @@
 package com.jongber.projectp.game.data;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.jongber.projectp.asset.AnimationAsset;
 import com.jongber.projectp.graphics.VFAnimation;
 
 public class AnimationComponent {
