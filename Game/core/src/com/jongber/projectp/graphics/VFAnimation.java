@@ -15,6 +15,7 @@ public class VFAnimation {
     private AnimationAsset asset;
     private float elapsed = 0;
     private int curIndex = 0;
+    private int playbackCount = 0;
 
     public VFAnimation(AnimationAsset asset, PlayMode mode) {
         this.mode = mode;
@@ -31,12 +32,24 @@ public class VFAnimation {
         }
 
         if (this.curIndex >= this.asset.getFrameLength()) {
-            if (this.mode == PlayMode.LOOP)
+            if (this.mode == PlayMode.LOOP) {
                 this.curIndex = 0;
-            else if (this.mode == PlayMode.ONCE)
-                this.curIndex --;
+                this.playbackCount++;
+            }
+            else if (this.mode == PlayMode.ONCE) {
+                this.curIndex--;
+                this.playbackCount = 1;
+            }
         }
 
         return this.asset.getTextureRegion(curIndex);
+    }
+
+    public PlayMode getMode() {
+        return this.mode;
+    }
+
+    public int getPlaybackCount() {
+        return this.playbackCount;
     }
 }
