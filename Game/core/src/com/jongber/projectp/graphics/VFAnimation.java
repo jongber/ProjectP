@@ -17,9 +17,12 @@ public class VFAnimation {
     private int curIndex = 0;
     private int playbackCount = 0;
 
-    public VFAnimation(AnimationAsset asset, PlayMode mode) {
+    public void init(AnimationAsset asset, PlayMode mode) {
         this.mode = mode;
         this.asset = asset;
+        this.elapsed = 0;
+        this.curIndex = 0;
+        this.playbackCount = 0;
     }
 
     public TextureRegion getNext(float elapsed) {

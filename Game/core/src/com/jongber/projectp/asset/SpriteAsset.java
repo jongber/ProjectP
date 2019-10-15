@@ -46,6 +46,10 @@ public class SpriteAsset {
         return this.anims.keySet();
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     public void dispose() {
         this.texture.dispose();
     }

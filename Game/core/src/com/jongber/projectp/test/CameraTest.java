@@ -26,7 +26,7 @@ public class CameraTest extends ApplicationAdapter implements InputProcessor {
     private SpriteBatch batch;
 
     private SpriteAsset asset;
-    private VFAnimation animation;
+    private VFAnimation animation = new VFAnimation();
 
     private float ratio;
     private Vector3 cameraPos = new Vector3();
@@ -46,7 +46,7 @@ public class CameraTest extends ApplicationAdapter implements InputProcessor {
 
         AsepriteJson json = AsepriteJson.load("object/hero.json");
         this.asset = AssetLoader.loadSprite("hero", json);
-        this.animation = new VFAnimation(this.asset.getAnimation("Attack1"), VFAnimation.PlayMode.LOOP);
+        this.animation.init(this.asset.getAnimation("Attack1"), VFAnimation.PlayMode.LOOP);
 
         int height = Gdx.graphics.getHeight();
         this.cameraPos.z = this.ratio = height / (64 * 3);

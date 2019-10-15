@@ -14,7 +14,7 @@ import com.jongber.projectp.graphics.VFAnimation;
 public class JsonLoad extends ApplicationAdapter {
     SpriteBatch batch;
     SpriteAsset asset;
-    VFAnimation animation;
+    VFAnimation animation = new VFAnimation();
 
     @Override
     public void create () {
@@ -22,7 +22,7 @@ public class JsonLoad extends ApplicationAdapter {
 
         AsepriteJson json = AsepriteJson.load("object/hero.json");
         asset = AssetLoader.loadSprite("hero", json);
-        this.animation = new VFAnimation(this.asset.getAnimation("Idle"), VFAnimation.PlayMode.LOOP);
+        this.animation.init(this.asset.getAnimation("Idle"), VFAnimation.PlayMode.LOOP);
     }
 
     @Override
