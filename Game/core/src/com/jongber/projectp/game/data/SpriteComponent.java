@@ -31,6 +31,10 @@ public class SpriteComponent {
         return this.animation.getNext(elapsed);
     }
 
+    public boolean canPlay() {
+        return this.animation.canPlay();
+    }
+
     public boolean isFinished() {
         return this.animation.getPlaybackCount() > 0
                 && this.animation.getMode() == VFAnimation.PlayMode.ONCE;

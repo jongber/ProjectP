@@ -25,6 +25,10 @@ public class VFAnimation {
         this.playbackCount = 0;
     }
 
+    public boolean canPlay() {
+        return this.asset != null;
+    }
+
     public TextureRegion getNext(float elapsed) {
         this.elapsed += elapsed;
 
