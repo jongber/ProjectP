@@ -1,4 +1,4 @@
-package com.jongber.projectp.object.data;
+package com.jongber.projectp.object.component;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;

@@ -22,6 +22,10 @@ public class GameObject {
         return this.transform;
     }
 
+    public void setTransform(Vector2 transform) {
+        this.transform = transform;
+    }
+
     public void addComponent(Class<?> type, Object obj) {
         this.components.put(type, obj);
     }
