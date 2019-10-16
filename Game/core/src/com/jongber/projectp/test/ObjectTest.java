@@ -13,6 +13,7 @@ import com.jongber.projectp.graphics.OrthoCameraWrapper;
 import com.jongber.projectp.graphics.VFAnimation;
 import com.jongber.projectp.object.GameObject;
 import com.jongber.projectp.object.data.SpriteComponent;
+import com.jongber.projectp.object.method.RenderMethod;
 
 public class ObjectTest extends ApplicationAdapter {
     SpriteBatch batch;
@@ -50,12 +51,9 @@ public class ObjectTest extends ApplicationAdapter {
 
         float elapsed = Gdx.graphics.getDeltaTime();
 
-        SpriteComponent component = this.object.getComponent(SpriteComponent.class);
-        TextureRegion region = component.getNext(elapsed);
-
         batch.begin();
 
-        this.batch.draw(region, 0, 0);
+        RenderMethod.renderSprite(batch, this.object, elapsed);
 
         batch.end();
     }
