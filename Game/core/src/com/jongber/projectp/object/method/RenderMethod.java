@@ -36,9 +36,9 @@ public class RenderMethod {
             int texWidth = texture.getWidth();
 
             Vector2 renderPos = new Vector2(object.getTransform());
-            if (Math.abs(camera.getPosition().len2() - renderPos.len2()) >= Math.pow(camera.getCamera().viewportWidth, 2)) {
-                renderPos.x += texWidth;
+            if (camera.getPosition().x > renderPos.x + texWidth/2) {
                 object.getTransform().x += texWidth;
+                renderPos.x += texWidth;
             }
 
             renderPos.x -= texWidth;
@@ -47,7 +47,7 @@ public class RenderMethod {
 
                 batch.draw(texture, renderPos.x - asset.getPivotX(), renderPos.y - asset.getPivotY());
 
-                ////Gdx.app.log("DEBUG", "scenery render pos" + renderPos);
+                Gdx.app.log("DEBUG", "scenery render pos" + renderPos + object.getTransform());
                 renderPos.x += texWidth;
             }
         }

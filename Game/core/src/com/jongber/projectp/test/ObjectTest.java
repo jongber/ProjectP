@@ -72,8 +72,8 @@ public class ObjectTest extends ApplicationAdapter {
         RenderMethod.renderScenery(batch, this.scenery, this.camera);
         RenderMethod.renderSprite(batch, this.object, elapsed);
 
-        this.object.getTransform().x += 0.2f;
-        this.camera.getCamera().position.x += 0.2f;
+        this.object.getTransform().x += 0.6f;
+        this.camera.getCamera().position.x += 0.6f;
 
         batch.end();
     }
