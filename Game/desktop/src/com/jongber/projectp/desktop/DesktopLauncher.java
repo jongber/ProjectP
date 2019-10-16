@@ -2,6 +2,7 @@ package com.jongber.projectp.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.jongber.projectp.test.CameraTest;
 import com.jongber.projectp.test.ObjectTest;
 
 public class DesktopLauncher {

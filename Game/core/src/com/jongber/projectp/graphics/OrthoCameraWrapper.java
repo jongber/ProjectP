@@ -13,6 +13,7 @@ public class OrthoCameraWrapper {
 
     public OrthoCameraWrapper(int w, int h) {
         this.viewport = new FitViewport(w, h, this.camera);
+        this.viewport.apply();
     }
 
     public void update(SpriteBatch batch) {

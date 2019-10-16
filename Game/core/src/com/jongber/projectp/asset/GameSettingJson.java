@@ -8,7 +8,7 @@ import com.jongber.projectp.asset.aseprite.wh;
 import java.io.IOException;
 
 public class GameSettingJson {
-    public wh screenSize;
+    public wh viewport;
 
     public static GameSettingJson load() {
         ObjectMapper mapper = new ObjectMapper();
