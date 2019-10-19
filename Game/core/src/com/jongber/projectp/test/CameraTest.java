@@ -9,15 +9,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jongber.projectp.asset.AssetLoader;
 import com.jongber.projectp.asset.SpriteAsset;
-import com.jongber.projectp.asset.aseprite.AsepriteJson;
+import com.jongber.projectp.asset.json.AsepriteJson;
 import com.jongber.projectp.graphics.VFAnimation;
 
 public class CameraTest extends ApplicationAdapter implements InputProcessor {

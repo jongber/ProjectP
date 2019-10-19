@@ -1,8 +1,10 @@
-package com.jongber.projectp.asset.aseprite;
+package com.jongber.projectp.asset.json;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jongber.projectp.asset.aseprite.Frame;
+import com.jongber.projectp.asset.aseprite.Meta;
 
 import java.io.File;
 import java.io.IOException;

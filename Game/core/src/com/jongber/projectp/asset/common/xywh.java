@@ -1,4 +1,4 @@
-package com.jongber.projectp.asset.aseprite;
+package com.jongber.projectp.asset.common;
 
 public class xywh {
     public int x;

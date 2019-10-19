@@ -3,7 +3,7 @@ package com.jongber.projectp.asset;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.jongber.projectp.asset.aseprite.AsepriteJson;
+import com.jongber.projectp.asset.json.AsepriteJson;
 import com.jongber.projectp.asset.aseprite.Frame;
 import com.jongber.projectp.asset.aseprite.FrameTag;
 import com.jongber.projectp.asset.aseprite.Layer;

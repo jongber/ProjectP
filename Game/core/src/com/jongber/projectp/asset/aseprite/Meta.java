@@ -1,5 +1,7 @@
 package com.jongber.projectp.asset.aseprite;
 
+import com.jongber.projectp.asset.common.wh;
+
 import java.util.List;
 
 public class Meta {

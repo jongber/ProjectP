@@ -1,5 +1,8 @@
 package com.jongber.projectp.asset.aseprite;
 
+import com.jongber.projectp.asset.common.wh;
+import com.jongber.projectp.asset.common.xywh;
+
 public class Frame {
 
     public String filename;

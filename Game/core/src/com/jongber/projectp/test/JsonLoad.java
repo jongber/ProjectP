@@ -3,12 +3,11 @@ package com.jongber.projectp.test;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jongber.projectp.asset.AssetLoader;
 import com.jongber.projectp.asset.SpriteAsset;
-import com.jongber.projectp.asset.aseprite.AsepriteJson;
+import com.jongber.projectp.asset.json.AsepriteJson;
 import com.jongber.projectp.graphics.VFAnimation;
 
 public class JsonLoad extends ApplicationAdapter {
