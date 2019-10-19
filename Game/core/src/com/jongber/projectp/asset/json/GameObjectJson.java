@@ -10,8 +10,8 @@ import java.io.IOException;
 public class GameObjectJson {
     public String name;
     public xy transform;
-    public String spriteName;
-    public String sceneryName;
+    public String sprite;
+    public String scenery;
 
     public static GameObjectJson load(String filename) {
         ObjectMapper mapper = new ObjectMapper();
