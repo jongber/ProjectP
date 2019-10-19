@@ -12,7 +12,7 @@
  "meta": {
   "app": "http://www.aseprite.org/",
   "version": "1.2.15-x64",
-  "image": "Stage1.png",
+  "image": "Stage1_sky.png",
   "format": "RGBA8888",
   "size": { "w": 256, "h": 144 },
   "scale": "1",
