@@ -1,0 +1,5 @@
+{
+	"name": "sky",
+	"scenery" : {"filename":"stage1/Stage1_sky.json", "moveRatio":0.1},
+	"transform" : {"x": 0, "y": 0}
+}
