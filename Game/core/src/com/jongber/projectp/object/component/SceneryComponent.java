@@ -6,6 +6,10 @@ public class SceneryComponent {
     private StaticTextureAsset asset;
     private float moveRatio;
 
+    public SceneryComponent(StaticTextureAsset asset, float moveRatio) {
+        this.setSceneryImage(asset, moveRatio);
+    }
+
     public void setSceneryImage(StaticTextureAsset asset, float moveRatio) {
         this.asset = asset;
         this.moveRatio = moveRatio;

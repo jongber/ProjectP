@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.jongber.projectp.asset.AssetLoader;
+import com.jongber.projectp.asset.GameAsset;
 import com.jongber.projectp.asset.SpriteAsset;
 import com.jongber.projectp.asset.json.AsepriteJson;
 import com.jongber.projectp.graphics.VFAnimation;
@@ -41,7 +41,7 @@ public class CameraTest extends ApplicationAdapter implements InputProcessor {
         viewport.apply();
 
         AsepriteJson json = AsepriteJson.load("object/hero.json");
-        this.asset = AssetLoader.loadSprite("hero", json);
+        this.asset = GameAsset.loadSprite("hero", json);
         this.animation.init(this.asset.getAnimation("Attack1"), VFAnimation.PlayMode.LOOP);
 
         int height = Gdx.graphics.getHeight();

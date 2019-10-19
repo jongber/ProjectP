@@ -21,7 +21,7 @@ public class SpriteComponent {
     public void setAnimation(String name, VFAnimation.PlayMode mode) throws Exception{
         AnimationAsset animAsset = this.asset.getAnimation(name);
         if (animAsset == null){
-            throw new Exception("can't find animation[" + name + "] on [" + this.asset.getName() + "]");
+            throw new Exception("can't find animation[" + name + "]");
         }
 
         this.animation.init(animAsset, mode);

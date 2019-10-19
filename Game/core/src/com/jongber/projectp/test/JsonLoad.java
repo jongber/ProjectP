@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.jongber.projectp.asset.AssetLoader;
+import com.jongber.projectp.asset.GameAsset;
 import com.jongber.projectp.asset.SpriteAsset;
 import com.jongber.projectp.asset.json.AsepriteJson;
 import com.jongber.projectp.graphics.VFAnimation;
@@ -20,7 +20,7 @@ public class JsonLoad extends ApplicationAdapter {
         batch = new SpriteBatch();
 
         AsepriteJson json = AsepriteJson.load("object/hero.json");
-        asset = AssetLoader.loadSprite("hero", json);
+        asset = GameAsset.loadSprite("hero", json);
         this.animation.init(this.asset.getAnimation("Idle"), VFAnimation.PlayMode.LOOP);
     }
 

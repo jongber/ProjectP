@@ -4,12 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 public class StaticTextureAsset {
-    private String name;
     private Texture texture;
     private Vector2 pivot = new Vector2();
 
-    public void set(String name, Texture texture) {
-        this.name = name;
+    public void set(Texture texture) {
         this.texture = texture;
     }
 
@@ -25,9 +23,6 @@ public class StaticTextureAsset {
         return (int)this.pivot.y;
     }
 
-    public String getName() {
-        return this.name;
-    }
 
     public Texture getTexture() {
         return this.texture;
