@@ -1,5 +1,0 @@
-{
-	"name": "hero",
-	"sprite" : "object/hero.json",
-	"transform" : {"x": 0, "y": 0}
-}

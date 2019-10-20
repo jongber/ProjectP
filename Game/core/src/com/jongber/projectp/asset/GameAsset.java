@@ -28,42 +28,63 @@ public class GameAsset {
     }
 
     public static StaticTextureAsset loadTexture(String filename) {
-        AsepriteJson json = AsepriteJson.load(filename);
-        return GameAsset.loadTexture(filename, json);
-    }
-
-    public static StaticTextureAsset loadTexture(String filename, AsepriteJson json) {
 
         if (GameAsset.textureAssets.containsKey(filename)) {
             return GameAsset.textureAssets.get(filename);
         }
 
-        StaticTextureAsset asset = new StaticTextureAsset();
-
-        Texture texture = new Texture((json.getImgPath()));
-        asset.set(texture);
-
-        //// *set pivot point
-        //// y좌표축 방향이 다름..
-        int height = texture.getHeight();
-        for (Layer layer : json.meta.layers) {
-            if (layer.name.startsWith("P_pivot")) {
-                String[] split = layer.name.split("_");
-                asset.setPivot(new Vector2(Integer.parseInt(split[2]), height - Integer.parseInt(split[3])));
-            }
-        }
-
-        GameAsset.textureAssets.put(filename, asset);
-
-        return asset;
+        AsepriteJson json = AsepriteJson.load(filename);
+        return GameAsset.loadTexture(filename, json);
     }
 
     public static SpriteAsset loadSprite(String filename) {
+
+        if (GameAsset.spriteAssets.containsKey(filename)) {
+            return GameAsset.spriteAssets.get(filename);
+        }
+
         AsepriteJson json = AsepriteJson.load(filename);
         return GameAsset.loadSprite(filename, json);
     }
 
-    public static SpriteAsset loadSprite(String filename, AsepriteJson json) {
+    public static GameObject inflate(String filename) {
+        GameObjectJson json = GameObjectJson.load(filename);
+        return GameAsset.inflate(json);
+    }
+
+    public static GameObject inflate(GameObjectJson json) {
+        GameObject object = new GameObject(json.name);
+
+        if (json.sprite != null) {
+            SpriteAsset asset = GameAsset.loadSprite(json.sprite);
+            object.addComponent(SpriteComponent.class, new SpriteComponent(asset));
+        }
+
+        if (json.scenery != null) {
+            StaticTextureAsset asset = GameAsset.loadTexture(json.scenery.filename);
+            object.addComponent(SceneryComponent.class, new SceneryComponent(asset, json.scenery.moveRatio));
+        }
+
+        return object;
+    }
+
+    public static void dispose() {
+        Set<String> keys = GameAsset.spriteAssets.keySet();
+        for (String key : keys) {
+            SpriteAsset item = GameAsset.spriteAssets.get(key);
+            item.dispose();
+        }
+        GameAsset.spriteAssets.clear();
+
+        keys = GameAsset.textureAssets.keySet();
+        for (String key : keys) {
+            StaticTextureAsset item = GameAsset.textureAssets.get(key);
+            item.dispose();
+        }
+        GameAsset.textureAssets.clear();
+    }
+
+    private static SpriteAsset loadSprite(String filename, AsepriteJson json) {
 
         if (GameAsset.spriteAssets.containsKey(filename)) {
             return GameAsset.spriteAssets.get(filename);
@@ -112,45 +133,30 @@ public class GameAsset {
         return asset;
     }
 
-    public static GameObject inflate(String filename) {
-        GameObjectJson json = GameObjectJson.load(filename);
-        return GameAsset.inflate(json);
-    }
+    private static StaticTextureAsset loadTexture(String filename, AsepriteJson json) {
 
-    public static GameObject inflate(GameObjectJson json) {
-        GameObject object = new GameObject(json.name);
-
-        if (json.sprite != null) {
-            SpriteAsset asset = GameAsset.loadSprite(json.sprite);
-            object.addComponent(SpriteComponent.class, new SpriteComponent(asset));
+        if (GameAsset.textureAssets.containsKey(filename)) {
+            return GameAsset.textureAssets.get(filename);
         }
 
-        if (json.scenery != null) {
-            StaticTextureAsset asset = GameAsset.loadTexture(json.scenery.filename);
-            object.addComponent(SceneryComponent.class, new SceneryComponent(asset, json.scenery.moveRatio));
+        StaticTextureAsset asset = new StaticTextureAsset();
+
+        Texture texture = new Texture((json.getImgPath()));
+        asset.set(texture);
+
+        //// *set pivot point
+        //// y좌표축 방향이 다름..
+        int height = texture.getHeight();
+        for (Layer layer : json.meta.layers) {
+            if (layer.name.startsWith("P_pivot")) {
+                String[] split = layer.name.split("_");
+                asset.setPivot(new Vector2(Integer.parseInt(split[2]), height - Integer.parseInt(split[3])));
+            }
         }
 
-        if (json.transform != null) {
-            object.setTransform(new Vector2(json.transform.x, json.transform.y));
-        }
+        GameAsset.textureAssets.put(filename, asset);
 
-        return object;
-    }
-
-    public static void dispose() {
-        Set<String> keys = GameAsset.spriteAssets.keySet();
-        for (String key : keys) {
-            SpriteAsset item = GameAsset.spriteAssets.get(key);
-            item.dispose();
-        }
-        GameAsset.spriteAssets.clear();
-
-        keys = GameAsset.textureAssets.keySet();
-        for (String key : keys) {
-            StaticTextureAsset item = GameAsset.textureAssets.get(key);
-            item.dispose();
-        }
-        GameAsset.textureAssets.clear();
+        return asset;
     }
 }
 

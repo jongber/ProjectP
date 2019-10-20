@@ -17,11 +17,14 @@ import com.jongber.projectp.object.component.SceneryComponent;
 import com.jongber.projectp.object.component.SpriteComponent;
 import com.jongber.projectp.object.method.RenderMethod;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ObjectTest extends ApplicationAdapter {
     SpriteBatch batch;
     OrthoCameraWrapper camera;
-    GameObject hero;
-    GameObject sky;
+    List<GameObject> sceneries = new ArrayList<>();
+    List<GameObject> objects = new ArrayList<>();
 
     @Override
     public void create () {
@@ -30,15 +33,8 @@ public class ObjectTest extends ApplicationAdapter {
         GameSettingJson json = GameSettingJson.load();
         this.camera = new OrthoCameraWrapper(json.viewport.w, json.viewport.h);
 
-        hero = GameAsset.inflate("hero_define.json");
-        SpriteComponent comp = hero.getComponent(SpriteComponent.class);
-        try {
-            comp.setAnimation("Walk", VFAnimation.PlayMode.LOOP);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        
 
-        sky = GameAsset.inflate("sky_define.json");
     }
 
     @Override
@@ -50,8 +46,8 @@ public class ObjectTest extends ApplicationAdapter {
 
         batch.begin();
 
-        RenderMethod.renderScenery(batch, sky, camera);
-        RenderMethod.renderSprite(batch, hero, Gdx.graphics.getDeltaTime());
+//        RenderMethod.renderScenery(batch, sky, camera);
+//        RenderMethod.renderSprite(batch, hero, Gdx.graphics.getDeltaTime());
 
         batch.end();
     }

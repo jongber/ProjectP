@@ -1,4 +1,4 @@
-package com.jongber.projectp.asset.common;
+package com.jongber.projectp.common;
 
 public class SceneryJsonElement {
     public String filename;

@@ -3,25 +3,26 @@ package com.jongber.projectp.asset.json;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jongber.projectp.common.SceneryJsonElement;
+import com.jongber.projectp.common.FnTr;
 
 import java.io.IOException;
+import java.util.List;
 
-public class GameObjectJson {
-    public String name;
-    public String sprite;
-    public SceneryJsonElement scenery;
+public class GameWorldJson {
+    public List<FnTr> sceneries;
+    public List<FnTr> objects;
 
-    public static GameObjectJson load(String filename) {
+    public static GameSettingJson load(String filename) {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
             FileHandle file = Gdx.files.internal(filename);
-            GameObjectJson json = mapper.readValue(file.readString(), GameObjectJson.class);
+            String json = file.readString();
 
-            Gdx.app.log("DEBUG", "GameObject json [" + filename + "]");
+            GameSettingJson settingJson = mapper.readValue(json, GameSettingJson.class);
+            Gdx.app.log("DEBUG", "[" + filename + "]json loaded");
 
-            return json;
+            return settingJson;
 
         } catch (IOException e) {
             e.printStackTrace();

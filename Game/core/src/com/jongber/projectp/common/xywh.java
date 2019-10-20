@@ -1,4 +1,4 @@
-package com.jongber.projectp.asset.common;
+package com.jongber.projectp.common;
 
 public class xywh {
     public int x;

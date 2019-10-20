@@ -3,7 +3,7 @@ package com.jongber.projectp.asset.json;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jongber.projectp.asset.common.wh;
+import com.jongber.projectp.common.wh;
 
 import java.io.IOException;
 

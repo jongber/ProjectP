@@ -1,27 +1,21 @@
 package com.jongber.projectp.object.component;
 
+import com.jongber.projectp.game.World;
 import com.jongber.projectp.object.GameObject;
 
 public class GameLogicComponent {
 
     public interface LogicImpl {
-        void create(GameObject owner);
-        void update();
+        void update(World world, GameObject owner);
     }
 
-    private GameObject owner;
     private LogicImpl logicImpl;
 
-    public GameLogicComponent(GameObject owner, LogicImpl logicImpl) {
+    public GameLogicComponent(LogicImpl logicImpl) {
         this.logicImpl = logicImpl;
-        this.owner = owner;
     }
 
-    public void create(GameObject owner) {
-        this.owner = owner;
-    }
-
-    public void update() {
-        logicImpl.update();
+    public void update(World world, GameObject owner) {
+        logicImpl.update(world, owner);
     }
 }
