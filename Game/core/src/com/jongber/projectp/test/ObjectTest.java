@@ -10,6 +10,8 @@ import com.jongber.projectp.asset.json.GameSettingJson;
 import com.jongber.projectp.asset.SpriteAsset;
 import com.jongber.projectp.asset.StaticTextureAsset;
 import com.jongber.projectp.asset.json.AsepriteJson;
+import com.jongber.projectp.common.Traverser;
+import com.jongber.projectp.game.World;
 import com.jongber.projectp.graphics.OrthoCameraWrapper;
 import com.jongber.projectp.graphics.VFAnimation;
 import com.jongber.projectp.object.GameObject;
@@ -22,18 +24,14 @@ import java.util.List;
 
 public class ObjectTest extends ApplicationAdapter {
     SpriteBatch batch;
-    OrthoCameraWrapper camera;
-    List<GameObject> sceneries = new ArrayList<>();
-    List<GameObject> objects = new ArrayList<>();
+    World world;
 
     @Override
     public void create () {
         batch = new SpriteBatch();
 
         GameSettingJson json = GameSettingJson.load();
-        this.camera = new OrthoCameraWrapper(json.viewport.w, json.viewport.h);
-
-        
+        world = GameAsset.inflate(json, "Stage1/stage1_define.json");
 
     }
 
@@ -42,12 +40,22 @@ public class ObjectTest extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        this.camera.update(this.batch);
-
+        this.world.camera.update(batch);
         batch.begin();
 
-//        RenderMethod.renderScenery(batch, sky, camera);
-//        RenderMethod.renderSprite(batch, hero, Gdx.graphics.getDeltaTime());
+        world.forSceneries(new Traverser<GameObject>() {
+            @Override
+            public void onTraverse(GameObject item) {
+                RenderMethod.renderScenery(batch, item, world.camera);
+            }
+        });
+
+        world.forObjects(new Traverser<GameObject>() {
+            @Override
+            public void onTraverse(GameObject item) {
+                RenderMethod.renderSprite(batch, item, Gdx.graphics.getDeltaTime());
+            }
+        });
 
         batch.end();
     }

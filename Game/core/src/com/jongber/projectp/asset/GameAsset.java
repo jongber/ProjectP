@@ -8,12 +8,18 @@ import com.jongber.projectp.asset.aseprite.Frame;
 import com.jongber.projectp.asset.aseprite.FrameTag;
 import com.jongber.projectp.asset.aseprite.Layer;
 import com.jongber.projectp.asset.json.GameObjectJson;
+import com.jongber.projectp.asset.json.GameSettingJson;
+import com.jongber.projectp.asset.json.GameWorldJson;
+import com.jongber.projectp.common.FnTr;
+import com.jongber.projectp.game.World;
+import com.jongber.projectp.graphics.VFAnimation;
 import com.jongber.projectp.object.GameObject;
 import com.jongber.projectp.object.component.SceneryComponent;
 import com.jongber.projectp.object.component.SpriteComponent;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -56,8 +62,18 @@ public class GameAsset {
         GameObject object = new GameObject(json.name);
 
         if (json.sprite != null) {
-            SpriteAsset asset = GameAsset.loadSprite(json.sprite);
-            object.addComponent(SpriteComponent.class, new SpriteComponent(asset));
+            try {
+                SpriteAsset asset = GameAsset.loadSprite(json.sprite.filename);
+                SpriteComponent component = new SpriteComponent(asset);
+                VFAnimation.PlayMode mode = VFAnimation.PlayMode.LOOP;
+                if (mode.toString().compareToIgnoreCase(json.sprite.mode) != 0) {
+                    mode = VFAnimation.PlayMode.ONCE;
+                }
+                component.setAnimation(json.sprite.animation, mode);
+                object.addComponent(SpriteComponent.class, component);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         if (json.scenery != null) {
@@ -66,6 +82,38 @@ public class GameAsset {
         }
 
         return object;
+    }
+
+    public static World inflate(GameSettingJson settingJson, String filename) {
+        World world = new World(settingJson);
+
+        GameWorldJson json = GameWorldJson.load(filename);
+        if (json.sceneries != null) {
+            Iterator<FnTr> it = json.sceneries.iterator();
+            while (it.hasNext()) {
+                FnTr fntr = it.next();
+
+                GameObject scenery = GameAsset.inflate(fntr.filename);
+                scenery.setTransform(new Vector2(fntr.transform.x, fntr.transform.y));
+
+                world.sceneries.add(scenery);
+            }
+        }
+
+        if (json.objects != null) {
+            Iterator<FnTr> it = json.objects.iterator();
+            while (it.hasNext()) {
+                FnTr fntr = it.next();
+
+                GameObject object = GameAsset.inflate(fntr.filename);
+                object.setTransform(new Vector2(fntr.transform.x, fntr.transform.y));
+
+                world.objects.add(object);
+            }
+        }
+
+
+        return world;
     }
 
     public static void dispose() {

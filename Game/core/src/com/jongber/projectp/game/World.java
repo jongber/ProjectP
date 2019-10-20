@@ -1,5 +1,6 @@
 package com.jongber.projectp.game;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.projectp.asset.GameAsset;
 import com.jongber.projectp.asset.json.GameSettingJson;
 import com.jongber.projectp.common.Traverser;

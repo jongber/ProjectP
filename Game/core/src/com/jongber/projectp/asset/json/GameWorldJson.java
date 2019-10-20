@@ -12,17 +12,17 @@ public class GameWorldJson {
     public List<FnTr> sceneries;
     public List<FnTr> objects;
 
-    public static GameSettingJson load(String filename) {
+    public static GameWorldJson load(String filename) {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
             FileHandle file = Gdx.files.internal(filename);
             String json = file.readString();
 
-            GameSettingJson settingJson = mapper.readValue(json, GameSettingJson.class);
+            GameWorldJson worldJson = mapper.readValue(json, GameWorldJson.class);
             Gdx.app.log("DEBUG", "[" + filename + "]json loaded");
 
-            return settingJson;
+            return worldJson;
 
         } catch (IOException e) {
             e.printStackTrace();
