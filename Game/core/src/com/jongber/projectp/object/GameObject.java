@@ -5,13 +5,20 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.HashMap;
 
 public class GameObject {
-
+    private static int ID = 0;
+    private int id;
     private String name;
     private Vector2 transform = new Vector2();
     private HashMap<Class<?>, Object> components = new HashMap<>();
 
     public GameObject(String name) {
         this.name = name;
+        GameObject.ID++;
+        this.id = GameObject.ID;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public String getName() {
