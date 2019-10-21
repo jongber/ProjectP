@@ -6,7 +6,8 @@ import com.jongber.projectp.object.GameObject;
 public class GameLogicComponent {
 
     public interface LogicImpl {
-        void update(World world, GameObject owner);
+        void init();
+        void update(World world, GameObject owner, float elapsed);
     }
 
     private LogicImpl logicImpl;
@@ -15,7 +16,11 @@ public class GameLogicComponent {
         this.logicImpl = logicImpl;
     }
 
-    public void update(World world, GameObject owner) {
-        logicImpl.update(world, owner);
+    public void init() {
+        this.logicImpl.init();
+    }
+
+    public void update(World world, GameObject owner, float elapsed) {
+        logicImpl.update(world, owner, elapsed);
     }
 }

@@ -14,6 +14,7 @@ import com.jongber.projectp.common.FnTr;
 import com.jongber.projectp.game.World;
 import com.jongber.projectp.graphics.VFAnimation;
 import com.jongber.projectp.object.GameObject;
+import com.jongber.projectp.object.component.GameLogicComponent;
 import com.jongber.projectp.object.component.SceneryComponent;
 import com.jongber.projectp.object.component.SpriteComponent;
 
@@ -79,6 +80,17 @@ public class GameAsset {
         if (json.scenery != null) {
             StaticTextureAsset asset = GameAsset.loadTexture(json.scenery.filename);
             object.addComponent(SceneryComponent.class, new SceneryComponent(asset, json.scenery.moveRatio));
+        }
+
+        if (json.logic != null) {
+            try {
+                Class logicClass = Class.forName("com.jongber.projectp.game.detail." + json.logic);
+                GameLogicComponent compoenent = new GameLogicComponent((GameLogicComponent.LogicImpl) logicClass.newInstance());
+                object.addComponent(GameLogicComponent.class, compoenent);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return object;

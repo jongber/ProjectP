@@ -32,7 +32,7 @@ public class ObjectTest extends ApplicationAdapter {
 
         GameSettingJson json = GameSettingJson.load();
         world = GameAsset.inflate(json, "Stage1/stage1_define.json");
-
+        world.init();
     }
 
     @Override
@@ -40,7 +40,8 @@ public class ObjectTest extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        this.world.camera.update(batch);
+        this.world.update(this.batch, Gdx.graphics.getDeltaTime());
+
         batch.begin();
 
         world.forSceneries(new Traverser<GameObject>() {

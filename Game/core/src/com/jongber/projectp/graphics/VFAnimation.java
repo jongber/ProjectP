@@ -25,6 +25,10 @@ public class VFAnimation {
         this.playbackCount = 0;
     }
 
+    public String getName() {
+        return this.asset.getName();
+    }
+
     public boolean canPlay() {
         return this.asset != null;
     }

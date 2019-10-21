@@ -1,5 +1,6 @@
 package com.jongber.projectp.object.component;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.projectp.asset.AnimationAsset;
@@ -18,10 +19,14 @@ public class SpriteComponent {
         return this.asset.getAnimation(name);
     }
 
-    public void setAnimation(String name, VFAnimation.PlayMode mode) throws Exception{
+    public String getAnimationName() {
+        return this.animation.getName();
+    }
+
+    public void setAnimation(String name, VFAnimation.PlayMode mode) {
         AnimationAsset animAsset = this.asset.getAnimation(name);
         if (animAsset == null){
-            throw new Exception("can't find animation[" + name + "]");
+            Gdx.app.log("DEBUG", "can't find animation[" + name + "]");
         }
 
         this.animation.init(animAsset, mode);

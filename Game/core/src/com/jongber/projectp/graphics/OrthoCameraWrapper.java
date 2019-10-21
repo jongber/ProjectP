@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -48,8 +49,9 @@ public class OrthoCameraWrapper {
         this.camera.zoom += zoomDelta;
     }
 
-    public Vector2 getPosition() {
-        return new Vector2(this.camera.position.x, this.camera.position.y);
+    public Vector3 getPosition() {
+        //return new Vector2(this.camera.position.x, this.camera.position.y);
+        return this.camera.position;
     }
 
     public float getZoom() {
