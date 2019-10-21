@@ -31,7 +31,7 @@ public class ObjectTest extends ApplicationAdapter {
         batch = new SpriteBatch();
 
         GameSettingJson json = GameSettingJson.load();
-        world = GameAsset.inflate(json, "Stage1/stage1_define.json");
+        world = GameAsset.inflate(json, "stage1/stage1_define.json");
         world.init();
     }
 
@@ -69,6 +69,6 @@ public class ObjectTest extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height){
-        //this.camera.resize(width, height);
+        this.world.camera.resize(width, height);
     }
 }
