@@ -1,0 +1,18 @@
+{
+	"sceneries":[
+		{
+			"filename": "stage1/sky_define.json",
+			"transform": {"x":0, "y":0}
+		},
+		{
+			"filename": "stage1/bottom_define.json",
+			"transform": {"x":0, "y":0}
+		}
+	],
+	"objects":[
+		{
+			"filename": "stage1/hero_define.json",
+			"transform": {"x":0, "y":0}
+		}
+	]
+}

@@ -63,10 +63,7 @@ public class ObjectTest extends ApplicationAdapter {
     @Override
     public void dispose () {
         batch.dispose();
-        GameAsset.dispose();
-//        this.asset.dispose();
-//        this.textureAsset2.dispose();
-//        this.textureAsset.dispose();
+        this.world.dispose();
     }
 
     @Override
