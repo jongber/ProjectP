@@ -1,5 +1,4 @@
 {
 	"name": "hero",
-	"sprite" : { "filename":"object/hero.json", "animation":"Idle", "mode":"LOOP"},
-	"logic" : "Stage1Logic"
+	"sprite" : { "filename":"object/hero.json", "animation":"Idle", "mode":"LOOP"}
 }

@@ -23,6 +23,10 @@ public class SpriteComponent {
         return this.animation.getName();
     }
 
+    public boolean isAnimation(String name) {
+        return this.animation.getName().compareTo(name) == 0;
+    }
+
     public void setAnimation(String name, VFAnimation.PlayMode mode) {
         AnimationAsset animAsset = this.asset.getAnimation(name);
         if (animAsset == null){

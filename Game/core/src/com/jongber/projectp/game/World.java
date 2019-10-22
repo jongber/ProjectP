@@ -1,12 +1,12 @@
 package com.jongber.projectp.game;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.projectp.asset.GameAsset;
 import com.jongber.projectp.asset.json.GameSettingJson;
 import com.jongber.projectp.common.Traverser;
 import com.jongber.projectp.graphics.OrthoCameraWrapper;
 import com.jongber.projectp.object.GameObject;
-import com.jongber.projectp.object.component.GameLogicComponent;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,33 +14,34 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class World {
+public class World implements InputProcessor {
+
+    public interface WorldLogic {
+        void init();
+        void update(World world, float elapsed);
+        void touchDown(int screenX, int screenY, int pointer, int button);
+    }
+
     public OrthoCameraWrapper camera;
     public List<GameObject> sceneries = new ArrayList<>();
     public Set<GameObject> objects = new HashSet<>();
-
-    private UpdateImpl impl = new UpdateImpl();
+    public List<WorldLogic> logics = new ArrayList<>();
 
     public World(GameSettingJson json) {
         this.camera = new OrthoCameraWrapper(json.viewport.w, json.viewport.h);
     }
 
     public void init() {
-        forObjects(new Traverser<GameObject>() {
-            @Override
-            public void onTraverse(GameObject item) {
-                GameLogicComponent component = item.getComponent(GameLogicComponent.class);
-                if (component != null) {
-                    component.init();
-                }
-            }
-        });
+        for (int i = 0; i <logics.size(); ++i) {
+            logics.get(i).init();
+        }
     }
 
     public void update(SpriteBatch batch, float elapsed) {
         this.camera.update(batch);
-        this.impl.elapsed = elapsed;
-        this.forObjects(this.impl);
+        for (int i = 0; i <logics.size(); ++i) {
+            logics.get(i).update(this, elapsed);
+        }
     }
 
     public void forSceneries(Traverser<GameObject> traverser) {
@@ -61,15 +62,47 @@ public class World {
         GameAsset.dispose();
     }
 
-    private class UpdateImpl implements Traverser<GameObject> {
-        public float elapsed;
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
 
-        @Override
-        public void onTraverse(GameObject item) {
-            GameLogicComponent component = item.getComponent(GameLogicComponent.class);
-            if (component != null) {
-                component.update(World.this, item, this.elapsed);
-            }
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        for (int i = 0; i <logics.size(); ++i) {
+            logics.get(i).touchDown(screenX, screenY, pointer, button);
         }
+
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }

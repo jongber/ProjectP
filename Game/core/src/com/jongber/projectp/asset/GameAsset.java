@@ -14,7 +14,6 @@ import com.jongber.projectp.common.FnTr;
 import com.jongber.projectp.game.World;
 import com.jongber.projectp.graphics.VFAnimation;
 import com.jongber.projectp.object.GameObject;
-import com.jongber.projectp.object.component.GameLogicComponent;
 import com.jongber.projectp.object.component.SceneryComponent;
 import com.jongber.projectp.object.component.SpriteComponent;
 
@@ -82,17 +81,6 @@ public class GameAsset {
             object.addComponent(SceneryComponent.class, new SceneryComponent(asset, json.scenery.moveRatio));
         }
 
-        if (json.logic != null) {
-            try {
-                Class logicClass = Class.forName("com.jongber.projectp.game.detail." + json.logic);
-                GameLogicComponent compoenent = new GameLogicComponent((GameLogicComponent.LogicImpl) logicClass.newInstance());
-                object.addComponent(GameLogicComponent.class, compoenent);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
         return object;
     }
 
@@ -124,6 +112,19 @@ public class GameAsset {
             }
         }
 
+        if (json.logics != null) {
+            Iterator<String> it = json.logics.iterator();
+            while (it.hasNext()) {
+                String name = it.next();
+
+                try {
+                    Class logicClass = Class.forName("com.jongber.projectp.game.detail." + name);
+                    world.logics.add((World.WorldLogic) logicClass.newInstance());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         return world;
     }

@@ -12,7 +12,6 @@ public class GameObjectJson {
     public String name;
     public SpriteStateJson sprite;
     public SceneryJsonElement scenery;
-    public String logic;
 
     public static GameObjectJson load(String filename) {
         ObjectMapper mapper = new ObjectMapper();

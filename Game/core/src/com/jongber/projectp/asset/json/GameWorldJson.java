@@ -11,6 +11,7 @@ import java.util.List;
 public class GameWorldJson {
     public List<FnTr> sceneries;
     public List<FnTr> objects;
+    public List<String> logics;
 
     public static GameWorldJson load(String filename) {
         ObjectMapper mapper = new ObjectMapper();
