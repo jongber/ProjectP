@@ -21,6 +21,10 @@ public class GameObject {
         return this.id;
     }
 
+    public boolean isName(String name) {
+        return this.name.compareTo(name) == 0;
+    }
+
     public String getName() {
         return this.name;
     }

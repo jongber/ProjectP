@@ -33,6 +33,8 @@ public class ObjectTest extends ApplicationAdapter {
         GameSettingJson json = GameSettingJson.load();
         world = GameAsset.inflate(json, "stage1/stage1_define.json");
         world.init();
+
+        Gdx.input.setInputProcessor(world);
     }
 
     @Override

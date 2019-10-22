@@ -108,7 +108,7 @@ public class GameAsset {
                 GameObject object = GameAsset.inflate(fntr.filename);
                 object.setTransform(new Vector2(fntr.transform.x, fntr.transform.y));
 
-                world.objects.add(object);
+                world.addObject(object);
             }
         }
 
