@@ -4,18 +4,15 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.projectp.asset.GameAsset;
 import com.jongber.projectp.asset.json.GameSettingJson;
+import com.jongber.projectp.common.JoinTraverser;
 import com.jongber.projectp.common.PackedArray;
 import com.jongber.projectp.common.Traverser;
-import com.jongber.projectp.game.detail.stage1.PlayerController;
 import com.jongber.projectp.graphics.OrthoCameraWrapper;
 import com.jongber.projectp.object.GameObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 /*
 * this is data class, do not add world logic!!!
@@ -57,6 +54,10 @@ public class World implements InputProcessor {
         objects.add(object);
     }
 
+    public boolean isContained(GameObject object) {
+        return this.objects.isContained(object);
+    }
+
     public int gameObjectCount() {
         return this.objects.size();
     }
@@ -76,6 +77,18 @@ public class World implements InputProcessor {
         Object[] array = this.objects.getArray();
         for (int i = 0; i < this.objects.size(); ++i) {
             traverser.onTraverse((GameObject) array[i]);
+        }
+    }
+
+    public void forJoinObjects(JoinTraverser<GameObject> join) {
+        Object[] array = this.objects.getArray();
+        int size = this.objects.size();
+        for(int i = 0; i < size; ++i) {
+            GameObject target1 = (GameObject)array[i];
+            for (int j = i + 1; j < size; ++j) {
+                GameObject target2 = (GameObject)array[j];
+                join.onJoin(target1, target2);
+            }
         }
     }
 

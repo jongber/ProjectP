@@ -57,6 +57,10 @@ public class PackedArray {
         }
     }
 
+    public boolean isContained(Object object) {
+        return this.indexMap.containsKey(object);
+    }
+
     public int size() {
         return this.tailIndex + 1;
     }

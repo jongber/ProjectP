@@ -1,5 +1,6 @@
 package com.jongber.projectp.game.detail;
 
+import com.jongber.projectp.common.JoinTraverser;
 import com.jongber.projectp.common.Traverser;
 import com.jongber.projectp.game.World;
 import com.jongber.projectp.game.detail.stage1.PlayerController;
@@ -8,11 +9,9 @@ import com.jongber.projectp.graphics.VFAnimation;
 import com.jongber.projectp.object.GameObject;
 import com.jongber.projectp.object.component.SpriteComponent;
 
-public class Stage1Logic implements World.WorldLogic{
+public class Stage1Logic implements World.WorldLogic, JoinTraverser<GameObject> {
 
     private GameObject player;
-    private String beforeAttack = "Walk";
-    private boolean touched = true;
 
     private PlayerController playerController;
     private NPCController NPCController;
@@ -33,24 +32,24 @@ public class Stage1Logic implements World.WorldLogic{
 
     @Override
     public void update(World world, float elapsed) {
-        this.checkPlayerState();
+        world.forJoinObjects(this);
+
         this.playerController.update(elapsed);
         this.NPCController.update(elapsed);
     }
 
     @Override
     public void touchDown(int screenX, int screenY, int pointer, int button) {
-        SpriteComponent component = this.player.getComponent(SpriteComponent.class);
-        if (component.isAnimation("Attack1") == false) {
-            this.beforeAttack = component.getAnimationName();
-            component.setAnimation("Attack1", VFAnimation.PlayMode.ONCE);
-        }
+        this.playerController.touchDown();
     }
 
-    private void checkPlayerState() {
-        SpriteComponent component = this.player.getComponent(SpriteComponent.class);
-        if (component.isAnimation("Attack1") && component.isFinished()){
-            component.setAnimation(this.beforeAttack, VFAnimation.PlayMode.LOOP);
+    @Override
+    public void onJoin(GameObject main, GameObject target) {
+        if (this.player.getId() == main.getId()) {
+            float dist = Math.abs(main.getTransform().x - target.getTransform().x);
+            if (dist <= World.Setting.collisionDist) {
+                this.playerController.collide(target);
+            }
         }
     }
 }
