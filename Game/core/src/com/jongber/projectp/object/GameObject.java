@@ -1,8 +1,12 @@
 package com.jongber.projectp.object;
 
 import com.badlogic.gdx.math.Vector2;
+import com.jongber.projectp.graphics.VFAnimation;
+import com.jongber.projectp.object.component.SpriteComponent;
 
+import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.Queue;
 
 public class GameObject {
     private static int ID = 0;
@@ -10,6 +14,8 @@ public class GameObject {
     private String name;
     private Vector2 transform = new Vector2();
     private HashMap<Class<?>, Object> components = new HashMap<>();
+
+    public Queue<GameObject> collisionQ = new ArrayDeque<>();
 
     public GameObject(String name) {
         this.name = name;

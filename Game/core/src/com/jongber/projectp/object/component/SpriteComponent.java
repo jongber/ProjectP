@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.jongber.projectp.asset.AnimationAsset;
 import com.jongber.projectp.asset.SpriteAsset;
 import com.jongber.projectp.graphics.VFAnimation;
+import com.jongber.projectp.object.GameObject;
 
 public class SpriteComponent {
     private SpriteAsset asset;
@@ -59,5 +60,12 @@ public class SpriteComponent {
 
     public int getPivotY() {
         return this.asset.getPivotY();
+    }
+
+    public static void changeAnimation(GameObject object, String change, VFAnimation.PlayMode mode) {
+        SpriteComponent sprite = object.getComponent(SpriteComponent.class);
+        if (sprite != null && sprite.isAnimation(change) == false) {
+            sprite.setAnimation(change, mode);
+        }
     }
 }

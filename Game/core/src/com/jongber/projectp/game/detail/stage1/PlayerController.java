@@ -1,7 +1,7 @@
 package com.jongber.projectp.game.detail.stage1;
 
-import com.jongber.projectp.common.Traverser;
 import com.jongber.projectp.game.World;
+import com.jongber.projectp.game.detail.common.LogicController;
 import com.jongber.projectp.graphics.VFAnimation;
 import com.jongber.projectp.object.GameObject;
 import com.jongber.projectp.object.component.SpriteComponent;
@@ -9,13 +9,11 @@ import com.jongber.projectp.object.component.SpriteComponent;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class PlayerController {
-    private final float Speed = 12.0f;
+public class PlayerController implements LogicController {
+    private final float Speed = 15.0f;
 
-    private Queue<GameObject> collisions = new ArrayDeque<>();
     private World world;
     private GameObject hero;
-
 
 
     public PlayerController(World world, GameObject object) {
@@ -32,16 +30,28 @@ public class PlayerController {
     }
 
     public void update(float elapsed) {
-        if (collisions.isEmpty()) {
+        if (this.hero.collisionQ.isEmpty()) {
             this.move(elapsed);
         }
         else {
             stop();
         }
+
+        this.hero.collisionQ.clear();
     }
 
-    public void collide(GameObject target) {
-        collisions.add(target);
+    @Override
+    public void collide(GameObject target1, GameObject target2) {
+        if (target1.getId() != this.hero.getId() && target2.getId() != this.hero.getId()) {
+            return;
+        }
+
+        GameObject enemy = target1;
+        if (target1.getId() == this.hero.getId()) {
+            enemy = target2;
+        }
+
+        this.hero.collisionQ.add(enemy);
     }
 
     private void attackStart() {
