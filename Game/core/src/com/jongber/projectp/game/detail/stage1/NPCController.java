@@ -6,21 +6,30 @@ import com.jongber.projectp.asset.GameAsset;
 import com.jongber.projectp.game.World;
 import com.jongber.projectp.object.GameObject;
 
-public class SpawnController {
+import java.util.ArrayList;
+import java.util.List;
+
+public class NPCController {
 
     private final float SpawnTime = 5.0f;
 
     private World world;
     private float elapsed;
+    private List<GameObject> spawnedList = new ArrayList<>();
 
-    public SpawnController(World world) {
+    public NPCController(World world) {
         this.world = world;
     }
 
     public void update(float elapsed) {
         this.elapsed += elapsed;
 
-        if (this.elapsed >= SpawnTime && this.world.gameObjectCount() < 2) {
+        this.trySpawn();
+
+    }
+
+    private void trySpawn() {
+        if (this.elapsed >= SpawnTime && this.spawnedList.size() < 1) {
             GameObject zombie = GameAsset.inflate("stage1/zombie_define.json");
 
             Vector2 spawnPos = new Vector2(world.camera.getPosition().x, world.camera.getPosition().y);
@@ -30,6 +39,8 @@ public class SpawnController {
             zombie.setTransform(spawnPos);
 
             this.world.addObject(zombie);
+
+            this.spawnedList.add(zombie);
         }
     }
 }

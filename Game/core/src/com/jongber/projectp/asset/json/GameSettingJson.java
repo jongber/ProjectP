@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class GameSettingJson {
     public wh viewport;
+    public float collisionDist;
 
     public static GameSettingJson load() {
         ObjectMapper mapper = new ObjectMapper();

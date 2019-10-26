@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.projectp.asset.GameAsset;
 import com.jongber.projectp.asset.json.GameSettingJson;
+import com.jongber.projectp.common.PackedArray;
 import com.jongber.projectp.common.Traverser;
 import com.jongber.projectp.game.detail.stage1.PlayerController;
 import com.jongber.projectp.graphics.OrthoCameraWrapper;
@@ -32,8 +33,7 @@ public class World implements InputProcessor {
     public List<GameObject> sceneries = new ArrayList<>();
     public List<WorldLogic> logics = new ArrayList<>();
 
-    private Set<GameObject> objects = new HashSet<>();
-    private HashMap<Integer, GameObject> objectById = new HashMap<>();
+    private PackedArray objects = new PackedArray();
 
     public World(GameSettingJson json) {
         World.Setting = json;
@@ -55,20 +55,14 @@ public class World implements InputProcessor {
 
     public void addObject(GameObject object) {
         objects.add(object);
-        objectById.put(object.getId(), object);
     }
 
     public int gameObjectCount() {
         return this.objects.size();
     }
 
-    public GameObject getObject(int id) {
-        return objectById.get(id);
-    }
-
     public void removeObject(GameObject object) {
         objects.remove(object);
-        objectById.remove(object);
     }
 
     public void forSceneries(Traverser<GameObject> traverser) {
@@ -79,9 +73,9 @@ public class World implements InputProcessor {
     }
 
     public void forObjects(Traverser<GameObject> traverser) {
-        Iterator<GameObject> it = objects.iterator();
-        while (it.hasNext()) {
-            traverser.onTraverse(it.next());
+        Object[] array = this.objects.getArray();
+        for (int i = 0; i < this.objects.size(); ++i) {
+            traverser.onTraverse((GameObject) array[i]);
         }
     }
 

@@ -3,7 +3,7 @@ package com.jongber.projectp.game.detail;
 import com.jongber.projectp.common.Traverser;
 import com.jongber.projectp.game.World;
 import com.jongber.projectp.game.detail.stage1.PlayerController;
-import com.jongber.projectp.game.detail.stage1.SpawnController;
+import com.jongber.projectp.game.detail.stage1.NPCController;
 import com.jongber.projectp.graphics.VFAnimation;
 import com.jongber.projectp.object.GameObject;
 import com.jongber.projectp.object.component.SpriteComponent;
@@ -15,7 +15,7 @@ public class Stage1Logic implements World.WorldLogic{
     private boolean touched = true;
 
     private PlayerController playerController;
-    private SpawnController spawnController;
+    private NPCController NPCController;
 
     @Override
     public void init(World world) {
@@ -28,14 +28,14 @@ public class Stage1Logic implements World.WorldLogic{
         });
 
         this.playerController = new PlayerController(world, this.player);
-        this.spawnController = new SpawnController(world);
+        this.NPCController = new NPCController(world);
     }
 
     @Override
     public void update(World world, float elapsed) {
         this.checkPlayerState();
         this.playerController.update(elapsed);
-        this.spawnController.update(elapsed);
+        this.NPCController.update(elapsed);
     }
 
     @Override

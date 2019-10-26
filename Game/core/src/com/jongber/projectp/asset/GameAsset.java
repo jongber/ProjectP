@@ -27,10 +27,12 @@ public class GameAsset {
 
     private static HashMap<String, SpriteAsset> spriteAssets;
     private static HashMap<String, StaticTextureAsset> textureAssets;
+    private static HashMap<String, GameObjectJson> objJsons;
 
     static {
         GameAsset.spriteAssets = new HashMap<>();
         GameAsset.textureAssets = new HashMap<>();
+        GameAsset.objJsons = new HashMap<>();
     }
 
     public static StaticTextureAsset loadTexture(String filename) {
@@ -54,34 +56,18 @@ public class GameAsset {
     }
 
     public static GameObject inflate(String filename) {
-        GameObjectJson json = GameObjectJson.load(filename);
+
+        GameObjectJson json;
+
+        if (GameAsset.objJsons.containsKey(filename)) {
+            json = GameAsset.objJsons.get(filename);
+        }
+        else {
+            json = GameObjectJson.load(filename);
+            GameAsset.objJsons.put(filename, json);
+        }
+
         return GameAsset.inflate(json);
-    }
-
-    public static GameObject inflate(GameObjectJson json) {
-        GameObject object = new GameObject(json.name);
-
-        if (json.sprite != null) {
-            try {
-                SpriteAsset asset = GameAsset.loadSprite(json.sprite.filename);
-                SpriteComponent component = new SpriteComponent(asset);
-                VFAnimation.PlayMode mode = VFAnimation.PlayMode.LOOP;
-                if (mode.toString().compareToIgnoreCase(json.sprite.mode) != 0) {
-                    mode = VFAnimation.PlayMode.ONCE;
-                }
-                component.setAnimation(json.sprite.animation, mode);
-                object.addComponent(SpriteComponent.class, component);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (json.scenery != null) {
-            StaticTextureAsset asset = GameAsset.loadTexture(json.scenery.filename);
-            object.addComponent(SceneryComponent.class, new SceneryComponent(asset, json.scenery.moveRatio));
-        }
-
-        return object;
     }
 
     public static World inflate(GameSettingJson settingJson, String filename) {
@@ -143,6 +129,32 @@ public class GameAsset {
             item.dispose();
         }
         GameAsset.textureAssets.clear();
+    }
+
+    private static GameObject inflate(GameObjectJson json) {
+        GameObject object = new GameObject(json.name);
+
+        if (json.sprite != null) {
+            try {
+                SpriteAsset asset = GameAsset.loadSprite(json.sprite.filename);
+                SpriteComponent component = new SpriteComponent(asset);
+                VFAnimation.PlayMode mode = VFAnimation.PlayMode.LOOP;
+                if (mode.toString().compareToIgnoreCase(json.sprite.mode) != 0) {
+                    mode = VFAnimation.PlayMode.ONCE;
+                }
+                component.setAnimation(json.sprite.animation, mode);
+                object.addComponent(SpriteComponent.class, component);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (json.scenery != null) {
+            StaticTextureAsset asset = GameAsset.loadTexture(json.scenery.filename);
+            object.addComponent(SceneryComponent.class, new SceneryComponent(asset, json.scenery.moveRatio));
+        }
+
+        return object;
     }
 
     private static SpriteAsset loadSprite(String filename, AsepriteJson json) {
