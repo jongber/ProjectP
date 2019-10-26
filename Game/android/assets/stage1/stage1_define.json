@@ -14,5 +14,6 @@
 			"filename": "stage1/hero_define.json",
 			"transform": {"x":0, "y":-24}
 		}
-	]
+	],
+	"logics": ["Stage1Logic"]
 }

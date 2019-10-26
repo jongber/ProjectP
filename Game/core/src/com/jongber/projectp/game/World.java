@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.projectp.asset.GameAsset;
 import com.jongber.projectp.asset.json.GameSettingJson;
 import com.jongber.projectp.common.Traverser;
+import com.jongber.projectp.game.detail.stage1.PlayerController;
 import com.jongber.projectp.graphics.OrthoCameraWrapper;
 import com.jongber.projectp.object.GameObject;
 
@@ -15,6 +16,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+/*
+* this is data class, do not add world logic!!!
+* */
 public class World implements InputProcessor {
 
     public interface WorldLogic {
@@ -23,13 +27,16 @@ public class World implements InputProcessor {
         void touchDown(int screenX, int screenY, int pointer, int button);
     }
 
+    public static GameSettingJson Setting;
     public OrthoCameraWrapper camera;
     public List<GameObject> sceneries = new ArrayList<>();
-    private Set<GameObject> objects = new HashSet<>();
-    private HashMap<Integer, GameObject> objectById = new HashMap<>();
     public List<WorldLogic> logics = new ArrayList<>();
 
+    private Set<GameObject> objects = new HashSet<>();
+    private HashMap<Integer, GameObject> objectById = new HashMap<>();
+
     public World(GameSettingJson json) {
+        World.Setting = json;
         this.camera = new OrthoCameraWrapper(json.viewport.w, json.viewport.h);
     }
 
@@ -51,13 +58,17 @@ public class World implements InputProcessor {
         objectById.put(object.getId(), object);
     }
 
+    public int gameObjectCount() {
+        return this.objects.size();
+    }
+
     public GameObject getObject(int id) {
         return objectById.get(id);
     }
 
     public void removeObject(GameObject object) {
         objects.remove(object);
-        objectById.remove(object.getId(), object);
+        objectById.remove(object);
     }
 
     public void forSceneries(Traverser<GameObject> traverser) {
