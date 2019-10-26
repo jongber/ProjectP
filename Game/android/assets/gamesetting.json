@@ -1,3 +1,4 @@
 {
-	"viewport" : {"w" : 256, "h" : 144}
+	"viewport" : {"w" : 256, "h" : 144},
+	"collisionDist" : 32.0
 }
