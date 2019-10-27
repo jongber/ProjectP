@@ -11,7 +11,7 @@ import com.jongber.projectp.asset.json.GameObjectJson;
 import com.jongber.projectp.asset.json.GameSettingJson;
 import com.jongber.projectp.asset.json.GameWorldJson;
 import com.jongber.projectp.common.FnTr;
-import com.jongber.projectp.common.SpriteStateJson;
+import com.jongber.projectp.common.SpriteDefineJson;
 import com.jongber.projectp.game.World;
 import com.jongber.projectp.graphics.VFAnimation;
 import com.jongber.projectp.object.GameObject;
@@ -144,14 +144,16 @@ public class GameAsset {
                 SpriteComponent component = new SpriteComponent(json.sprites.size());
 
                 for (int i = 0; i < json.sprites.size(); ++i) {
-                    SpriteStateJson spriteJson = json.sprites.get(i);
-                    SpriteAsset asset = GameAsset.loadSprite(spriteJson.filename);
-                    component.addAsset(i, asset);
+
+                    SpriteDefineJson spriteJson = json.sprites.get(i);
+
+                    component.addAsset(i, GameAsset.loadSprite(spriteJson.filename));
 
                     VFAnimation.PlayMode mode = VFAnimation.PlayMode.LOOP;
                     if (mode.toString().compareToIgnoreCase(spriteJson.mode) != 0) {
                         mode = VFAnimation.PlayMode.ONCE;
                     }
+
                     component.setAnimation(i, spriteJson.animation, mode);
                 }
 

@@ -1,6 +1,6 @@
 package com.jongber.projectp.common;
 
-public class SpriteStateJson {
+public class SpriteDefineJson {
     public String filename;
     public String animation;
     public String mode;

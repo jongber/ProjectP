@@ -4,14 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jongber.projectp.common.SceneryJsonElement;
-import com.jongber.projectp.common.SpriteStateJson;
+import com.jongber.projectp.common.SpriteDefineJson;
 
 import java.io.IOException;
 import java.util.List;
 
 public class GameObjectJson {
     public String name;
-    public List<SpriteStateJson> sprites;
+    public List<SpriteDefineJson> sprites;
     public SceneryJsonElement scenery;
 
     public static GameObjectJson load(String filename) {
