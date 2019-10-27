@@ -9,57 +9,77 @@ import com.jongber.projectp.graphics.VFAnimation;
 import com.jongber.projectp.object.GameObject;
 
 public class SpriteComponent {
-    private SpriteAsset asset;
-    private VFAnimation animation = new VFAnimation();
+    private final int layerCnt;
+    private SpriteAsset[] assets;
+    private VFAnimation[] animations;
 
-    public SpriteComponent(SpriteAsset asset) {
-        this.asset = asset;
+    public SpriteComponent(int layerCnt) {
+        this.layerCnt = layerCnt;
+        this.assets = new SpriteAsset[layerCnt];
+        this.animations = new VFAnimation[layerCnt];
+
+        for (int i = 0; i < layerCnt; ++i) {
+            this.animations[i] = new VFAnimation();
+        }
     }
 
-    public AnimationAsset getAnimationAsset(String name) {
-        return this.asset.getAnimation(name);
-    }
+    public void addAsset(int layer, SpriteAsset asset) {
+        if (this.layerCnt <= layer) {
+            Gdx.app.log("DEBUG", "invalid sprite layer " + layer);
+            return;
+        }
 
-    public String getAnimationName() {
-        return this.animation.getName();
+        assets[layer] = asset;
     }
 
     public boolean isAnimation(String name) {
-        return this.animation.getName().compareTo(name) == 0;
+        for (int i = 0; i < this.layerCnt; ++i) {
+            if (this.animations[i].getName().compareTo(name) != 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void setAnimation(String name, VFAnimation.PlayMode mode) {
-        AnimationAsset animAsset = this.asset.getAnimation(name);
-        if (animAsset == null){
-            Gdx.app.log("DEBUG", "can't find animation[" + name + "]");
-        }
+        for (int i = 0; i < this.layerCnt; ++i) {
+            AnimationAsset animAsset = this.assets[i].getAnimation(name);
+            if (animAsset == null){
+                Gdx.app.log("DEBUG", "can't find animation[" + name + "]");
+            }
 
-        this.animation.init(animAsset, mode);
+            this.animations[i].init(animAsset, mode);
+        }
     }
 
-    public TextureRegion getNext(float elapsed) {
-        return this.animation.getNext(elapsed);
+    public TextureRegion getNext(int layer, float elapsed) {
+        if (this.layerCnt <= layer) {
+            return null;
+        }
+
+        return this.animations[layer].getNext(elapsed);
     }
 
     public boolean canPlay() {
-        return this.animation.canPlay();
+        return this.animations[0].canPlay();
     }
 
     public boolean isFinished() {
-        return this.animation.getPlaybackCount() > 0
-                && this.animation.getMode() == VFAnimation.PlayMode.ONCE;
+        return this.animations[0].getPlaybackCount() > 0
+                && this.animations[0].getMode() == VFAnimation.PlayMode.ONCE;
     }
 
     public Vector2 getPivot() {
-        return new Vector2(this.asset.getPivotX(), this.asset.getPivotY());
+        return new Vector2(this.assets[0].getPivotX(), this.assets[0].getPivotY());
     }
 
     public int getPivotX() {
-        return this.asset.getPivotX();
+        return this.assets[0].getPivotX();
     }
 
     public int getPivotY() {
-        return this.asset.getPivotY();
+        return this.assets[0].getPivotY();
     }
 
     public static void changeAnimation(GameObject object, String change, VFAnimation.PlayMode mode) {

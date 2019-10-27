@@ -34,7 +34,7 @@ public class ObjectTest extends ApplicationAdapter {
         world = GameAsset.inflate(json, "stage1/stage1_define.json");
         world.init();
 
-        ////GameAsset.inflate("stage1/zombie_define.json");
+        GameAsset.inflate("stage1/zombie_define.json");
 
         Gdx.input.setInputProcessor(world);
     }
@@ -62,7 +62,7 @@ public class ObjectTest extends ApplicationAdapter {
         world.forObjects(new Traverser<GameObject>() {
             @Override
             public void onTraverse(GameObject item) {
-                RenderMethod.renderSprite(batch, item, Gdx.graphics.getDeltaTime());
+                RenderMethod.renderSprite(0, batch, item, Gdx.graphics.getDeltaTime());
             }
         });
 

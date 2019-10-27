@@ -1,8 +1,6 @@
 package com.jongber.projectp.object;
 
 import com.badlogic.gdx.math.Vector2;
-import com.jongber.projectp.graphics.VFAnimation;
-import com.jongber.projectp.object.component.SpriteComponent;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;

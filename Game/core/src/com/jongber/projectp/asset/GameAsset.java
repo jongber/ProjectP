@@ -137,7 +137,9 @@ public class GameAsset {
         if (json.sprite != null) {
             try {
                 SpriteAsset asset = GameAsset.loadSprite(json.sprite.filename);
-                SpriteComponent component = new SpriteComponent(asset);
+                SpriteComponent component = new SpriteComponent(1);
+                component.addAsset(0, asset);
+
                 VFAnimation.PlayMode mode = VFAnimation.PlayMode.LOOP;
                 if (mode.toString().compareToIgnoreCase(json.sprite.mode) != 0) {
                     mode = VFAnimation.PlayMode.ONCE;

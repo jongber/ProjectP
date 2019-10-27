@@ -13,11 +13,11 @@ import com.jongber.projectp.object.component.SpriteComponent;
 
 public class RenderMethod {
 
-    public static void renderSprite(SpriteBatch batch, GameObject object, float elapsed) {
+    public static void renderSprite(int layer, SpriteBatch batch, GameObject object, float elapsed) {
         try {
 
             SpriteComponent component = object.getComponent(SpriteComponent.class);
-            TextureRegion region = component.getNext(elapsed);
+            TextureRegion region = component.getNext(layer, elapsed);
             Vector2 pos = object.getTransform();
 
             batch.draw(region, pos.x - component.getPivotX(), pos.y - component.getPivotY());
