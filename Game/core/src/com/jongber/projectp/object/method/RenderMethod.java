@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.projectp.asset.StaticTextureAsset;
+import com.jongber.projectp.game.World;
 import com.jongber.projectp.graphics.OrthoCameraWrapper;
 import com.jongber.projectp.object.GameObject;
 import com.jongber.projectp.object.component.SceneryComponent;
@@ -17,9 +18,13 @@ public class RenderMethod {
         try {
 
             SpriteComponent component = object.getComponent(SpriteComponent.class);
-            TextureRegion region = component.getNext(layer, elapsed);
-            Vector2 pos = object.getTransform();
 
+            TextureRegion region = component.getNext(layer, elapsed);
+
+            if (region == null)
+                return;
+
+            Vector2 pos = object.getTransform();
             batch.draw(region, pos.x - component.getPivotX(), pos.y - component.getPivotY());
 
         } catch (Exception e) {

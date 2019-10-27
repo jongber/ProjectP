@@ -9,6 +9,7 @@ import com.jongber.projectp.graphics.VFAnimation;
 import com.jongber.projectp.object.GameObject;
 
 public class SpriteComponent {
+    public static final int SpriteLayer = 2;
     private final int layerCnt;
     private SpriteAsset[] assets;
     private VFAnimation[] animations;
@@ -44,13 +45,21 @@ public class SpriteComponent {
 
     public void setAnimation(String name, VFAnimation.PlayMode mode) {
         for (int i = 0; i < this.layerCnt; ++i) {
-            AnimationAsset animAsset = this.assets[i].getAnimation(name);
-            if (animAsset == null){
-                Gdx.app.log("DEBUG", "can't find animation[" + name + "]");
-            }
-
-            this.animations[i].init(animAsset, mode);
+            setAnimation(i, name, mode);
         }
+    }
+
+    public void setAnimation(int layer, String name, VFAnimation.PlayMode mode) {
+        if (this.layerCnt <= layer) {
+            return;
+        }
+
+        AnimationAsset animAsset = this.assets[layer].getAnimation(name);
+        if (animAsset == null){
+            Gdx.app.log("DEBUG", "can't find animation[" + name + "]");
+        }
+
+        this.animations[layer].init(animAsset, mode);
     }
 
     public TextureRegion getNext(int layer, float elapsed) {

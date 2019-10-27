@@ -11,6 +11,7 @@ import com.jongber.projectp.asset.json.GameObjectJson;
 import com.jongber.projectp.asset.json.GameSettingJson;
 import com.jongber.projectp.asset.json.GameWorldJson;
 import com.jongber.projectp.common.FnTr;
+import com.jongber.projectp.common.SpriteStateJson;
 import com.jongber.projectp.game.World;
 import com.jongber.projectp.graphics.VFAnimation;
 import com.jongber.projectp.object.GameObject;
@@ -134,18 +135,28 @@ public class GameAsset {
     private static GameObject inflate(GameObjectJson json) {
         GameObject object = new GameObject(json.name);
 
-        if (json.sprite != null) {
+        if (json.sprites != null && json.sprites.size() > 0) {
             try {
-                SpriteAsset asset = GameAsset.loadSprite(json.sprite.filename);
-                SpriteComponent component = new SpriteComponent(1);
-                component.addAsset(0, asset);
-
-                VFAnimation.PlayMode mode = VFAnimation.PlayMode.LOOP;
-                if (mode.toString().compareToIgnoreCase(json.sprite.mode) != 0) {
-                    mode = VFAnimation.PlayMode.ONCE;
+                if (json.sprites.size() > SpriteComponent.SpriteLayer) {
+                    throw new Exception("sprite layer overflow!");
                 }
-                component.setAnimation(json.sprite.animation, mode);
+
+                SpriteComponent component = new SpriteComponent(json.sprites.size());
+
+                for (int i = 0; i < json.sprites.size(); ++i) {
+                    SpriteStateJson spriteJson = json.sprites.get(i);
+                    SpriteAsset asset = GameAsset.loadSprite(spriteJson.filename);
+                    component.addAsset(i, asset);
+
+                    VFAnimation.PlayMode mode = VFAnimation.PlayMode.LOOP;
+                    if (mode.toString().compareToIgnoreCase(spriteJson.mode) != 0) {
+                        mode = VFAnimation.PlayMode.ONCE;
+                    }
+                    component.setAnimation(i, spriteJson.animation, mode);
+                }
+
                 object.addComponent(SpriteComponent.class, component);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

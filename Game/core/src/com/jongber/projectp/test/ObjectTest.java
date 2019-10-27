@@ -66,8 +66,15 @@ public class ObjectTest extends ApplicationAdapter {
             }
         });
 
+        world.forObjects(new Traverser<GameObject>() {
+            @Override
+            public void onTraverse(GameObject item) {
+                RenderMethod.renderSprite(1, batch, item, Gdx.graphics.getDeltaTime());
+            }
+        });
+
         //Gdx.app.log("DEBUG", "render elapsed:" + (System.currentTimeMillis() - elapsed));
-        Gdx.app.log("DEBUG", "render elapsed:" + (Gdx.graphics.getDeltaTime()));
+        ////Gdx.app.log("DEBUG", "render elapsed:" + (Gdx.graphics.getDeltaTime()));
 
         batch.end();
     }

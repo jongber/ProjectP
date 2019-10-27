@@ -7,10 +7,11 @@ import com.jongber.projectp.common.SceneryJsonElement;
 import com.jongber.projectp.common.SpriteStateJson;
 
 import java.io.IOException;
+import java.util.List;
 
 public class GameObjectJson {
     public String name;
-    public SpriteStateJson sprite;
+    public List<SpriteStateJson> sprites;
     public SceneryJsonElement scenery;
 
     public static GameObjectJson load(String filename) {

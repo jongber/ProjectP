@@ -1,4 +1,7 @@
 {
 	"name": "hero",
-	"sprite" : { "filename":"object/hero.json", "animation":"Idle", "mode":"LOOP"}
+	"sprites" : [
+		{"filename":"object/hero.json", "animation":"Idle", "mode":"LOOP"},
+		{"filename":"object/hero.json", "animation":"Idle", "mode":"LOOP"}
+	]
 }
