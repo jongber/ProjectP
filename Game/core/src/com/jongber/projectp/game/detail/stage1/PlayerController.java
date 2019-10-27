@@ -1,5 +1,6 @@
 package com.jongber.projectp.game.detail.stage1;
 
+import com.badlogic.gdx.Gdx;
 import com.jongber.projectp.game.World;
 import com.jongber.projectp.game.detail.common.LogicController;
 import com.jongber.projectp.graphics.VFAnimation;
@@ -32,9 +33,11 @@ public class PlayerController implements LogicController {
     public void update(float elapsed) {
         if (this.hero.collisionQ.isEmpty()) {
             this.move(elapsed);
+            //Gdx.app.log("DEBUG", "player move[" + (int)(elapsed * 1000.0f) + "]ms");
         }
         else {
             stop();
+            //Gdx.app.log("DEBUG", "player stop[" + (int)(elapsed * 1000.0f) + "]ms");
         }
 
         this.hero.collisionQ.clear();

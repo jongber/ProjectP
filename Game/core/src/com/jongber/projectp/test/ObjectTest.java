@@ -34,6 +34,8 @@ public class ObjectTest extends ApplicationAdapter {
         world = GameAsset.inflate(json, "stage1/stage1_define.json");
         world.init();
 
+        ////GameAsset.inflate("stage1/zombie_define.json");
+
         Gdx.input.setInputProcessor(world);
     }
 
@@ -42,8 +44,12 @@ public class ObjectTest extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        this.world.update(this.batch, Gdx.graphics.getDeltaTime());
+        //long elapsed = System.currentTimeMillis();
 
+        this.world.update(this.batch, Gdx.graphics.getDeltaTime());
+        //Gdx.app.log("DEBUG", "world update elapsed:" + (System.currentTimeMillis() - elapsed));
+
+        ///elapsed = System.currentTimeMillis();
         batch.begin();
 
         world.forSceneries(new Traverser<GameObject>() {
@@ -59,6 +65,9 @@ public class ObjectTest extends ApplicationAdapter {
                 RenderMethod.renderSprite(batch, item, Gdx.graphics.getDeltaTime());
             }
         });
+
+        //Gdx.app.log("DEBUG", "render elapsed:" + (System.currentTimeMillis() - elapsed));
+        Gdx.app.log("DEBUG", "render elapsed:" + (Gdx.graphics.getDeltaTime()));
 
         batch.end();
     }

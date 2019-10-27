@@ -32,6 +32,9 @@ public class World implements InputProcessor {
 
     private PackedArray objects = new PackedArray();
 
+    private final float FrameRate = 0.01666666f;
+    private float elapsed = 0.0f;
+
     public World(GameSettingJson json) {
         World.Setting = json;
         this.camera = new OrthoCameraWrapper(json.viewport.w, json.viewport.h);
@@ -44,9 +47,15 @@ public class World implements InputProcessor {
     }
 
     public void update(SpriteBatch batch, float elapsed) {
-        this.camera.update(batch);
-        for (int i = 0; i <logics.size(); ++i) {
-            logics.get(i).update(this, elapsed);
+
+        this.elapsed += elapsed;
+        while (this.elapsed >= FrameRate) {
+            this.elapsed -= FrameRate;
+
+            this.camera.update(batch);
+            for (int i = 0; i <logics.size(); ++i) {
+                logics.get(i).update(this, this.FrameRate);
+            }
         }
     }
 
