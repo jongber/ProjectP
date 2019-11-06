@@ -78,7 +78,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 64 },
     "sourceSize": { "w": 64, "h": 64 },
-    "duration": 150
+    "duration": 100
    },
    {
     "filename": "hero 9.aseprite",
@@ -114,7 +114,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 64 },
     "sourceSize": { "w": 64, "h": 64 },
-    "duration": 100
+    "duration": 80
    },
    {
     "filename": "hero 13.aseprite",
@@ -123,7 +123,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 64 },
     "sourceSize": { "w": 64, "h": 64 },
-    "duration": 100
+    "duration": 80
    },
    {
     "filename": "hero 14.aseprite",
@@ -132,29 +132,11 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 64 },
     "sourceSize": { "w": 64, "h": 64 },
-    "duration": 80
+    "duration": 75
    },
    {
     "filename": "hero 15.aseprite",
     "frame": { "x": 0, "y": 192, "w": 64, "h": 64 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 64 },
-    "sourceSize": { "w": 64, "h": 64 },
-    "duration": 80
-   },
-   {
-    "filename": "hero 16.aseprite",
-    "frame": { "x": 64, "y": 192, "w": 64, "h": 64 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 64 },
-    "sourceSize": { "w": 64, "h": 64 },
-    "duration": 75
-   },
-   {
-    "filename": "hero 17.aseprite",
-    "frame": { "x": 128, "y": 192, "w": 64, "h": 64 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 64 },
@@ -172,9 +154,9 @@
   "frameTags": [
    { "name": "Idle", "from": 0, "to": 3, "direction": "forward" },
    { "name": "Walk", "from": 4, "to": 7, "direction": "forward" },
-   { "name": "Attack1", "from": 8, "to": 13, "direction": "forward" },
-   { "name": "Damaged", "from": 14, "to": 16, "direction": "forward" },
-   { "name": "Dead", "from": 17, "to": 17, "direction": "forward" }
+   { "name": "Attack1", "from": 8, "to": 11, "direction": "forward" },
+   { "name": "Damaged", "from": 12, "to": 14, "direction": "forward" },
+   { "name": "Dead", "from": 15, "to": 15, "direction": "forward" }
   ],
   "layers": [
    { "name": "human-flat", "opacity": 255, "blendMode": "normal" },
