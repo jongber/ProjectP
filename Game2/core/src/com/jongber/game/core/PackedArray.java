@@ -1,4 +1,4 @@
-package com.jongber.game;
+package com.jongber.game.core;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +55,11 @@ public class PackedArray {
             this.items[this.tailIndex] = null;
             this.tailIndex --;
         }
+    }
+
+    public void clearAll() {
+        this.indexMap.clear();
+        this.items = new Object[128];
     }
 
     public boolean isContained(Object object) {
