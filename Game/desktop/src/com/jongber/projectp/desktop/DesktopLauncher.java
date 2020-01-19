@@ -2,7 +2,7 @@ package com.jongber.projectp.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.jongber.projectp.test.ObjectTest;
+import com.jongber.projectp.oldaction.test.ObjectTest;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
