@@ -7,13 +7,26 @@ import java.util.List;
 import java.util.Queue;
 
 public class SceneGraph {
+    private GameObject root;
     private List<GameObject> sorted = new ArrayList<>();
 
-    public List<GameObject> build(GameObject root) {
+    public SceneGraph(GameObject root) {
+        this.root = root;
+    }
+
+    public void addObject(GameObject obj) {
+        this.root.addChild(obj);
+    }
+
+    public void removeObject(GameObject obj) {
+            this.root.removeChild(obj);
+        }
+
+    public List<GameObject> build() {
         this.sorted.clear();
 
         Queue<GameObject> travel = new ArrayDeque<>();
-        travel.add(root);
+        travel.add(this.root);
 
         while (travel.peek() != null) {
             GameObject node = travel.remove();
@@ -23,5 +36,13 @@ public class SceneGraph {
         }
 
         return this.sorted;
+    }
+
+    public List<GameObject> getGraph() {
+        return this.sorted;
+    }
+
+    public GameObject getRoot() {
+        return this.root;
     }
 }
