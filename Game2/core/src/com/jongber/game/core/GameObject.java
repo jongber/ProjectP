@@ -1,5 +1,7 @@
 package com.jongber.game.core;
 
+import com.jongber.game.core.component.TransformComponent;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ public class GameObject {
     private Map<Class, Component> componentMap = new HashMap<>();
 
     public State state = State.Active;
+    public TransformComponent transform = new TransformComponent();
 
     public GameObject(Callback callback) {
         this.parent = null;
@@ -30,6 +33,10 @@ public class GameObject {
     public void addChild(GameObject object) {
         object.parent = this;
         this.children.add(object);
+
+        object.transform.parentStack.clear();
+        object.transform.parentStack.addAll(this.transform.parentStack);
+        object.transform.parentStack.add(this.transform.local);
 
         if (this.callback != null)
             this.callback.modified(this);

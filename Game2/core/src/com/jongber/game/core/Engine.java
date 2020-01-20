@@ -42,6 +42,14 @@ public class Engine implements GameObject.Callback {
         this.modified = false;
     }
 
+    private void calcWorldPos() {
+        List<GameObject> sorted = this.graph.getGraph();
+
+        for (GameObject obj : sorted) {
+            obj.transform.calcWorldPos();
+        }
+    }
+
     @Override
     public void modified(GameObject object) {
         this.modified = true;
