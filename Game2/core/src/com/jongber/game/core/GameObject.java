@@ -1,5 +1,8 @@
 package com.jongber.game.core;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class GameObject {
 
     public interface Callback {
@@ -15,6 +18,7 @@ public class GameObject {
     private GameObject parent;
     private PackedArray<GameObject> children = new PackedArray<>();
     private Callback callback;
+    private Map<Class, Component> componentMap = new HashMap<>();
 
     public State state = State.Active;
 
@@ -36,6 +40,14 @@ public class GameObject {
 
         if (this.callback != null)
             this.callback.modified(this);
+    }
+
+    public void addComponent(Component component) {
+        this.componentMap.put(component.getClass(), component);
+    }
+
+    public Component getComponent(Class componentType) {
+        return this.componentMap.get(componentType);
     }
 
     public GameObject[] getChildren() {
