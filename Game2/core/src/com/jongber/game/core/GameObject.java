@@ -34,10 +34,6 @@ public class GameObject {
         object.parent = this;
         this.children.add(object);
 
-        object.transform.parentStack.clear();
-        object.transform.parentStack.addAll(this.transform.parentStack);
-        object.transform.parentStack.add(this.transform.local);
-
         if (this.callback != null)
             this.callback.modified(this);
     }
@@ -55,6 +51,10 @@ public class GameObject {
 
     public Component getComponent(Class componentType) {
         return this.componentMap.get(componentType);
+    }
+
+    public GameObject getParent() {
+        return this.parent;
     }
 
     public GameObject[] getChildren() {

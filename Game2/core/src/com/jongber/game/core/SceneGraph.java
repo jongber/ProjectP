@@ -6,12 +6,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 
-public class SceneGraph {
+public class SceneGraph implements GameObject.Callback{
+    private boolean modified = false;
     private GameObject root;
     private List<GameObject> sorted = new ArrayList<>();
 
-    public SceneGraph(GameObject root) {
-        this.root = root;
+    public SceneGraph() {
+        this.root = new GameObject(this);
     }
 
     public void addObject(GameObject obj) {
@@ -22,7 +23,10 @@ public class SceneGraph {
             this.root.removeChild(obj);
         }
 
-    public List<GameObject> build() {
+    public boolean build() {
+        if (this.modified == false)
+            return false;
+
         this.sorted.clear();
 
         Queue<GameObject> travel = new ArrayDeque<>();
@@ -35,7 +39,9 @@ public class SceneGraph {
             travel.addAll(Arrays.asList(node.getChildren()));
         }
 
-        return this.sorted;
+        this.modified = true;
+
+        return true;
     }
 
     public List<GameObject> getGraph() {
@@ -44,5 +50,10 @@ public class SceneGraph {
 
     public GameObject getRoot() {
         return this.root;
+    }
+
+    @Override
+    public void modified(GameObject object) {
+        this.modified = true;
     }
 }
