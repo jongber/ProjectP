@@ -25,6 +25,7 @@ public class GameLayer {
     private List<Updater> updaters = new ArrayList<>();
 
     public void init() {
+        this.build();
     }
 
     public void registerController(Controller controller) {

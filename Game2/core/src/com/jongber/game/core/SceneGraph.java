@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Queue;
 
 public class SceneGraph implements GameObject.Callback{
-    private boolean modified = false;
+    private boolean modified = true;
     private GameObject root;
     private List<GameObject> sorted = new ArrayList<>();
 
@@ -36,7 +36,11 @@ public class SceneGraph implements GameObject.Callback{
             GameObject node = travel.remove();
             this.sorted.add(node);
 
-            travel.addAll(Arrays.asList(node.getChildren()));
+            for (Object object : node.getChildren()) {
+                if (object instanceof GameObject) {
+                    travel.add((GameObject) object);
+                }
+            }
         }
 
         this.modified = true;

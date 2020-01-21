@@ -19,7 +19,7 @@ public class GameObject {
     }
 
     private GameObject parent;
-    private PackedArray<GameObject> children = new PackedArray<>();
+    private PackedArray children = new PackedArray();
     private Callback callback;
     private Map<Class, Component> componentMap = new HashMap<>();
 
@@ -65,7 +65,7 @@ public class GameObject {
         return this.parent;
     }
 
-    public GameObject[] getChildren() {
+    public Object[] getChildren() {
         return this.children.getArray();
     }
 }

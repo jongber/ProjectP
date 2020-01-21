@@ -7,32 +7,43 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.jongber.game.core.GameLayer;
+import com.jongber.game.core.controller.TextureRenderer;
+import com.jongber.game.core.graphics.OrthoCameraWrapper;
 
 public class MapEditor extends ApplicationAdapter {
-    Stage stage;
-    OrthographicCamera camera;
+    OrthoCameraWrapper cameraWrapper;
     SpriteBatch batch;
+    GameLayer layer;
 
     @Override
     public void create () {
+        this.cameraWrapper = new OrthoCameraWrapper(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        this.batch = new SpriteBatch();
+        this.layer = new GameLayer();
+
+        this.layer.registerController(new TextureRenderer());
     }
 
     @Override
     public void render () {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.setProjectionMatrix(camera.combined);
         batch.begin();
-//        koreanFont.draw(batch, "한국어/ 3 조선�?" + "한국어", 0, 28);
+        this.cameraWrapper.update(batch);
+        this.layer.update(Gdx.graphics.getDeltaTime());
+        this.layer.update(Gdx.graphics.getDeltaTime());
+
         batch.end();
     }
 
     @Override
     public void resize (int width, int height) {
-        camera.setToOrtho(false, width, height);
+        this.cameraWrapper.resize(width, height);
     }
 
     @Override
     public void dispose() {
+        this.batch.dispose();
     }
 }

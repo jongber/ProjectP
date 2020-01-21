@@ -3,24 +3,23 @@ package com.jongber.game.core.util;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PackedArray<T> {
-    private T[] items;
-    private Map<T, Integer> indexMap = new HashMap<>();
+public class PackedArray {
+    private Object[] items;
+    private Map<Object, Integer> indexMap = new HashMap<>();
     private int tailIndex = -1;
 
-
     public PackedArray() {
-        this.items = (T[])new Object[128];
+        this.items =  new Object[128];
     }
 
-    public T[] getArray() {
+    public Object[] getArray() {
         return this.items;
     }
 
-    public void add(T item) {
+    public void add(Object item) {
         this.tailIndex++;
         if (this.tailIndex >= this.items.length) {
-            T[] newArr = (T[])new Object[this.items.length * 2];
+            Object[] newArr = new Object[this.items.length * 2];
             System.arraycopy(this.items, 0, newArr, 0, this.items.length);
             this.items = newArr;
         }
@@ -29,7 +28,7 @@ public class PackedArray<T> {
         this.indexMap.put(item, this.tailIndex);
     }
 
-    public void remove(T item) {
+    public void remove(Object item) {
         Integer index = this.indexMap.get(item);
         if (index == null) {
             return;
@@ -49,7 +48,7 @@ public class PackedArray<T> {
         }
         else {
             this.indexMap.remove(this.items[index]);
-            T item = this.items[this.tailIndex];
+            Object item = this.items[this.tailIndex];
             this.items[index] = item;
             this.indexMap.put(item, index);
             this.items[this.tailIndex] = null;
@@ -59,7 +58,7 @@ public class PackedArray<T> {
 
     public void clearAll() {
         this.indexMap.clear();
-        this.items = (T[]) new Object[128];
+        this.items = new Object[128];
     }
 
     public boolean isContained(Object object) {
