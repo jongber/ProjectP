@@ -23,6 +23,8 @@ public class MapEditor extends ApplicationAdapter {
         this.layer = new GameLayer();
 
         this.layer.registerController(new TextureRenderer());
+
+        this.layer.addObject(ObjectFactory.createLabel("hello world"));
     }
 
     @Override
@@ -32,8 +34,7 @@ public class MapEditor extends ApplicationAdapter {
         batch.begin();
         this.cameraWrapper.update(batch);
         this.layer.update(Gdx.graphics.getDeltaTime());
-        this.layer.update(Gdx.graphics.getDeltaTime());
-
+        this.layer.render(this.batch, this.cameraWrapper, Gdx.graphics.getDeltaTime());
         batch.end();
     }
 

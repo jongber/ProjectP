@@ -61,6 +61,7 @@ public class GameLayer {
         }
 
         this.objects.add(object);
+        this.modified = true;
     }
 
     public void removeObject(GameObject object) {
@@ -69,6 +70,7 @@ public class GameLayer {
         }
 
         this.objects.remove(object);
+        this.modified = true;
     }
 
     private void build() {
