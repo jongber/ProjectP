@@ -17,6 +17,11 @@ public class OrthoCameraWrapper {
         this.viewport.apply();
     }
 
+    public OrthoCameraWrapper(Viewport port) {
+        this.viewport = port;
+        this.viewport.apply();
+    }
+
     public void update(SpriteBatch batch) {
         this.camera.update();
         batch.setProjectionMatrix(this.camera.combined);
