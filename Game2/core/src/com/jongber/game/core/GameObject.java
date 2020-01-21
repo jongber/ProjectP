@@ -8,10 +8,6 @@ import java.util.Map;
 
 public class GameObject {
 
-    public interface Callback {
-        void modified(GameObject object);
-    }
-
     public enum State {
         Active,
         InActive,
@@ -20,31 +16,23 @@ public class GameObject {
 
     private GameObject parent;
     private PackedArray children = new PackedArray();
-    private Callback callback;
     private Map<Class, Component> componentMap = new HashMap<>();
 
     public String name = "";
     public State state = State.Active;
     public TransformComponent transform = new TransformComponent();
 
-    public GameObject(Callback callback) {
+    public GameObject() {
         this.parent = null;
-        this.callback = callback;
     }
 
     public void addChild(GameObject object) {
         object.parent = this;
         this.children.add(object);
-
-        if (this.callback != null)
-            this.callback.modified(this);
     }
 
     public void removeChild(GameObject object) {
         this.children.remove(object);
-
-        if (this.callback != null)
-            this.callback.modified(this);
     }
 
     public void addComponent(Component component) {

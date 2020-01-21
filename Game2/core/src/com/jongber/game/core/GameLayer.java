@@ -1,6 +1,7 @@
 package com.jongber.game.core;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.jongber.game.core.controller.SceneGraph;
 import com.jongber.game.core.controller.Transformation;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
 
@@ -24,9 +25,8 @@ public class GameLayer {
     private List<Renderer> renders = new ArrayList<>();
     private List<Updater> updaters = new ArrayList<>();
 
-    public void init() {
-        this.build();
-    }
+    private List<GameObject> objects = new ArrayList<>();
+    private boolean modified = true;
 
     public void registerController(Controller controller) {
         if (controller instanceof Renderer) {
@@ -55,14 +55,33 @@ public class GameLayer {
         }
     }
 
-    private void build() {
-        boolean graphBuilt = this.graph.build();
-        if (graphBuilt) {
-            this.transform.build(this.graph.getGraph());
-
-            for (Controller controller : this.controllers) {
-                controller.build(this.graph.getGraph());
-            }
+    public void addObject(GameObject object) {
+        if (object.getParent() != null) {
+            return;
         }
+
+        this.objects.add(object);
+    }
+
+    public void removeObject(GameObject object) {
+        if (object.getParent() != null) {
+            return;
+        }
+
+        this.objects.remove(object);
+    }
+
+    private void build() {
+        if (this.modified == false)
+            return;
+
+        this.graph.build(this.objects);
+        this.transform.build(this.graph.getGraph());
+
+        for (Controller controller : this.controllers) {
+            controller.build(this.graph.getGraph());
+        }
+
+        this.modified = false;
     }
 }
