@@ -1,4 +1,4 @@
-package com.jongber.game.core;
+package com.jongber.game.core.util;
 
 import java.util.HashMap;
 import java.util.Map;

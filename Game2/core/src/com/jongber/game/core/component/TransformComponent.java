@@ -1,9 +1,9 @@
 package com.jongber.game.core.component;
 
-import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Matrix3;
 
 
 public class TransformComponent {
-    public Matrix4 local = new Matrix4();
-    public Matrix4 world = new Matrix4();
+    public Matrix3 local = new Matrix3();
+    public Matrix3 world = new Matrix3();
 }

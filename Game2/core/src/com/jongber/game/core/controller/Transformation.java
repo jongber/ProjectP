@@ -1,12 +1,13 @@
 package com.jongber.game.core.controller;
 
 import com.jongber.game.core.Controller;
+import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.component.TransformComponent;
 
 import java.util.List;
 
-public class TransformController extends Controller {
+public class Transformation extends Controller implements GameLayer.Updater {
 
     private List<GameObject> graph = null;
 
@@ -16,7 +17,7 @@ public class TransformController extends Controller {
     }
 
     @Override
-    public void update(float delta) {
+    public void update(float elapsed) {
         for (GameObject node : this.graph) {
             GameObject parentNode = node.getParent();
             if (parentNode == null) {
