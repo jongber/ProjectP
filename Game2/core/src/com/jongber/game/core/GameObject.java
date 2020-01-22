@@ -1,5 +1,6 @@
 package com.jongber.game.core;
 
+import com.jongber.game.core.component.Component;
 import com.jongber.game.core.component.TransformComponent;
 import com.jongber.game.core.util.PackedArray;
 

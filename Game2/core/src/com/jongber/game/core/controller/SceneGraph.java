@@ -1,11 +1,9 @@
 package com.jongber.game.core.controller;
 
-import com.jongber.game.core.Controller;
 import com.jongber.game.core.GameObject;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 

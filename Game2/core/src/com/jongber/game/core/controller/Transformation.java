@@ -1,13 +1,11 @@
 package com.jongber.game.core.controller;
 
-import com.jongber.game.core.Controller;
-import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.component.TransformComponent;
 
 import java.util.List;
 
-public class Transformation extends Controller implements GameLayer.Updater {
+public class Transformation extends Controller implements Controller.Updater {
 
     private List<GameObject> graph = null;
 

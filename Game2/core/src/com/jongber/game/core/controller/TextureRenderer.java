@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Vector2;
-import com.jongber.game.core.Controller;
-import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.component.TextureComponent;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
@@ -13,7 +11,7 @@ import com.jongber.game.core.graphics.OrthoCameraWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextureRenderer extends Controller implements GameLayer.Renderer {
+public class TextureRenderer extends Controller implements Controller.Renderer {
 
     private List<GameObject> list = new ArrayList<>();
 
