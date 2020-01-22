@@ -3,28 +3,21 @@ package com.jongber.game.editor;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.controller.TextureRenderer;
-import com.jongber.game.core.graphics.OrthoCameraWrapper;
 
 public class MapEditor extends ApplicationAdapter {
-    OrthoCameraWrapper cameraWrapper;
     SpriteBatch batch;
-    GameLayer layer;
+    GameLayer mapLayer;
 
     @Override
     public void create () {
-        this.cameraWrapper = new OrthoCameraWrapper(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.batch = new SpriteBatch();
-        this.layer = new GameLayer();
+        this.mapLayer = new GameLayer();
 
-        this.layer.registerController(new TextureRenderer());
-
-        this.layer.addObject(ObjectFactory.createLabel("hello world"));
+        this.mapLayer.registerController(new TextureRenderer());
+        this.mapLayer.addObject(ObjectFactory.createLabel("hello world"));
     }
 
     @Override
@@ -32,19 +25,19 @@ public class MapEditor extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        this.cameraWrapper.update(batch);
-        this.layer.update(Gdx.graphics.getDeltaTime());
-        this.layer.render(this.batch, this.cameraWrapper, Gdx.graphics.getDeltaTime());
+        this.mapLayer.update(Gdx.graphics.getDeltaTime());
+        this.mapLayer.render(this.batch, Gdx.graphics.getDeltaTime());
         batch.end();
     }
 
     @Override
     public void resize (int width, int height) {
-        this.cameraWrapper.resize(width, height);
+        this.mapLayer.resize(width, height);
     }
 
     @Override
     public void dispose() {
         this.batch.dispose();
+        this.mapLayer.dispose();
     }
 }

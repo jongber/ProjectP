@@ -1,9 +1,12 @@
 package com.jongber.game.core;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jongber.game.core.controller.SceneGraph;
 import com.jongber.game.core.controller.Transformation;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
+import com.sun.org.apache.xpath.internal.operations.Or;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,8 @@ public class GameLayer {
         void render(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed);
     }
 
+    private OrthoCameraWrapper cameraWrapper;
+
     private SceneGraph graph = new SceneGraph();
     private Transformation transform = new Transformation();
 
@@ -27,6 +32,14 @@ public class GameLayer {
 
     private List<GameObject> objects = new ArrayList<>();
     private boolean modified = true;
+
+    public GameLayer() {
+        this.cameraWrapper = new OrthoCameraWrapper(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    }
+
+    public GameLayer(Viewport viewport) {
+        this.cameraWrapper = new OrthoCameraWrapper(viewport);
+    }
 
     public void registerController(Controller controller) {
         if (controller instanceof Renderer) {
@@ -40,9 +53,12 @@ public class GameLayer {
         this.controllers.add(controller);
     }
 
-    public void render(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
+    public void render(SpriteBatch batch, float elapsed) {
+
+        this.cameraWrapper.update(batch);
+
         for (Renderer renderer : this.renders) {
-            renderer.render(batch, camera, elapsed);
+            renderer.render(batch, this.cameraWrapper, elapsed);
         }
     }
 
@@ -71,6 +87,13 @@ public class GameLayer {
 
         this.objects.remove(object);
         this.modified = true;
+    }
+
+    public void resize (int width, int height) {
+        this.cameraWrapper.resize(width, height);
+    }
+
+    public void dispose() {
     }
 
     private void build() {

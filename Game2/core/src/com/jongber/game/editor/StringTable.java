@@ -8,6 +8,23 @@ public class StringTable {
 
     private static final Set<Character> charset = new HashSet<>();
 
+    public static boolean contain(String words) {
+
+        boolean result = true;
+
+        for (int i = 0; i < words.length(); ++i) {
+            char character = words.charAt(i);
+            if (charset.contains(character) == false) {
+
+                charset.add(character);
+
+                result = false;
+            }
+        }
+
+        return result;
+    }
+
     public static String mergeStrings() {
         Class me = StringTable.class;
 

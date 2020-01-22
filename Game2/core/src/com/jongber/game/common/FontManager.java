@@ -45,6 +45,37 @@ public class FontManager {
         generator.dispose();
     }
 
+    public void build() {
+        StringBuilder charsetBuilder = new StringBuilder();
+        charsetBuilder.append(FreeTypeFontGenerator.DEFAULT_CHARS);
+        charsetBuilder.append(StringTable.mergeStrings());
+
+        String charset = charsetBuilder.toString();
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Jua-Regular.ttf"));
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.size = 10;
+        parameter.characters = charset;
+        this.small = generator.generateFont(parameter);
+
+        parameter = new FreeTypeFontParameter();
+        parameter.size = 16;
+        parameter.characters = charset;
+        this.normal = generator.generateFont(parameter);
+
+        parameter = new FreeTypeFontParameter();
+        parameter.size = 24;
+        parameter.characters = charset;
+        this.large = generator.generateFont(parameter);
+
+        parameter = new FreeTypeFontParameter();
+        parameter.size = 32;
+        parameter.characters = charset;
+        this.extra = generator.generateFont(parameter);
+
+        generator.dispose();
+    }
+
     public void dispose() {
         this.small.dispose();
         this.normal.dispose();
