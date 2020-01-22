@@ -8,7 +8,7 @@ public class StringTable {
 
     private static final Set<Character> charset = new HashSet<>();
 
-    public static boolean contain(String words) {
+    public static boolean put(String words) {
 
         boolean result = true;
 

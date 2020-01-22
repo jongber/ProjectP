@@ -16,4 +16,14 @@ public class ObjectFactory {
 
         return object;
     }
+
+    public static GameObject createTexture() {
+        GameObject object = new GameObject();
+
+        TextureRegion region = new TextureRegion(new Texture("badlogic.jpg"));
+
+        object.addComponent(new TextureComponent(region));
+
+        return object;
+    }
 }

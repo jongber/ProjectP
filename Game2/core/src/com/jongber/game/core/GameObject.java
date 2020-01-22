@@ -40,6 +40,10 @@ public class GameObject {
         this.componentMap.put(component.getClass(), component);
     }
 
+    public boolean hasComponent(Class type) {
+        return this.componentMap.containsKey(type);
+    }
+
     public <E> E getComponent(Class componentType) {
 
         Component obj = this.componentMap.get(componentType);

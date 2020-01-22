@@ -6,43 +6,35 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.jongber.game.editor.StringTable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FontManager {
 
-    private BitmapFont small;   // 10
-    private BitmapFont normal;  // 16
-    private BitmapFont large;   // 24
-    private BitmapFont extra;   // 32
+    public enum FontSize{
+        Small,          // 10
+        Normal,         // 16
+        Large,          // 24
+        Extra           // 32
+    }
+
+    private Map<FontSize, Integer> fontSizeMap = new HashMap<>();
+    private Map<FontSize, BitmapFont> fontMap = new HashMap<>();
+    private String fontPath = "fonts/Jua-Regular.ttf";
+    private FreeTypeFontGenerator generator;
+
+    public void init(String fontPath) {
+        this.fontPath = fontPath;
+        this.init();
+    }
 
     public void init() {
-
-        StringBuilder charsetBuilder = new StringBuilder();
-        charsetBuilder.append(FreeTypeFontGenerator.DEFAULT_CHARS);
-        charsetBuilder.append(StringTable.mergeStrings());
-
-        String charset = charsetBuilder.toString();
-
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Jua-Regular.ttf"));
-        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = 10;
-        parameter.characters = charset;
-        this.small = generator.generateFont(parameter);
-
-        parameter = new FreeTypeFontParameter();
-        parameter.size = 16;
-        parameter.characters = charset;
-        this.normal = generator.generateFont(parameter);
-
-        parameter = new FreeTypeFontParameter();
-        parameter.size = 24;
-        parameter.characters = charset;
-        this.large = generator.generateFont(parameter);
-
-        parameter = new FreeTypeFontParameter();
-        parameter.size = 32;
-        parameter.characters = charset;
-        this.extra = generator.generateFont(parameter);
-
-        generator.dispose();
+        this.generator = new FreeTypeFontGenerator(Gdx.files.internal(fontPath));
+        this.fontSizeMap.put(FontSize.Small, 10);
+        this.fontSizeMap.put(FontSize.Normal, 16);
+        this.fontSizeMap.put(FontSize.Large, 24);
+        this.fontSizeMap.put(FontSize.Extra, 32);
+        this.build();
     }
 
     public void build() {
@@ -52,34 +44,25 @@ public class FontManager {
 
         String charset = charsetBuilder.toString();
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Jua-Regular.ttf"));
-        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = 10;
-        parameter.characters = charset;
-        this.small = generator.generateFont(parameter);
+        for (Map.Entry<FontSize, Integer> pair : fontSizeMap.entrySet()) {
+            FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+            parameter.size = pair.getValue();
+            parameter.characters = charset;
 
-        parameter = new FreeTypeFontParameter();
-        parameter.size = 16;
-        parameter.characters = charset;
-        this.normal = generator.generateFont(parameter);
-
-        parameter = new FreeTypeFontParameter();
-        parameter.size = 24;
-        parameter.characters = charset;
-        this.large = generator.generateFont(parameter);
-
-        parameter = new FreeTypeFontParameter();
-        parameter.size = 32;
-        parameter.characters = charset;
-        this.extra = generator.generateFont(parameter);
+            BitmapFont font = generator.generateFont(parameter);
+            this.fontMap.put(pair.getKey(), font);
+        }
 
         generator.dispose();
     }
 
+    public BitmapFont getFont(FontSize size) {
+        return this.fontMap.get(size);
+    }
+
     public void dispose() {
-        this.small.dispose();
-        this.normal.dispose();
-        this.large.dispose();
-        this.extra.dispose();
+        for (Map.Entry<FontSize, BitmapFont> pair : fontMap.entrySet()) {
+            pair.getValue().dispose();
+        }
     }
 }

@@ -4,20 +4,36 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.jongber.game.common.FontManager;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.controller.TextureRenderer;
 
 public class MapEditor extends ApplicationAdapter {
     SpriteBatch batch;
     GameLayer mapLayer;
+    FontManager fontManager;
 
     @Override
     public void create () {
+
+        Gdx.app.log("MapEditor", "create start");
+        long elapsed = System.currentTimeMillis();
+
+        this.fontManager = new FontManager();
+        this.fontManager.init();
+
+        elapsed = System.currentTimeMillis() - elapsed;
+        Gdx.app.log("MapEditor", "font load end " + elapsed);
+        elapsed = System.currentTimeMillis();
+
         this.batch = new SpriteBatch();
         this.mapLayer = new GameLayer();
 
         this.mapLayer.registerController(new TextureRenderer());
-        this.mapLayer.addObject(ObjectFactory.createLabel("hello world"));
+        this.mapLayer.addObject(ObjectFactory.createTexture());
+
+        elapsed = System.currentTimeMillis() - elapsed;
+        Gdx.app.log("MapEditor", "create end " + elapsed);
     }
 
     @Override
@@ -39,5 +55,6 @@ public class MapEditor extends ApplicationAdapter {
     public void dispose() {
         this.batch.dispose();
         this.mapLayer.dispose();
+        this.fontManager.dispose();
     }
 }
