@@ -30,8 +30,8 @@ public class LabelRenderer extends Controller implements Controller.Renderer {
                 Gdx.app.error("LabelRenderer", "why null? " + obj.name);
             }
 
-            BitmapFont font = this.fontManager.getFont(label.size);
-            font.draw(batch, label.text, 0, 0);
+//            BitmapFont font = this.fontManager.getFont(label.size);
+//            font.draw(batch, label.text, 0, 0);
         }
 
     }

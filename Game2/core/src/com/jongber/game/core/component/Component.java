@@ -1,4 +1,4 @@
 package com.jongber.game.core.component;
 
-public class Component {
+public abstract class Component {
 }

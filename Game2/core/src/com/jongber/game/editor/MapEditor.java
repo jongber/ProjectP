@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.game.common.FontManager;
 import com.jongber.game.core.GameLayer;
+import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.TextureRenderer;
 
 public class MapEditor extends ApplicationAdapter {
@@ -20,7 +21,6 @@ public class MapEditor extends ApplicationAdapter {
         long elapsed = System.currentTimeMillis();
 
         this.fontManager = new FontManager();
-        this.fontManager.init();
 
         elapsed = System.currentTimeMillis() - elapsed;
         Gdx.app.log("MapEditor", "font load end " + elapsed);
@@ -56,5 +56,6 @@ public class MapEditor extends ApplicationAdapter {
         this.batch.dispose();
         this.mapLayer.dispose();
         this.fontManager.dispose();
+        AssetManager.dispose();
     }
 }
