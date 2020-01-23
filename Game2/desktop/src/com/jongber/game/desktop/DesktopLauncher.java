@@ -2,7 +2,6 @@ package com.jongber.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.jongber.game.MainApp;
 import com.jongber.game.editor.MapEditor;
 
 public class DesktopLauncher {
