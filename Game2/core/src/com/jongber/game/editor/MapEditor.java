@@ -8,6 +8,7 @@ import com.jongber.game.common.FontManager;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.TextureRenderer;
+import com.jongber.game.editor.controller.TextRenderer;
 
 public class MapEditor extends ApplicationAdapter {
     SpriteBatch batch;
@@ -30,6 +31,9 @@ public class MapEditor extends ApplicationAdapter {
         this.mapLayer = new GameLayer();
 
         this.mapLayer.registerController(new TextureRenderer());
+        this.mapLayer.registerController(new TextRenderer());
+
+        this.mapLayer.addObject(ObjectFactory.createLabel("가가가가가갸거겨.\n민아럼ㄴㅇㄹ"));
         this.mapLayer.addObject(ObjectFactory.createTexture());
 
         elapsed = System.currentTimeMillis() - elapsed;

@@ -88,6 +88,9 @@ public class GameLayer {
     }
 
     public void dispose() {
+        for (Controller controller : this.controllers) {
+            controller.dispose();
+        }
     }
 
     private void build() {

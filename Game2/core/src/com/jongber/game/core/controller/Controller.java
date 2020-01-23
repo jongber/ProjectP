@@ -17,4 +17,6 @@ public abstract class Controller {
     }
 
     public abstract void build(List<GameObject> graph);
+
+    public abstract void dispose();
 }

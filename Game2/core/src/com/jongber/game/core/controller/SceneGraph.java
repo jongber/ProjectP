@@ -31,6 +31,10 @@ public class SceneGraph extends Controller {
         }
     }
 
+    @Override
+    public void dispose() {
+    }
+
     public List<GameObject> getGraph() {
         return this.sorted;
     }

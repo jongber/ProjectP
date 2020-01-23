@@ -15,6 +15,10 @@ public class Transformation extends Controller implements Controller.Updater {
     }
 
     @Override
+    public void dispose() {
+    }
+
+    @Override
     public void update(float elapsed) {
         for (GameObject node : this.graph) {
             GameObject parentNode = node.getParent();

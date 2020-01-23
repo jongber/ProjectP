@@ -28,6 +28,10 @@ public class TextureRenderer extends Controller implements Controller.Renderer {
     }
 
     @Override
+    public void dispose() {
+    }
+
+    @Override
     public void render(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
         for (GameObject object : list) {
 
