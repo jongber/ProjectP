@@ -10,8 +10,6 @@ import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.event.GameEventHandler;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,7 +114,7 @@ public class GameLayer {
         }
     }
 
-    public void addObject(@NotNull GameObject object) {
+    public void addObject(GameObject object) {
         if (object.getParent() != null) {
             Gdx.app.error("GameLayer", "cannot add gameobject, object has parent " + object.name);
             return;
@@ -126,7 +124,7 @@ public class GameLayer {
         this.modified = true;
     }
 
-    public void removeObject(@NotNull GameObject object) {
+    public void removeObject(GameObject object) {
         if (object.getParent() != null) {
             Gdx.app.error("GameLayer", "cannot remove gameobject, object has parent " + object.name);
             return;
@@ -136,7 +134,7 @@ public class GameLayer {
         this.modified = true;
     }
 
-    public void addObject(@NotNull GameObject parent, @NotNull GameObject child) {
+    public void addObject(GameObject parent, GameObject child) {
         if (parent == null) {
             Gdx.app.error("GameLayer", "cannot add gameobjec parent is null" + child.name);
             return;
@@ -146,7 +144,7 @@ public class GameLayer {
         this.modified = true;
     }
 
-    public void removeObject(@NotNull GameObject parent, @NotNull GameObject child) {
+    public void removeObject(GameObject parent, GameObject child) {
         parent.removeChild(child);
         this.modified = true;
     }
