@@ -1,38 +1,67 @@
-package com.jongber.game.core.asset;
+package com.jongber.game.desktop.room.controller;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.jongber.game.core.GameObject;
+import com.jongber.game.core.controller.Controller;
+import com.jongber.game.core.graphics.OrthoCameraWrapper;
 
 import java.util.List;
 
-public class AnimationAsset {
+public class RoomRender extends Controller implements Controller.Renderer, Controller.InputProcessor {
 
-    private String name;
-    private TextureRegion[] regions;
-    private int[] frameDuration;
+    @Override
+    public void render(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
 
-    public AnimationAsset(String name, TextureRegion[] regions, List<Integer> durations) {
-        this.regions = regions;
-        this.frameDuration = new int[durations.size()];
-        this.name = name;
-
-        for (int i = 0; i < this.frameDuration.length; ++i) {
-            this.frameDuration[i] = durations.get(i);
-        }
     }
 
-    public String getName() {
-        return this.name;
+    @Override
+    public void build(List<GameObject> graph) {
+
     }
 
-    public int getFrameLength() {
-        return this.regions.length;
+    @Override
+    public void dispose() {
+
     }
 
-    public TextureRegion getTextureRegion(int index) {
-        return regions[index];
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
     }
 
-    public int getFrameDuration(int index) {
-        return this.frameDuration[index];
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(OrthoCameraWrapper camera, int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(OrthoCameraWrapper camera, int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(OrthoCameraWrapper camera, int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(OrthoCameraWrapper camera, int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+
+        return false;
     }
 }

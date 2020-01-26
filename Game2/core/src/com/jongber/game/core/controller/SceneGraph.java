@@ -23,10 +23,8 @@ public class SceneGraph extends Controller {
             GameObject node = travel.remove();
             this.sorted.add(node);
 
-            for (Object object : node.getChildren()) {
-                if (object instanceof GameObject) {
-                    travel.add((GameObject) object);
-                }
+            for (int i = 0; i < node.getChildrenSize(); ++i) {
+                travel.add(node.getChild(i));
             }
         }
     }

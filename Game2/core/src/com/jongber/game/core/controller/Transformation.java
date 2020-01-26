@@ -30,7 +30,7 @@ public class Transformation extends Controller implements Controller.Updater {
                 TransformComponent parentTransform = parentNode.transform;
 
                 transform.world.set(parentTransform.world);
-                transform.world.mul(node.transform.local);
+                transform.world.mul(transform.local);
             }
         }
     }

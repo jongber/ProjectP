@@ -2,11 +2,12 @@ package com.jongber.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.jongber.game.editor.MapEditor;
+import com.jongber.game.desktop.room.RoomEditor;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new MapEditor(), config);
+		config.resizable = true;
+		new LwjglApplication(new RoomEditor(), config);
 	}
 }

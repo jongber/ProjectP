@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import java.util.HashMap;
 
 public class AssetManager {
-    private static HashMap<String, TextureAsset> textureAssets = new HashMap<>();
+    private static HashMap<String, Texture> textureAssets = new HashMap<>();
 
-    public static TextureAsset getTextureAsset(String filename) {
+    public static Texture getTexture(String filename) {
 
         if (textureAssets.containsKey(filename)) {
             return textureAssets.get(filename);
@@ -17,19 +17,16 @@ public class AssetManager {
         }
     }
 
-    public static TextureAsset loadTexture(String filename) {
-        TextureAsset asset = new TextureAsset();
-
+    public static Texture loadTexture(String filename) {
         Texture texture = new Texture(filename);
-        asset.set(texture);
 
-        textureAssets.put(filename, asset);
+        textureAssets.put(filename, texture);
 
-        return asset;
+        return texture;
     }
 
     public static void dispose() {
-        for (TextureAsset asset : textureAssets.values()) {
+        for (Texture asset : textureAssets.values()) {
             asset.dispose();
         }
     }

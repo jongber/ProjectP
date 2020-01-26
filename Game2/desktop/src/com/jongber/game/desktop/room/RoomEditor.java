@@ -21,6 +21,7 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
 
 
         RoomEditorDialog.popInitUI(this.layer);
+        Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
 
-        
+        this.layer.getInput().scrolled(amount);
 
         return false;
     }

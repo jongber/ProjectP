@@ -9,35 +9,28 @@ import java.util.Map;
 
 public class GameObject {
 
-    public enum State {
-        Active,
-        InActive,
-        Dead,
-    }
-
     private GameObject parent;
-    private PackedArray children = new PackedArray();
+    private PackedArray<GameObject> children = new PackedArray();
     private Map<Class, Component> componentMap = new HashMap<>();
 
     public String name = "";
-    public State state = State.Active;
     public TransformComponent transform = new TransformComponent();
 
     public GameObject() {
         this.parent = null;
     }
 
-    public void addChild(GameObject object) {
+    public void addComponent(Component component) {
+        this.componentMap.put(component.getClass(), component);
+    }
+
+    protected void addChild(GameObject object) {
         object.parent = this;
         this.children.add(object);
     }
 
-    public void removeChild(GameObject object) {
+    protected void removeChild(GameObject object) {
         this.children.remove(object);
-    }
-
-    public void addComponent(Component component) {
-        this.componentMap.put(component.getClass(), component);
     }
 
     public boolean hasComponent(Class type) {
@@ -58,7 +51,15 @@ public class GameObject {
         return this.parent;
     }
 
-    public Object[] getChildren() {
-        return this.children.getArray();
+    public GameObject[] getChildren() {
+        return this.children.toArray(GameObject.class);
+    }
+
+    public int getChildrenSize() {
+        return this.children.size();
+    }
+
+    public GameObject getChild(int index) {
+        return this.children.get(index);
     }
 }

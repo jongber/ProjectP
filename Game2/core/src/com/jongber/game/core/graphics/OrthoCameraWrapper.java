@@ -63,7 +63,7 @@ public class OrthoCameraWrapper {
         return this.camera.zoom;
     }
 
-    public Camera getCamera() {
+    public OrthographicCamera getCamera() {
         return this.camera;
     }
 }
