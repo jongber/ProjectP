@@ -29,19 +29,32 @@ public class BlockGridRenderer extends Controller implements Controller.PostRend
         batch.end();
 
         Vector3 camPos = camera.getPosition(new Vector3());
+
         int cameraGridX = (int)(camPos.x / BlockSize) * BlockSize;
         int cameraGridY = (int)(camPos.y / BlockSize) * BlockSize;
 
         Gdx.gl.glLineWidth(0.5f);
         renderer.setProjectionMatrix(camera.getCamera().projection);
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(Color.RED);
+        renderer.setColor(Color.WHITE);
 
         for (int i = cameraGridX - this.gridX; i < cameraGridX + this.gridX; i += BlockSize) {
+
+            if (i == cameraGridX)
+                renderer.setColor(Color.RED);
+            else
+                renderer.setColor(Color.WHITE);
+
             renderer.line(i, -this.gridY, i, this.gridY);
         }
 
         for (int i = cameraGridY - this.gridY; i < cameraGridY + this.gridY; i += BlockSize) {
+
+            if (i == cameraGridX)
+                renderer.setColor(Color.RED);
+            else
+                renderer.setColor(Color.WHITE);
+
             renderer.line(-this.gridX, i, this.gridX, i);
         }
 
