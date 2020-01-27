@@ -3,10 +3,12 @@ package com.jongber.game.desktop.room;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.TextureRenderer;
+import com.jongber.game.desktop.room.controller.ZoomController;
 
 public class RoomEditor extends ApplicationAdapter implements InputProcessor {
 
@@ -18,7 +20,7 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
         this.batch = new SpriteBatch();
         this.layer = new GameLayer();
         this.layer.registerController(new TextureRenderer());
-
+        this.layer.registerController(new ZoomController());
 
         RoomEditorDialog.popInitUI(this.layer);
         Gdx.input.setInputProcessor(this);
@@ -31,6 +33,9 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public void render () {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         float elapsed = Gdx.graphics.getDeltaTime();
 
         batch.begin();
@@ -62,11 +67,13 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        this.layer.getInput().touchDown(screenX, screenY, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        this.layer.getInput().touchUp(screenX, screenY, pointer, button);
         return false;
     }
 
@@ -77,6 +84,7 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+        this.layer.getInput().mouseMoved(screenX, screenY);
         return false;
     }
 
