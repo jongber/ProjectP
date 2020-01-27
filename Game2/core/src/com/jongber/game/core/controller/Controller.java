@@ -25,10 +25,10 @@ public abstract class Controller {
         boolean keyTyped(char character);
         boolean keyDown(int keycode);
         boolean keyUp(int keycode);
-        boolean touchDown(float worldX, float worldY, int pointer, int button);
-        boolean touchUp(float worldX, float worldY, int pointer, int button);
-        boolean touchDragged(float worldX, float worldY, int pointer);
-        boolean mouseMoved(float worldX, float worldY);
+        boolean touchDown(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button);
+        boolean touchUp(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button);
+        boolean touchDragged(OrthoCameraWrapper camera, float worldX, float worldY, int pointer);
+        boolean mouseMoved(OrthoCameraWrapper camera, float worldX, float worldY);
         boolean scrolled(OrthoCameraWrapper camera, int amount);
     }
 

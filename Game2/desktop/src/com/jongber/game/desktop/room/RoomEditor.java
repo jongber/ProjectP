@@ -9,7 +9,7 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.room.controller.BlockGridRenderer;
-import com.jongber.game.desktop.room.controller.ZoomController;
+import com.jongber.game.desktop.room.controller.CameraController;
 
 public class RoomEditor extends ApplicationAdapter implements InputProcessor {
 
@@ -22,7 +22,7 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
         this.layer = new GameLayer();
         this.layer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         this.layer.registerController(new TextureRenderer());
-        this.layer.registerController(new ZoomController());
+        this.layer.registerController(new CameraController());
 
         RoomEditorDialog.popInitUI(this.layer);
         Gdx.input.setInputProcessor(this);
@@ -81,6 +81,7 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        this.layer.getInput().touchDragged(screenX, screenY, pointer);
         return false;
     }
 

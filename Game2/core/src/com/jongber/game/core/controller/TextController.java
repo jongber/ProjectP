@@ -97,12 +97,12 @@ public class TextController extends Controller implements Controller.Renderer, C
     }
 
     @Override
-    public boolean touchDown(float screenX, float screenY, int pointer, int button) {
+    public boolean touchDown(OrthoCameraWrapper camera, float screenX, float screenY, int pointer, int button) {
         return false;
     }
 
     @Override
-    public boolean touchUp(float worldX, float worldY, int pointer, int button) {
+    public boolean touchUp(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button) {
 
         for (GameObject obj : this.objs) {
             Vector2 pos = obj.transform.getPos();
@@ -126,12 +126,12 @@ public class TextController extends Controller implements Controller.Renderer, C
     }
 
     @Override
-    public boolean touchDragged(float screenX, float screenY, int pointer) {
+    public boolean touchDragged(OrthoCameraWrapper camera, float screenX, float screenY, int pointer) {
         return false;
     }
 
     @Override
-    public boolean mouseMoved(float screenX, float screenY) {
+    public boolean mouseMoved(OrthoCameraWrapper camera, float screenX, float screenY) {
         return false;
     }
 

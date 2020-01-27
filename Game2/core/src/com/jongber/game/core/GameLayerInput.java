@@ -58,7 +58,7 @@ public class GameLayerInput implements InputProcessor {
         Vector3 worldPos = cameraWrapper.getCamera().unproject(new Vector3(screenX, screenY, cameraWrapper.getCamera().zoom));
 
         for (Controller.InputProcessor input : this.inputProcessors) {
-            if (input.touchDown(worldPos.x, worldPos.y, pointer, button)) {
+            if (input.touchDown(cameraWrapper, worldPos.x, worldPos.y, pointer, button)) {
                 processed = true;
             }
         }
@@ -72,7 +72,7 @@ public class GameLayerInput implements InputProcessor {
         Vector3 worldPos = cameraWrapper.getCamera().unproject(new Vector3(screenX, screenY, cameraWrapper.getCamera().zoom));
 
         for (Controller.InputProcessor input : this.inputProcessors) {
-            if (input.touchUp(worldPos.x, worldPos.y, pointer, button)) {
+            if (input.touchUp(cameraWrapper, worldPos.x, worldPos.y, pointer, button)) {
                 processed = true;
             }
         }
@@ -86,7 +86,7 @@ public class GameLayerInput implements InputProcessor {
         Vector3 worldPos = cameraWrapper.getCamera().unproject(new Vector3(screenX, screenY, cameraWrapper.getCamera().zoom));
 
         for (Controller.InputProcessor input : this.inputProcessors) {
-            if (input.touchDragged(worldPos.x, worldPos.y, pointer)) {
+            if (input.touchDragged(cameraWrapper, worldPos.x, worldPos.y, pointer)) {
                 processed = true;
             }
         }
@@ -100,7 +100,7 @@ public class GameLayerInput implements InputProcessor {
         Vector3 worldPos = cameraWrapper.getCamera().unproject(new Vector3(screenX, screenY, cameraWrapper.getCamera().zoom));
 
         for (Controller.InputProcessor input : this.inputProcessors) {
-            if (input.mouseMoved(worldPos.x, worldPos.y)) {
+            if (input.mouseMoved(cameraWrapper, worldPos.x, worldPos.y)) {
                 processed = true;
             }
         }

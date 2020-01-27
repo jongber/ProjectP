@@ -1,26 +1,10 @@
-package com.jongber.game.core.controller.adapter;
+package com.jongber.game.desktop.room.controller;
 
-import com.jongber.game.core.GameObject;
-import com.jongber.game.core.controller.Controller;
+import com.jongber.game.core.controller.adapter.InputControlAdapter;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
 
-import java.util.List;
+public class CameraController extends InputControlAdapter {
 
-public class InputControlAdapter extends Controller implements Controller.InputProcessor {
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
 
     @Override
     public boolean touchDown(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button) {
@@ -29,6 +13,7 @@ public class InputControlAdapter extends Controller implements Controller.InputP
 
     @Override
     public boolean touchUp(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button) {
+
         return false;
     }
 
@@ -44,16 +29,15 @@ public class InputControlAdapter extends Controller implements Controller.InputP
 
     @Override
     public boolean scrolled(OrthoCameraWrapper camera, int amount) {
-        return false;
-    }
+        // up : -1
+        // down : 1
 
-    @Override
-    public void build(List<GameObject> graph) {
+        if (amount < 0 && camera.getZoom() <= 0.08f) {
+            return true;
+        }
 
-    }
+        camera.addZoom(amount * 0.04f);
 
-    @Override
-    public void dispose() {
-
+        return true;
     }
 }
