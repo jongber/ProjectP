@@ -59,6 +59,11 @@ public class OrthoCameraWrapper {
         return this.camera.position;
     }
 
+    public Vector3 getPosition(Vector3 pos) {
+        pos.set(this.camera.position);
+        return pos;
+    }
+
     public float getZoom() {
         return this.camera.zoom;
     }

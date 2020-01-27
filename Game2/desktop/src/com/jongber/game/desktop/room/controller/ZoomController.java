@@ -40,7 +40,7 @@ public class ZoomController extends InputControlAdapter {
     @Override
     public boolean mouseMoved(float worldX, float worldY) {
 
-        System.out.println("x[" + worldX + "] y[" + worldY + "]");
+        //System.out.println("x[" + worldX + "] y[" + worldY + "]");
 
         return false;
     }

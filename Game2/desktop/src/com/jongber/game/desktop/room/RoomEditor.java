@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.TextureRenderer;
+import com.jongber.game.desktop.room.controller.BlockGridRenderer;
 import com.jongber.game.desktop.room.controller.ZoomController;
 
 public class RoomEditor extends ApplicationAdapter implements InputProcessor {
@@ -19,6 +20,7 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
     public void create () {
         this.batch = new SpriteBatch();
         this.layer = new GameLayer();
+        this.layer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         this.layer.registerController(new TextureRenderer());
         this.layer.registerController(new ZoomController());
 
