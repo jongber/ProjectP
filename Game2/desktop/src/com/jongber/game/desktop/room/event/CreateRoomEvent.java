@@ -7,6 +7,7 @@ import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.component.TextureComponent;
 import com.jongber.game.core.event.GameEvent;
+import com.jongber.game.desktop.room.RoomEditorDialog;
 
 public class CreateRoomEvent extends GameEvent {
 
@@ -19,6 +20,7 @@ public class CreateRoomEvent extends GameEvent {
     @Override
     public void handle() {
         this.layer.addObject(create());
+        RoomEditorDialog.popRoomUI(this.layer);
     }
 
     private GameObject create() {
