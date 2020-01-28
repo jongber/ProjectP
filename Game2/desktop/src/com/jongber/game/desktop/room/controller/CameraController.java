@@ -38,21 +38,12 @@ public class CameraController extends InputControlAdapter {
 
         if (wheel) {
             Vector2 drag = new Vector2(worldX, worldY).sub(this.pressed);
+            float len = drag.len();
             drag.nor();
+            drag.scl(-1.0f * len * 0.5f);
 
-            int diffX = 0, diffY = 0;
-
-            if (Math.abs(drag.x) > Math.abs(drag.y)) {
-                if (drag.x >= 0) diffX = -BlockSize;
-                else diffX = BlockSize;
-            }
-            else {
-                if (drag.y >= 0) diffY = -BlockSize;
-                else diffY = BlockSize;
-            }
-
-            camera.getCamera().position.add(diffX, diffY, 0);
-            this.pressed.set(worldX + diffX, worldY + diffY);
+            camera.addPosition(drag);
+            this.pressed.set(worldX, worldY);
 
             return true;
         }

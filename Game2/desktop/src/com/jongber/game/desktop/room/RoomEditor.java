@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
+import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.room.controller.BlockGridRenderer;
 import com.jongber.game.desktop.room.controller.CameraController;
@@ -14,23 +15,27 @@ import com.jongber.game.desktop.room.controller.CameraController;
 public class RoomEditor extends ApplicationAdapter implements InputProcessor {
 
     private SpriteBatch batch;
-    private GameLayer layer;
+    private GameLayer roomViewLayer;
+    private GameLayer fpsViewLayer;
 
     @Override
     public void create () {
         this.batch = new SpriteBatch();
-        this.layer = new GameLayer();
-        this.layer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        this.layer.registerController(new TextureRenderer());
-        this.layer.registerController(new CameraController());
+        this.roomViewLayer = new GameLayer();
+        this.roomViewLayer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        this.roomViewLayer.registerController(new TextureRenderer());
+        this.roomViewLayer.registerController(new CameraController());
 
-        RoomEditorDialog.popInitUI(this.layer);
+        this.fpsViewLayer = new GameLayer();
+        this.fpsViewLayer.registerController(new PerfRenderer());
+
+        RoomEditorDialog.popInitUI(this.roomViewLayer);
         Gdx.input.setInputProcessor(this);
     }
 
     @Override
     public void resize (int width, int height) {
-        this.layer.resize(width, height);
+        this.roomViewLayer.resize(width, height);
     }
 
     @Override
@@ -41,14 +46,17 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
         float elapsed = Gdx.graphics.getDeltaTime();
 
         batch.begin();
-        this.layer.update(elapsed);
-        this.layer.render(batch, elapsed);
+        this.roomViewLayer.update(elapsed);
+        this.fpsViewLayer.update(elapsed);
+
+        this.roomViewLayer.render(batch, elapsed);
+        this.fpsViewLayer.render(batch, elapsed);
         batch.end();
     }
 
     @Override
     public void dispose () {
-        this.layer.dispose();
+        this.roomViewLayer.dispose();
         AssetManager.dispose();
     }
 
@@ -69,32 +77,32 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        this.layer.getInput().touchDown(screenX, screenY, pointer, button);
+        this.roomViewLayer.getInput().touchDown(screenX, screenY, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        this.layer.getInput().touchUp(screenX, screenY, pointer, button);
+        this.roomViewLayer.getInput().touchUp(screenX, screenY, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        this.layer.getInput().touchDragged(screenX, screenY, pointer);
+        this.roomViewLayer.getInput().touchDragged(screenX, screenY, pointer);
         return false;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        this.layer.getInput().mouseMoved(screenX, screenY);
+        this.roomViewLayer.getInput().mouseMoved(screenX, screenY);
         return false;
     }
 
     @Override
     public boolean scrolled(int amount) {
 
-        this.layer.getInput().scrolled(amount);
+        this.roomViewLayer.getInput().scrolled(amount);
 
         return false;
     }
