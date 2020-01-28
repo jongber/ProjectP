@@ -31,14 +31,12 @@ public class BlockGridRenderer extends Controller implements Controller.PostRend
         Gdx.gl.glLineWidth(0.5f);
         renderer.setProjectionMatrix(camera.getCamera().combined);
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(Color.WHITE);
-
         for (int i = -this.gridX; i < this.gridX; i += BlockSize) {
 
             if (i == 0)
-                renderer.setColor(Color.RED);
+                renderer.setColor(Color.LIGHT_GRAY);
             else
-                renderer.setColor(Color.WHITE);
+                renderer.setColor(Color.DARK_GRAY);
 
             renderer.line(i, -this.gridY, i, this.gridY);
         }
@@ -46,9 +44,9 @@ public class BlockGridRenderer extends Controller implements Controller.PostRend
         for (int i = -this.gridY; i < this.gridY; i += BlockSize) {
 
             if (i == 0)
-                renderer.setColor(Color.RED);
+                renderer.setColor(Color.LIGHT_GRAY);
             else
-                renderer.setColor(Color.WHITE);
+                renderer.setColor(Color.DARK_GRAY);
 
             renderer.line(-this.gridX, i, this.gridX, i);
         }

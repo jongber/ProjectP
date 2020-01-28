@@ -11,6 +11,8 @@ import java.util.List;
 public class PerfRenderer extends Controller implements Controller.Renderer{
     private BitmapFont font;
     private Vector3 fpsPos = new Vector3();
+    private float totalElapsed = 0.0f;
+    private float elapsed = 0.0f;
 
     public PerfRenderer() {
         font = new BitmapFont();
@@ -28,10 +30,17 @@ public class PerfRenderer extends Controller implements Controller.Renderer{
 
     @Override
     public void render(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
-        elapsed = 1/elapsed;
+        if (totalElapsed == 0.0f) {
+            this.elapsed = elapsed;
+        }
+
+        totalElapsed += elapsed;
+        if (totalElapsed >= 1.0f) {
+            totalElapsed = 0.0f;
+        }
 
         this.fpsPos.setZero();
         camera.getCamera().unproject(this.fpsPos);
-        font.draw(batch, "fps:" + (int)elapsed, this.fpsPos.x, this.fpsPos.y - this.font.getLineHeight());
+        font.draw(batch, "fps:" + (int)(1/this.elapsed), this.fpsPos.x, this.fpsPos.y - this.font.getLineHeight());
     }
 }

@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class RoomEditorDialog {
@@ -20,6 +21,15 @@ public class RoomEditorDialog {
             @Override
             public void run() {
                 _popInitUI(layer);
+            }
+        }).start();
+    }
+
+    private static void popRoomUI(GameLayer layer) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                _popRoomUI(layer);
             }
         }).start();
     }
@@ -60,7 +70,6 @@ public class RoomEditorDialog {
         JDialog dialog = new JDialog();
 
         JPanel panel = new JPanel();
-
 
         dialog.add(panel);
         dialog.setSize(200, 400);

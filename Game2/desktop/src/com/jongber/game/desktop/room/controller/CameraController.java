@@ -5,7 +5,6 @@ import com.jongber.game.core.controller.adapter.InputControlAdapter;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
 
 public class CameraController extends InputControlAdapter {
-    private final int BlockSize = 16;
     private boolean wheel = false;
     private Vector2 pressed = new Vector2();
 
