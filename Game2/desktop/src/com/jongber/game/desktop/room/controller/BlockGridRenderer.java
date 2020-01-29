@@ -18,6 +18,8 @@ public class BlockGridRenderer extends Controller implements Controller.PostRend
     private int gridX;
     private int gridY;
 
+    public boolean showGrid = true;
+
     public BlockGridRenderer(int screenW, int screenH) {
         this.gridY = screenH * 3 / BlockSize * BlockSize;
         this.gridX = screenW * 3 / BlockSize * BlockSize;
@@ -25,6 +27,9 @@ public class BlockGridRenderer extends Controller implements Controller.PostRend
 
     @Override
     public void postRender(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
+
+        if (this.showGrid == false)
+            return;
 
         batch.end();
 

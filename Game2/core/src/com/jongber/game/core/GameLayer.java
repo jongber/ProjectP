@@ -89,6 +89,16 @@ public class GameLayer {
         this.modified = true;
     }
 
+    public Controller getController(Class type) {
+        for (Controller controller : this.controllers) {
+            if (type.isInstance(controller)) {
+                return controller;
+            }
+        }
+
+        return null;
+    }
+
     public void render(SpriteBatch batch, float elapsed) {
 
         this.cameraWrapper.update(batch);
