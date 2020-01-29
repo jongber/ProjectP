@@ -6,15 +6,21 @@ import com.jongber.game.desktop.room.event.CreateRoomEvent;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
@@ -22,8 +28,13 @@ import javax.swing.event.ChangeListener;
 
 public class RoomEditorDialog {
 
-    public static void popInitUI(GameLayer layer) {
-        _popInitUI(layer);
+    public static void popRoomUI(GameLayer layer) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                _popRoomUI(layer);
+            }
+        }).start();
     }
 
     /*
@@ -39,7 +50,7 @@ public class RoomEditorDialog {
      * [save] [load]
      * */
 
-    public static void popRoomUI(GameLayer layer) {
+    public static void _popRoomUI(GameLayer layer) {
         JDialog dialog = new JDialog();
         dialog.setSize(400, 400);
         //dialog.setResizable(false);
@@ -118,6 +129,7 @@ public class RoomEditorDialog {
         gbc.gridx = 1;
         gbc.gridy = 4;
         JSpinner widthSpinner = new JSpinner();
+        widthSpinner.setValue(3);
         dialog.add(widthSpinner, gbc);
 
         gbc.gridx = 2;
@@ -127,42 +139,34 @@ public class RoomEditorDialog {
         // 6. wallpaper
         gbc.gridx = 0;
         gbc.gridy = 5;
-        JButton pathButton = new JButton("wallpaper");
-        dialog.add(pathButton, gbc);
+        JLabel wallpaperLabel = new JLabel("Wallpaper: ");
+        dialog.add(wallpaperLabel, gbc);
 
-        //dialog.add(dialog);
-        dialog.setVisible(true);
-    }
-
-    private static void _popInitUI(GameLayer layer) {
-        JDialog dialog = new JDialog();
-        dialog.setLayout(new FlowLayout());
-        dialog.setSize(100, 100);
-
-        JButton newButton = new JButton();
-        JButton loadButton = new JButton();
-
-        newButton.setText("create room");
-        loadButton.setText("load room");
-
-        dialog.add(newButton);
-        dialog.add(loadButton);
-
-        newButton.addActionListener(new ActionListener() {
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        JButton wallpaperButton = new JButton("load");
+        wallpaperButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                layer.post(new CreateRoomEvent(layer));
-                dialog.dispose();
+                String basePath = System.getProperty("user.dir") +
+                        File.separator + "android" + File.separator + "assets";
+                File baseFile = new File(basePath);
+
+                JFileChooser fc = new JFileChooser(baseFile);
+                int i = fc.showOpenDialog(null);
+                if (i == JFileChooser.APPROVE_OPTION) {
+                    File f = fc.getSelectedFile();
+                    //String relative = baseFile.toURI().relativize(f.toURI()).getPath();
+                    ImageIcon icon = new ImageIcon(f.getAbsolutePath());
+                    Image image = icon.getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+                    wallpaperLabel.setIcon(new ImageIcon(image));
+                    wallpaperButton.setText("reload");
+                }
             }
         });
+        dialog.add(wallpaperButton, gbc);
 
-        dialog.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent windowEvent) {
-                super.windowClosed(windowEvent);
-            }
-        });
-
+        //dialog.add(dialog);
         dialog.setVisible(true);
     }
 }

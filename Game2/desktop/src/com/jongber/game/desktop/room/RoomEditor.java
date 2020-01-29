@@ -29,7 +29,7 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
         this.fpsViewLayer = new GameLayer();
         this.fpsViewLayer.registerController(new PerfRenderer());
 
-        RoomEditorDialog.popInitUI(this.roomViewLayer);
+        RoomEditorDialog.popRoomUI(this.roomViewLayer);
         Gdx.input.setInputProcessor(this);
     }
 
@@ -40,7 +40,7 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public void render () {
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+        Gdx.gl.glClearColor(0.17f, 0.17f, 0.17f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         float elapsed = Gdx.graphics.getDeltaTime();

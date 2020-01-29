@@ -20,7 +20,6 @@ public class CreateRoomEvent extends GameEvent {
     @Override
     public void handle() {
         this.layer.addObject(create());
-        RoomEditorDialog.popRoomUI(this.layer);
     }
 
     private GameObject create() {
