@@ -6,10 +6,12 @@ import com.jongber.game.desktop.room.event.CreateRoomEvent;
 import com.jongber.game.desktop.room.event.ShowGridEvent;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
@@ -61,7 +63,8 @@ public class RoomEditorDialog {
 
     public static void _popRoomUI(GameLayer layer) {
         JDialog dialog = new JDialog();
-        dialog.setSize(400, 400);
+        dialog.setTitle("Room Editor Commander");
+        dialog.setSize(450, 350);
         //propertyPanel.setResizable(false);
         dialog.setLayout(new GridBagLayout());
 
@@ -190,7 +193,7 @@ public class RoomEditorDialog {
 
             panelGbc.gridx = 1;
             panelGbc.gridy = 5;
-            JButton wallpaperButton = new JButton("load");
+            JButton wallpaperButton = new JButton("Load");
             wallpaperButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
@@ -213,11 +216,38 @@ public class RoomEditorDialog {
             });
             propertyPanel.add(wallpaperButton, panelGbc);
 
+            // 7. Apply & Clear
+            panelGbc.gridx = 1;
+            panelGbc.gridy = 6;
+            panelGbc.insets = new Insets(10,10,0,0);
+            JButton apply = new JButton("\tApply property\t");
+            propertyPanel.add(apply, panelGbc);
+
+            panelGbc.gridx = 2;
+            panelGbc.gridy = 6;
+            JButton clear = new JButton("\t   Clear view   \t");
+            propertyPanel.add(clear, panelGbc);
+
+            // 8. Save & Load
+            panelGbc.gridx = 1;
+            panelGbc.gridy = 7;
+            JButton save = new JButton("\tSave property\t");
+            propertyPanel.add(save, panelGbc);
+
+            panelGbc.gridx = 2;
+            panelGbc.gridy = 7;
+            JButton load = new JButton("\tLoad property\t");
+            propertyPanel.add(load, panelGbc);
+
         //// panel area end
         dialogGbc.gridx = 0;
         dialogGbc.gridy = 1;
         dialog.add(propertyPanel, dialogGbc);
 
         dialog.setVisible(true);
+    }
+
+    private static boolean validateRoomProperty() {
+        return true;
     }
 }
