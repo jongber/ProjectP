@@ -55,6 +55,7 @@ public class RoomEditViewer extends ApplicationAdapter implements InputProcessor
 
     @Override
     public void dispose () {
+        this.batch.dispose();
         this.roomViewLayer.dispose();
         AssetManager.dispose();
     }
