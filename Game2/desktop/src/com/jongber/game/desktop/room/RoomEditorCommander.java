@@ -54,197 +54,22 @@ class RoomEditorCommander {
         window.setSize(450, 500);
         //propertyPanel.setResizable(false);
         window.setLayout(new GridBagLayout());
-
-        ///// active panel area
-            JPanel activePanel = new JPanel();
-            activePanel.setLayout(new GridBagLayout());
-        activePanel.setBorder(BorderFactory.createTitledBorder("Editor Cmd"));
-            GridBagConstraints activeGbc = new GridBagConstraints();
-
-            // 1. show grid
-            activeGbc.fill = GridBagConstraints.HORIZONTAL;
-            activeGbc.gridx = 0;
-            activeGbc.gridy = 0;
-            activePanel.add(new JLabel("Show grid "), activeGbc);
-
-            activeGbc.gridx = 1;
-            activeGbc.gridy = 0;
-            JCheckBox gridCheck = new JCheckBox();
-            gridCheck.setSelected(true);
-            gridCheck.addItemListener(new ItemListener() {
-                @Override
-                public void itemStateChanged(ItemEvent e) {
-                    boolean checked = e.getStateChange() == ItemEvent.SELECTED;
-                    layer.post(new ShowGridEvent(layer, checked));
-                }
-            });
-            activePanel.add(gridCheck, activeGbc);
-        ///// active panel area end
-
         GridBagConstraints dialogGbc = new GridBagConstraints();
         dialogGbc.fill = GridBagConstraints.HORIZONTAL;
+
+        ///// active panel area
+        JPanel activePanel = createActivePanel(layer);
+        ///// active panel area end
+
         dialogGbc.gridx = 0;
         dialogGbc.gridy = 0;
         dialogGbc.ipady = 10;
-
         window.add(activePanel, dialogGbc);
 
-        ////// room property area
-            JPanel propertyPanel = new JPanel();
-            propertyPanel.setBorder(BorderFactory.createTitledBorder("Room Property"));
-            propertyPanel.setLayout(new GridBagLayout());
-            GridBagConstraints panelGbc = new GridBagConstraints();
-            //gbc.insets = new Insets(5,5,0,0);
+        //// property panel
+        JPanel propertyPanel = RoomEditorCommander.createRoomPropertyPanel(layer);
+        //// property end
 
-            // 1. room name
-            panelGbc.fill = GridBagConstraints.VERTICAL;
-            panelGbc.gridx = 0;
-            panelGbc.gridy = 0;
-            propertyPanel.add(new Label("Room name "), panelGbc);
-
-            panelGbc.gridx = 1;
-            panelGbc.gridy = 0;
-            TextField nameField = new TextField(8);
-            propertyPanel.add(nameField, panelGbc);
-
-            // 2. sanity
-            panelGbc.gridx = 0;
-            panelGbc.gridy = 1;
-            Label sanityLabel = new Label("Sanity: 50");
-            propertyPanel.add(sanityLabel, panelGbc);
-
-            panelGbc.gridx = 1;
-            panelGbc.gridy = 1;
-            JSlider sanitySlider = new JSlider();
-            sanitySlider.setMinimum(0);
-            sanitySlider.setMaximum(100);
-            sanitySlider.addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent changeEvent) {
-                    sanityLabel.setText("Sanity: " + sanitySlider.getValue());
-                }
-            });
-            propertyPanel.add(sanitySlider, panelGbc);
-
-            // 3. noise
-            panelGbc.gridx = 0;
-            panelGbc.gridy = 2;
-            Label noiseLabel = new Label("Noise: 50");
-            propertyPanel.add(noiseLabel, panelGbc);
-
-            panelGbc.gridx = 1;
-            panelGbc.gridy = 2;
-            JSlider noiseSlider = new JSlider();
-            noiseSlider.setMinimum(0);
-            noiseSlider.setMaximum(100);
-            noiseSlider.addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent changeEvent) {
-                    noiseLabel.setText("Noise: " + noiseSlider.getValue());
-                }
-            });
-            propertyPanel.add(noiseSlider, panelGbc);
-
-            // 4. height
-            panelGbc.gridx = 0;
-            panelGbc.gridy = 3;
-            Label heightLabel = new Label("Height: ");
-            propertyPanel.add(heightLabel, panelGbc);
-
-            panelGbc.gridx = 1;
-            panelGbc.gridy = 3;
-            propertyPanel.add(new Label("3 block(48px) fixed"), panelGbc);
-
-            // 5. width
-            panelGbc.gridx = 0;
-            panelGbc.gridy = 4;
-            Label widthLabel = new Label("Width: ");
-            propertyPanel.add(widthLabel, panelGbc);
-
-            panelGbc.gridx = 1;
-            panelGbc.gridy = 4;
-            JSpinner widthSpinner = new JSpinner();
-            widthSpinner.setValue(3);
-            propertyPanel.add(widthSpinner, panelGbc);
-
-            panelGbc.gridx = 2;
-            panelGbc.gridy = 4;
-            propertyPanel.add(new Label("block"), panelGbc);
-
-            // 6. wallpaper
-            panelGbc.gridx = 0;
-            panelGbc.gridy = 5;
-            JLabel wallpaperLabel = new JLabel("Wallpaper: ");
-            propertyPanel.add(wallpaperLabel, panelGbc);
-
-            panelGbc.gridx = 1;
-            panelGbc.gridy = 5;
-            JLabel wallpaperPathLabel = new JLabel("");
-            JButton wallpaperButton = new JButton("Load");
-            wallpaperButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    String basePath = System.getProperty("user.dir") +
-                            File.separator + "android" + File.separator + "assets";
-                    File baseFile = new File(basePath);
-
-                    JFileChooser fc = new JFileChooser(baseFile);
-                    fc.setAcceptAllFileFilterUsed(false);
-                    FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "png", "PNG", "JPG", "jpg");
-                    fc.setFileFilter(filter);
-
-                    int i = fc.showOpenDialog(null);
-                    if (i == JFileChooser.APPROVE_OPTION) {
-                        File selectedFile = fc.getSelectedFile();
-                        if (selectedFile.getPath().contains(baseFile.getPath()) == false) {
-                            JOptionPane.showMessageDialog(null, "Invalid path, use only under android/asset");
-                            return;
-                        }
-
-                        String relative = baseFile.toURI().relativize(selectedFile.toURI()).getPath();
-                        wallpaperPathLabel.setText(relative);
-
-                        ImageIcon icon = new ImageIcon(selectedFile.getAbsolutePath());
-                        Image image = icon.getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
-                        wallpaperLabel.setIcon(new ImageIcon(image));
-                        wallpaperButton.setText("reload");
-                    }
-                }
-            });
-            propertyPanel.add(wallpaperButton, panelGbc);
-
-            // 7. Apply & Clear
-            panelGbc.gridx = 1;
-            panelGbc.gridy = 6;
-            panelGbc.insets = new Insets(10,10,0,0);
-            JButton apply = new JButton("\tApply property\t");
-            apply.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    String name = nameField.getText();
-                    int sanity = sanitySlider.getValue();
-                    int noise = noiseSlider.getValue();
-                    int height = 48;
-                    int width = (Integer)widthSpinner.getValue();
-                    width *= Const.BlockSize;
-                    String wallpaperPath = wallpaperPathLabel.getText();
-
-                    RoomEditorCommander.validateAndCreateRoomProperty(name, sanity, noise, height, width, wallpaperPath, layer);
-                }
-            });
-            propertyPanel.add(apply, panelGbc);
-
-            panelGbc.gridx = 2;
-            panelGbc.gridy = 6;
-            JButton clear = new JButton("\t   Clear view   \t");
-            clear.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    layer.post(new ClearRoomViewEvent(layer));
-                }
-            });
-            propertyPanel.add(clear, panelGbc);
-        //// panel area end
         dialogGbc.gridx = 0;
         dialogGbc.gridy = 1;
         window.add(propertyPanel, dialogGbc);
@@ -260,7 +85,193 @@ class RoomEditorCommander {
                 Gdx.app.exit();
             }
         });
+    }
 
+    private static JPanel createActivePanel(GameLayer layer) {
+        JPanel activePanel = new JPanel();
+        activePanel.setLayout(new GridBagLayout());
+        activePanel.setBorder(BorderFactory.createTitledBorder("Editor Cmd"));
+        GridBagConstraints activeGbc = new GridBagConstraints();
+
+        // 1. show grid
+        activeGbc.fill = GridBagConstraints.HORIZONTAL;
+        activeGbc.gridx = 0;
+        activeGbc.gridy = 0;
+        activePanel.add(new JLabel("Show grid "), activeGbc);
+
+        activeGbc.gridx = 1;
+        activeGbc.gridy = 0;
+        JCheckBox gridCheck = new JCheckBox();
+        gridCheck.setSelected(true);
+        gridCheck.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                boolean checked = e.getStateChange() == ItemEvent.SELECTED;
+                layer.post(new ShowGridEvent(layer, checked));
+            }
+        });
+        activePanel.add(gridCheck, activeGbc);
+
+        return activePanel;
+    }
+
+    private static JPanel createRoomPropertyPanel(GameLayer layer) {
+        JPanel propertyPanel = new JPanel();
+        propertyPanel.setBorder(BorderFactory.createTitledBorder("Room Property"));
+        propertyPanel.setLayout(new GridBagLayout());
+        GridBagConstraints panelGbc = new GridBagConstraints();
+        //gbc.insets = new Insets(5,5,0,0);
+
+        // 1. room name
+        panelGbc.fill = GridBagConstraints.VERTICAL;
+        panelGbc.gridx = 0;
+        panelGbc.gridy = 0;
+        propertyPanel.add(new Label("Room name "), panelGbc);
+
+        panelGbc.gridx = 1;
+        panelGbc.gridy = 0;
+        TextField nameField = new TextField(8);
+        propertyPanel.add(nameField, panelGbc);
+
+        // 2. sanity
+        panelGbc.gridx = 0;
+        panelGbc.gridy = 1;
+        Label sanityLabel = new Label("Sanity: 50");
+        propertyPanel.add(sanityLabel, panelGbc);
+
+        panelGbc.gridx = 1;
+        panelGbc.gridy = 1;
+        JSlider sanitySlider = new JSlider();
+        sanitySlider.setMinimum(0);
+        sanitySlider.setMaximum(100);
+        sanitySlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                sanityLabel.setText("Sanity: " + sanitySlider.getValue());
+            }
+        });
+        propertyPanel.add(sanitySlider, panelGbc);
+
+        // 3. noise
+        panelGbc.gridx = 0;
+        panelGbc.gridy = 2;
+        Label noiseLabel = new Label("Noise: 50");
+        propertyPanel.add(noiseLabel, panelGbc);
+
+        panelGbc.gridx = 1;
+        panelGbc.gridy = 2;
+        JSlider noiseSlider = new JSlider();
+        noiseSlider.setMinimum(0);
+        noiseSlider.setMaximum(100);
+        noiseSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                noiseLabel.setText("Noise: " + noiseSlider.getValue());
+            }
+        });
+        propertyPanel.add(noiseSlider, panelGbc);
+
+        // 4. height
+        panelGbc.gridx = 0;
+        panelGbc.gridy = 3;
+        Label heightLabel = new Label("Height: ");
+        propertyPanel.add(heightLabel, panelGbc);
+
+        panelGbc.gridx = 1;
+        panelGbc.gridy = 3;
+        propertyPanel.add(new Label("3 block(48px) fixed"), panelGbc);
+
+        // 5. width
+        panelGbc.gridx = 0;
+        panelGbc.gridy = 4;
+        Label widthLabel = new Label("Width: ");
+        propertyPanel.add(widthLabel, panelGbc);
+
+        panelGbc.gridx = 1;
+        panelGbc.gridy = 4;
+        JSpinner widthSpinner = new JSpinner();
+        widthSpinner.setValue(3);
+        propertyPanel.add(widthSpinner, panelGbc);
+
+        panelGbc.gridx = 2;
+        panelGbc.gridy = 4;
+        propertyPanel.add(new Label("block"), panelGbc);
+
+        // 6. wallpaper
+        panelGbc.gridx = 0;
+        panelGbc.gridy = 5;
+        JLabel wallpaperLabel = new JLabel("Wallpaper: ");
+        propertyPanel.add(wallpaperLabel, panelGbc);
+
+        panelGbc.gridx = 1;
+        panelGbc.gridy = 5;
+        JLabel wallpaperPathLabel = new JLabel("");
+        JButton wallpaperButton = new JButton("Load");
+        wallpaperButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String basePath = System.getProperty("user.dir") +
+                        File.separator + "android" + File.separator + "assets";
+                File baseFile = new File(basePath);
+
+                JFileChooser fc = new JFileChooser(baseFile);
+                fc.setAcceptAllFileFilterUsed(false);
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "png", "PNG", "JPG", "jpg");
+                fc.setFileFilter(filter);
+
+                int i = fc.showOpenDialog(null);
+                if (i == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fc.getSelectedFile();
+                    if (selectedFile.getPath().contains(baseFile.getPath()) == false) {
+                        JOptionPane.showMessageDialog(null, "Invalid path, use only under android/asset");
+                        return;
+                    }
+
+                    String relative = baseFile.toURI().relativize(selectedFile.toURI()).getPath();
+                    wallpaperPathLabel.setText(relative);
+
+                    ImageIcon icon = new ImageIcon(selectedFile.getAbsolutePath());
+                    Image image = icon.getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+                    wallpaperLabel.setIcon(new ImageIcon(image));
+                    wallpaperButton.setText("reload");
+                }
+            }
+        });
+        propertyPanel.add(wallpaperButton, panelGbc);
+
+        // 7. Apply & Clear
+        panelGbc.gridx = 1;
+        panelGbc.gridy = 6;
+        panelGbc.insets = new Insets(10,10,0,0);
+        JButton apply = new JButton("\tApply property\t");
+        apply.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String name = nameField.getText();
+                int sanity = sanitySlider.getValue();
+                int noise = noiseSlider.getValue();
+                int height = 48;
+                int width = (Integer)widthSpinner.getValue();
+                width *= Const.BlockSize;
+                String wallpaperPath = wallpaperPathLabel.getText();
+
+                RoomEditorCommander.validateAndCreateRoomProperty(name, sanity, noise, height, width, wallpaperPath, layer);
+            }
+        });
+        propertyPanel.add(apply, panelGbc);
+
+        panelGbc.gridx = 2;
+        panelGbc.gridy = 6;
+        JButton clear = new JButton("\t   Clear view   \t");
+        clear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                layer.post(new ClearRoomViewEvent(layer));
+            }
+        });
+        propertyPanel.add(clear, panelGbc);
+
+        return propertyPanel;
     }
 
     private static boolean validateAndCreateRoomProperty(String name,
