@@ -1,11 +1,11 @@
 package com.jongber.game.core.util;
 
 import com.badlogic.gdx.utils.reflect.ArrayReflection;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 public class PackedArray<T> implements Iterable<T>{
     private T[] items;
     private Map<T, Integer> indexMap = new HashMap<>();
@@ -37,15 +37,16 @@ public class PackedArray<T> implements Iterable<T>{
     }
 
     private void remove(int index) {
-        if (this.tailIndex < index) {
-            return;
-        }
-        else if (this.tailIndex == index) {
+//        if (this.tailIndex < index) {
+//            // cannot remove..
+//            // do noting
+//        }
+        if (this.tailIndex == index) {
             this.indexMap.remove(this.items[index]);
             this.items[index] = null;
             this.tailIndex--;
         }
-        else {
+        else if (this.tailIndex > index) {
             this.indexMap.remove(this.items[index]);
             T item = this.items[this.tailIndex];
             this.items[index] = item;
@@ -61,10 +62,6 @@ public class PackedArray<T> implements Iterable<T>{
         this.tailIndex = -1;
     }
 
-    public T[] toArray () {
-        return (T[])toArray(items.getClass().getComponentType());
-    }
-
     public T get(int index) {
 
         if (index > size()) {
@@ -74,14 +71,10 @@ public class PackedArray<T> implements Iterable<T>{
         return this.items[index];
     }
 
-    public <T> T[] toArray (Class<T> type) {
+    public T[] toArray (Class type) {
         T[] result = (T[]) ArrayReflection.newInstance(type, size());
         System.arraycopy(items, 0, result, 0, size());
         return result;
-    }
-
-    public <T> boolean isContained(T object) {
-        return this.indexMap.containsKey(object);
     }
 
     public int size() {
