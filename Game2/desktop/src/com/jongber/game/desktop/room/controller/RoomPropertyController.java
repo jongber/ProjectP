@@ -1,4 +1,4 @@
-package com.jongber.game.projectz.controller;
+package com.jongber.game.desktop.room.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import com.jongber.game.projectz.component.RoomProperty;
+import com.jongber.game.desktop.room.component.RoomProperty;
 
 import java.util.ArrayList;
 import java.util.List;

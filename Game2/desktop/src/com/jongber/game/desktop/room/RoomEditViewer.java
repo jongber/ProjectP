@@ -11,7 +11,7 @@ import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.room.controller.BlockGridRenderer;
 import com.jongber.game.desktop.room.controller.CameraController;
-import com.jongber.game.projectz.controller.RoomPropertyController;
+import com.jongber.game.desktop.room.controller.RoomPropertyController;
 
 public class RoomEditViewer extends ApplicationAdapter implements InputProcessor {
 
