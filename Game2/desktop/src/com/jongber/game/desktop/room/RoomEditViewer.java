@@ -22,16 +22,13 @@ public class RoomEditViewer extends ApplicationAdapter implements InputProcessor
     @Override
     public void create () {
         this.batch = new SpriteBatch();
-        this.roomViewLayer = new GameLayer();
-        this.roomViewLayer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        this.roomViewLayer.registerController(new TextureRenderer());
-        this.roomViewLayer.registerController(new CameraController());
-        this.roomViewLayer.registerController(new RoomPropertyController());
+        this.createRoomViewer();
 
         this.fpsViewLayer = new GameLayer();
         this.fpsViewLayer.registerController(new PerfRenderer());
 
         RoomEditorCommander.popRoomUI(this.roomViewLayer);
+
         Gdx.input.setInputProcessor(this);
     }
 
@@ -107,5 +104,13 @@ public class RoomEditViewer extends ApplicationAdapter implements InputProcessor
         this.roomViewLayer.getInput().scrolled(amount);
 
         return false;
+    }
+
+    private void createRoomViewer() {
+        this.roomViewLayer = new GameLayer();
+        this.roomViewLayer.registerController(new TextureRenderer());
+        this.roomViewLayer.registerController(new CameraController());
+        this.roomViewLayer.registerController(new RoomPropertyController());
+        this.roomViewLayer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     }
 }

@@ -2,12 +2,10 @@ package com.jongber.game.desktop.room;
 
 import com.badlogic.gdx.Gdx;
 import com.jongber.game.core.GameLayer;
-import com.jongber.game.desktop.room.event.CreateRoomEvent;
 import com.jongber.game.desktop.room.event.ShowGridEvent;
+import com.jongber.game.projectz.Const;
+import com.jongber.game.projectz.event.CreateRoomEvent;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -21,13 +19,11 @@ import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,6 +33,7 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class RoomEditorCommander {
 
@@ -195,6 +192,7 @@ public class RoomEditorCommander {
 
             panelGbc.gridx = 1;
             panelGbc.gridy = 5;
+            JLabel wallpaperPathLabel = new JLabel("");
             JButton wallpaperButton = new JButton("Load");
             wallpaperButton.addActionListener(new ActionListener() {
                 @Override
@@ -204,12 +202,22 @@ public class RoomEditorCommander {
                     File baseFile = new File(basePath);
 
                     JFileChooser fc = new JFileChooser(baseFile);
+                    fc.setAcceptAllFileFilterUsed(false);
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "png", "PNG", "JPG", "jpg");
+                    fc.setFileFilter(filter);
+
                     int i = fc.showOpenDialog(null);
                     if (i == JFileChooser.APPROVE_OPTION) {
-                        File f = fc.getSelectedFile();
-                        String relative = baseFile.toURI().relativize(f.toURI()).getPath();
+                        File selectedFile = fc.getSelectedFile();
+                        if (selectedFile.getPath().contains(baseFile.getPath()) == false) {
+                            JOptionPane.showMessageDialog(null, "Invalid path, use only under android/asset");
+                            return;
+                        }
 
-                        ImageIcon icon = new ImageIcon(f.getAbsolutePath());
+                        String relative = baseFile.toURI().relativize(selectedFile.toURI()).getPath();
+                        wallpaperPathLabel.setText(relative);
+
+                        ImageIcon icon = new ImageIcon(selectedFile.getAbsolutePath());
                         Image image = icon.getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
                         wallpaperLabel.setIcon(new ImageIcon(image));
                         wallpaperButton.setText("reload");
@@ -223,6 +231,20 @@ public class RoomEditorCommander {
             panelGbc.gridy = 6;
             panelGbc.insets = new Insets(10,10,0,0);
             JButton apply = new JButton("\tApply property\t");
+            apply.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    String name = nameField.getText();
+                    int sanity = sanitySlider.getValue();
+                    int noise = noiseSlider.getValue();
+                    int height = 48;
+                    int width = (Integer)widthSpinner.getValue();
+                    width *= Const.BlockSize;
+                    String wallpaperPath = wallpaperPathLabel.getText();
+
+                    RoomEditorCommander.validateAndCreateRoomProperty(name, sanity, noise, height, width, wallpaperPath, layer);
+                }
+            });
             propertyPanel.add(apply, panelGbc);
 
             panelGbc.gridx = 2;
@@ -257,7 +279,20 @@ public class RoomEditorCommander {
 
     }
 
-    private static boolean validateRoomProperty() {
+    private static boolean validateAndCreateRoomProperty(String name,
+                                                         int sanity,
+                                                         int noise,
+                                                         int height,
+                                                         int width,
+                                                         String wallpaperPath, GameLayer layer) {
+
+        if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Room name vacant!");
+            return false;
+        }
+
+        layer.post(new CreateRoomEvent(layer, name, sanity, noise, height, width, wallpaperPath));
+
         return true;
     }
 }
