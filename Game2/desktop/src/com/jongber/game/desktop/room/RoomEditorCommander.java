@@ -290,6 +290,16 @@ class RoomEditorCommander {
             return false;
         }
 
+        String basePath = System.getProperty("user.dir") +
+                File.separator + "android" +
+                File.separator + "assets" +
+                File.separator + wallpaperPath;
+        File f = new File(basePath);
+        if (f.isDirectory() || f.exists() == false) {
+            JOptionPane.showMessageDialog(null, "Where wallpaper !!");
+            return false;
+        }
+
         layer.post(new ApplyRoomViewEvent(layer, name, sanity, noise, height, width, wallpaperPath));
 
         return true;
