@@ -44,6 +44,7 @@ public class ApplyRoomViewEvent extends GameEvent {
         RoomProperty p = new RoomProperty(name, wallpaperPath, region, width, height, sanity, noise);
 
         GameObject object = new GameObject();
+        object.name = p.name;
         object.addComponent(p);
 
         this.layer.addObject(object);
