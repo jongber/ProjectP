@@ -47,19 +47,6 @@ class RoomEditorCommander {
         }).start();
     }
 
-    /*
-     *
-     * room name : []
-     * sanity : []
-     * noise : []
-     * height : 48(current)
-     * width : 16px block
-     * wallpaper (texture)
-     * display grid[]
-     * [apply] [clear]
-     * [save] [load]
-     * */
-
     private static void _popRoomUI(GameLayer layer) {
 
         JFrame window = new JFrame();
@@ -295,6 +282,11 @@ class RoomEditorCommander {
 
         if (name.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Room name vacant!");
+            return false;
+        }
+
+        if (width <= 0) {
+            JOptionPane.showMessageDialog(null, "Width cannot under Zero!");
             return false;
         }
 
