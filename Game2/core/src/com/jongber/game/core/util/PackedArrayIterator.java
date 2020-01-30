@@ -6,7 +6,7 @@ public class PackedArrayIterator<T> implements Iterator {
 
     private final T[] array;
     private final int length;
-    private int index = -1;
+    private int index = 0;
 
     public PackedArrayIterator(T[] array, int length) {
         this.array = array;
@@ -20,7 +20,6 @@ public class PackedArrayIterator<T> implements Iterator {
 
     @Override
     public T next() {
-        ++index;
-        return array[index];
+        return array[index++];
     }
 }

@@ -9,6 +9,7 @@ import com.jongber.game.core.controller.Transformation;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.event.GameEventHandler;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
+import com.jongber.game.core.util.PackedArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class GameLayer {
     private List<Controller.Updater> updaters = new ArrayList<>();
     private List<Controller.InputProcessor> inputProcessors = new ArrayList<>();
 
-    private List<GameObject> objects = new ArrayList<>();
+    private PackedArray<GameObject> objects = new PackedArray<>();
     private boolean modified = true;
 
     private GameLayerInput layerInput;
@@ -160,7 +161,7 @@ public class GameLayer {
     }
 
     public void resetObject() {
-        this.objects.clear();
+        this.objects.clearAll();
 
         this.modified = true;
     }

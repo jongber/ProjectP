@@ -29,6 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -37,7 +38,7 @@ import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class RoomEditorDialog {
+public class RoomEditorCommander {
 
     public static void popRoomUI(GameLayer layer) {
         new Thread(new Runnable() {
@@ -62,11 +63,12 @@ public class RoomEditorDialog {
      * */
 
     public static void _popRoomUI(GameLayer layer) {
-        JDialog dialog = new JDialog();
-        dialog.setTitle("Room Editor Commander");
-        dialog.setSize(450, 350);
+
+        JFrame window = new JFrame();
+        window.setTitle("Room Editor Commander");
+        window.setSize(450, 350);
         //propertyPanel.setResizable(false);
-        dialog.setLayout(new GridBagLayout());
+        window.setLayout(new GridBagLayout());
 
         ///// active panel area
             JPanel activePanel = new JPanel();
@@ -100,7 +102,7 @@ public class RoomEditorDialog {
         dialogGbc.gridy = 0;
         dialogGbc.ipady = 10;
 
-        dialog.add(activePanel, dialogGbc);
+        window.add(activePanel, dialogGbc);
 
 
         ////// panel area
@@ -242,9 +244,17 @@ public class RoomEditorDialog {
         //// panel area end
         dialogGbc.gridx = 0;
         dialogGbc.gridy = 1;
-        dialog.add(propertyPanel, dialogGbc);
+        window.add(propertyPanel, dialogGbc);
 
-        dialog.setVisible(true);
+        window.setVisible(true);
+        window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                super.windowClosing(windowEvent);
+                Gdx.app.exit();
+            }
+        });
+
     }
 
     private static boolean validateRoomProperty() {

@@ -11,8 +11,9 @@ import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.room.controller.BlockGridRenderer;
 import com.jongber.game.desktop.room.controller.CameraController;
+import com.jongber.game.projectz.controller.RoomPropertyController;
 
-public class RoomEditor extends ApplicationAdapter implements InputProcessor {
+public class RoomEditViewer extends ApplicationAdapter implements InputProcessor {
 
     private SpriteBatch batch;
     private GameLayer roomViewLayer;
@@ -25,11 +26,12 @@ public class RoomEditor extends ApplicationAdapter implements InputProcessor {
         this.roomViewLayer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         this.roomViewLayer.registerController(new TextureRenderer());
         this.roomViewLayer.registerController(new CameraController());
+        this.roomViewLayer.registerController(new RoomPropertyController());
 
         this.fpsViewLayer = new GameLayer();
         this.fpsViewLayer.registerController(new PerfRenderer());
 
-        RoomEditorDialog.popRoomUI(this.roomViewLayer);
+        RoomEditorCommander.popRoomUI(this.roomViewLayer);
         Gdx.input.setInputProcessor(this);
     }
 

@@ -1,17 +1,17 @@
 package com.jongber.game.core.controller;
 
 import com.jongber.game.core.GameObject;
+import com.jongber.game.core.util.PackedArray;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-public class SceneGraph extends Controller {
+public class SceneGraph {
     private List<GameObject> sorted = new ArrayList<>();
 
-    @Override
-    public void build(List<GameObject> objects) {
+    public void build(PackedArray<GameObject> objects) {
         this.sorted.clear();
 
         Queue<GameObject> travel = new ArrayDeque<>();
@@ -27,10 +27,6 @@ public class SceneGraph extends Controller {
                 travel.add(node.getChild(i));
             }
         }
-    }
-
-    @Override
-    public void dispose() {
     }
 
     public List<GameObject> getGraph() {
