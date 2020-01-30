@@ -1,6 +1,5 @@
 package com.jongber.game.core.asset;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -26,7 +25,7 @@ public class FontManager {
 
     public FontManager(String fontPath) {
         this.fontPath = fontPath;
-        this.generator = new FreeTypeFontGenerator(Gdx.files.internal(this.fontPath));
+        this.generator = new FreeTypeFontGenerator(AssetManager.getFile(this.fontPath));
     }
 
     public FontManager() {
@@ -64,6 +63,7 @@ public class FontManager {
     public void dispose() {
         this.clear();
         this.generator.dispose();
+        AssetManager.removeFile(this.fontPath);
     }
 
     private void clear() {
