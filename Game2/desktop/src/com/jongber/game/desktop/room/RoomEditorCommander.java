@@ -51,7 +51,7 @@ class RoomEditorCommander {
 
         JFrame window = new JFrame();
         window.setTitle("Room Editor Commander");
-        window.setSize(450, 350);
+        window.setSize(450, 500);
         //propertyPanel.setResizable(false);
         window.setLayout(new GridBagLayout());
 
@@ -89,8 +89,7 @@ class RoomEditorCommander {
 
         window.add(activePanel, dialogGbc);
 
-
-        ////// panel area
+        ////// room property area
             JPanel propertyPanel = new JPanel();
             propertyPanel.setBorder(BorderFactory.createTitledBorder("Room Property"));
             propertyPanel.setLayout(new GridBagLayout());
@@ -245,22 +244,13 @@ class RoomEditorCommander {
                 }
             });
             propertyPanel.add(clear, panelGbc);
-
-            // 8. Save & Load
-            panelGbc.gridx = 1;
-            panelGbc.gridy = 7;
-            JButton save = new JButton("\tSave property\t");
-            propertyPanel.add(save, panelGbc);
-
-            panelGbc.gridx = 2;
-            panelGbc.gridy = 7;
-            JButton load = new JButton("\tLoad property\t");
-            propertyPanel.add(load, panelGbc);
-
         //// panel area end
         dialogGbc.gridx = 0;
         dialogGbc.gridy = 1;
         window.add(propertyPanel, dialogGbc);
+
+        JPanel propPanel = new JPanel();
+
 
         window.setVisible(true);
         window.addWindowListener(new WindowAdapter() {

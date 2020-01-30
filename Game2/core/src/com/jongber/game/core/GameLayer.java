@@ -166,7 +166,16 @@ public class GameLayer {
         this.modified = true;
     }
 
-    public List<GameObject> gatherObject(String name) {
+    public GameObject getObjectAny(String name) {
+        List<GameObject> objs = this.getObjects(name);
+
+        if (objs.size() == 0)
+            return null;
+
+        return objs.get(0);
+    }
+
+    public List<GameObject> getObjects(String name) {
         List<GameObject> objs = new ArrayList<>();
 
         for (GameObject obj : this.objects) {
@@ -178,7 +187,7 @@ public class GameLayer {
         return objs;
     }
 
-    public <T> List<T> gatherObject(Class<T> type) {
+    public <T> List<T> getObjects(Class<T> type) {
         List<T> objs = new ArrayList<>();
         for (GameObject obj : this.objects) {
             if (type.isInstance(obj)) {
@@ -187,6 +196,18 @@ public class GameLayer {
         }
 
         return objs;
+    }
+
+    public List<GameObject> getObjectsHas(Class componentType) {
+        List<GameObject> objects = new ArrayList<>();
+
+        for (GameObject obj : this.objects) {
+            if (obj.hasComponent(componentType)) {
+                objects.add(obj);
+            }
+        }
+
+        return objects;
     }
 
     public void post(GameEvent event) {
