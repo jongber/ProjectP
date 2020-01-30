@@ -36,7 +36,7 @@ public class PackedArray<T> implements Iterable<T>{
         this.remove(index);
     }
 
-    public void remove(int index) {
+    private void remove(int index) {
         if (this.tailIndex < index) {
             return;
         }
@@ -58,6 +58,7 @@ public class PackedArray<T> implements Iterable<T>{
     public void clearAll() {
         this.indexMap.clear();
         this.items = (T[])new Object[128];
+        this.tailIndex = -1;
     }
 
     public T[] toArray () {
@@ -79,7 +80,7 @@ public class PackedArray<T> implements Iterable<T>{
         return result;
     }
 
-    public boolean isContained(Object object) {
+    public <T> boolean isContained(T object) {
         return this.indexMap.containsKey(object);
     }
 
@@ -89,7 +90,7 @@ public class PackedArray<T> implements Iterable<T>{
 
     @Override
     public Iterator<T> iterator() {
-        return new PackedArrayIterator<>(this.items, this.size());
+        return new PackedArrayIterator<T>(this.items, this.size());
     }
 
 }

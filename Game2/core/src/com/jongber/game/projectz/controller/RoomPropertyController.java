@@ -32,12 +32,12 @@ public class RoomPropertyController extends Controller implements Controller.Ren
 
     @Override
     public void postRender(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
-        for (GameObject object : this.objs) {
-            RoomProperty property = object.getComponent(RoomProperty.class);
-            if (property == null) {
-                Gdx.app.error("RoomPropertyController", "RoomProperty is null");
-                continue;
-            }
+//        for (GameObject object : this.objs) {
+//            RoomProperty property = object.getComponent(RoomProperty.class);
+//            if (property == null) {
+//                Gdx.app.error("RoomPropertyController", "RoomProperty is null");
+//                continue;
+//            }
 
 //            Vector2 pos = object.transform.getPos();
 //            this.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -47,11 +47,13 @@ public class RoomPropertyController extends Controller implements Controller.Ren
 //            this.shapeRenderer.line(pos.x, pos.y + property.height, pos.x + property.width, pos.y + property.height);
 //            this.shapeRenderer.line(pos.x + property.width, pos.y, pos.x + property.width, pos.y + property.height);
 //            this.shapeRenderer.end();
-        }
+//        }
     }
 
     @Override
     public void build(List<GameObject> graph) {
+        this.objs.clear();
+
         for (GameObject node : graph) {
             if (node.hasComponent(RoomProperty.class)) {
                 this.objs.add(node);

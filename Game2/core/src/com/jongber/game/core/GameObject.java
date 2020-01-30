@@ -10,7 +10,7 @@ import java.util.Map;
 public class GameObject {
 
     private GameObject parent;
-    private PackedArray<GameObject> children = new PackedArray();
+    private PackedArray<GameObject> children = new PackedArray<>();
     private Map<Class, Component> componentMap = new HashMap<>();
 
     public String name = "";
@@ -24,12 +24,12 @@ public class GameObject {
         this.componentMap.put(component.getClass(), component);
     }
 
-    protected void addChild(GameObject object) {
+    void addChild(GameObject object) {
         object.parent = this;
         this.children.add(object);
     }
 
-    protected void removeChild(GameObject object) {
+    void removeChild(GameObject object) {
         this.children.remove(object);
     }
 
@@ -37,11 +37,11 @@ public class GameObject {
         return this.componentMap.containsKey(type);
     }
 
-    public <E> E getComponent(Class componentType) {
+    public <E> E getComponent(Class<E> componentType) {
 
         Component obj = this.componentMap.get(componentType);
-        if (obj != null && componentType.isInstance(obj)) {
-            return (E)this.componentMap.get(componentType);
+        if (componentType.isInstance(obj)) {
+            return componentType.cast(obj);
         }
 
         return null;

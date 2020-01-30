@@ -2,9 +2,10 @@ package com.jongber.game.desktop.room;
 
 import com.badlogic.gdx.Gdx;
 import com.jongber.game.core.GameLayer;
+import com.jongber.game.desktop.room.event.ClearRoomViewEvent;
 import com.jongber.game.desktop.room.event.ShowGridEvent;
 import com.jongber.game.projectz.Const;
-import com.jongber.game.projectz.event.CreateRoomEvent;
+import com.jongber.game.desktop.room.event.ApplyRoomViewEvent;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -35,9 +36,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class RoomEditorCommander {
+class RoomEditorCommander {
 
-    public static void popRoomUI(GameLayer layer) {
+    static void popRoomUI(GameLayer layer) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -59,7 +60,7 @@ public class RoomEditorCommander {
      * [save] [load]
      * */
 
-    public static void _popRoomUI(GameLayer layer) {
+    private static void _popRoomUI(GameLayer layer) {
 
         JFrame window = new JFrame();
         window.setTitle("Room Editor Commander");
@@ -86,7 +87,7 @@ public class RoomEditorCommander {
             gridCheck.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    boolean checked = e.getStateChange() == 1;
+                    boolean checked = e.getStateChange() == ItemEvent.SELECTED;
                     layer.post(new ShowGridEvent(layer, checked));
                 }
             });
@@ -250,6 +251,12 @@ public class RoomEditorCommander {
             panelGbc.gridx = 2;
             panelGbc.gridy = 6;
             JButton clear = new JButton("\t   Clear view   \t");
+            clear.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    layer.post(new ClearRoomViewEvent(layer));
+                }
+            });
             propertyPanel.add(clear, panelGbc);
 
             // 8. Save & Load
@@ -291,7 +298,7 @@ public class RoomEditorCommander {
             return false;
         }
 
-        layer.post(new CreateRoomEvent(layer, name, sanity, noise, height, width, wallpaperPath));
+        layer.post(new ApplyRoomViewEvent(layer, name, sanity, noise, height, width, wallpaperPath));
 
         return true;
     }

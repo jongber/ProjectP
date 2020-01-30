@@ -13,19 +13,24 @@ import java.util.Map;
 import java.util.Set;
 
 public class FontManager {
-    private String fontPath = "fonts/Jua-Regular.ttf";
+    private String fontPath;
     private FreeTypeFontGenerator generator;
     private Map<Integer, BitmapFont> fonts = new HashMap<>();
 
     public static class TextBlock {
-        public static final int DefaultFontSize = 24;
+        static final int DefaultFontSize = 24;
         public String text = "";
         public int fontSize = DefaultFontSize;
         public Color color = Color.WHITE;
     }
 
+    public FontManager(String fontPath) {
+        this.fontPath = fontPath;
+        this.generator = new FreeTypeFontGenerator(Gdx.files.internal(this.fontPath));
+    }
+
     public FontManager() {
-        this.generator = new FreeTypeFontGenerator(Gdx.files.internal(fontPath));
+        this("fonts/Jua-Regular.ttf");
     }
 
     public void build(List<TextBlock> list) {

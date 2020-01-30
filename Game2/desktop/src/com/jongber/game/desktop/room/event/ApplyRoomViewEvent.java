@@ -1,4 +1,4 @@
-package com.jongber.game.projectz.event;
+package com.jongber.game.desktop.room.event;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,7 +8,7 @@ import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.projectz.component.RoomProperty;
 
-public class CreateRoomEvent extends GameEvent {
+public class ApplyRoomViewEvent extends GameEvent {
 
     private GameLayer layer;
     private String name;
@@ -18,13 +18,13 @@ public class CreateRoomEvent extends GameEvent {
     private int width;
     private String wallpaperPath;
 
-    public CreateRoomEvent(GameLayer layer,
-                           String name,
-                           int sanity,
-                           int noise,
-                           int height,
-                           int width,
-                           String wallpaperPath) {
+    public ApplyRoomViewEvent(GameLayer layer,
+                              String name,
+                              int sanity,
+                              int noise,
+                              int height,
+                              int width,
+                              String wallpaperPath) {
         this.layer = layer;
         this.name = name;
         this.sanity = sanity;
@@ -36,6 +36,7 @@ public class CreateRoomEvent extends GameEvent {
 
     @Override
     public void handle() {
+        this.layer.resetObject();
 
         Texture tex = AssetManager.getTexture(this.wallpaperPath);
         TextureRegion region = new TextureRegion(tex, this.width, this.height);

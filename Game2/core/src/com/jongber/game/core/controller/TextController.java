@@ -19,8 +19,8 @@ import java.util.List;
 
 public class TextController extends Controller implements Controller.Renderer, Controller.InputProcessor {
 
-    public FontManager fontManager = new FontManager();
-    public List<GameObject> objs = new ArrayList<>();
+    private FontManager fontManager = new FontManager();
+    private List<GameObject> objs = new ArrayList<>();
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     @Override
@@ -55,8 +55,9 @@ public class TextController extends Controller implements Controller.Renderer, C
 
         for (GameObject obj : this.objs) {
             TextComponent button = obj.getComponent(TextComponent.class);
-            if (button == null) {
+            if (button == null || button.textBlock == null) {
                 Gdx.app.error("LabelRenderer", "why null? " + obj.name);
+                continue;
             }
 
             BitmapFont font = this.fontManager.getFont(button.textBlock.fontSize);
