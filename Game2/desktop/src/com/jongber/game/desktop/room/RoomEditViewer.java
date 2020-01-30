@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
@@ -30,6 +31,8 @@ public class RoomEditViewer extends ApplicationAdapter implements InputProcessor
         RoomEditorCommander.popRoomUI(this.roomViewLayer);
 
         Gdx.input.setInputProcessor(this);
+
+        this.loadAssets();
     }
 
     @Override
@@ -105,6 +108,12 @@ public class RoomEditViewer extends ApplicationAdapter implements InputProcessor
         this.roomViewLayer.getInput().scrolled(amount);
 
         return false;
+    }
+
+    private void loadAssets() {
+        AssetManager.getTexture("projectz/house/wall/ceil_wall.png");
+        AssetManager.getTexture("projectz/house/wall/left_wall.png");
+        AssetManager.getTexture("projectz/house/wall/right_wall.png");
     }
 
     private void createRoomViewer() {

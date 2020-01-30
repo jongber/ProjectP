@@ -1,12 +1,15 @@
 package com.jongber.game.desktop.room.controller;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameObject;
+import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
 import com.jongber.game.desktop.room.component.RoomProperty;
+import com.jongber.game.projectz.Const;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,22 +35,27 @@ public class RoomPropertyController extends Controller implements Controller.Ren
 
     @Override
     public void postRender(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
-//        for (GameObject object : this.objs) {
-//            RoomProperty property = object.getComponent(RoomProperty.class);
-//            if (property == null) {
-//                Gdx.app.error("RoomPropertyController", "RoomProperty is null");
-//                continue;
-//            }
 
-//            Vector2 pos = object.transform.getPos();
-//            this.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//            this.shapeRenderer.setProjectionMatrix(camera.getCamera().combined);
-//
-//            this.shapeRenderer.line(pos.x, pos.y, pos.x, pos.y + property.height);
-//            this.shapeRenderer.line(pos.x, pos.y + property.height, pos.x + property.width, pos.y + property.height);
-//            this.shapeRenderer.line(pos.x + property.width, pos.y, pos.x + property.width, pos.y + property.height);
-//            this.shapeRenderer.end();
-//        }
+        Texture left = AssetManager.getTexture("projectz/house/wall/left_wall.png");
+        Texture right = AssetManager.getTexture("projectz/house/wall/right_wall.png");
+        Texture ceil = AssetManager.getTexture("projectz/house/wall/ceil_wall.png");
+
+        for (GameObject object : this.objs) {
+            RoomProperty property = object.getComponent(RoomProperty.class);
+
+            int w = property.width / Const.BlockSize;
+            int h = property.height / Const.BlockSize;
+            Vector2 pos = object.transform.getPos();
+
+            for (int i = 0; i < h; i++) {
+                batch.draw(left, pos.x, pos.y + i * Const.BlockSize);
+                batch.draw(right, pos.x + property.width - Const.BlockSize, pos.y + i * Const.BlockSize);
+            }
+
+            for (int i = 0; i < w; i++) {
+                batch.draw(ceil, pos.x + i * Const.BlockSize, pos.y + property.height - Const.BlockSize);
+            }
+        }
     }
 
     @Override
