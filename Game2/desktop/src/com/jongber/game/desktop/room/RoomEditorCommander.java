@@ -36,7 +36,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-class RoomEditorCommander {
+public class RoomEditorCommander extends JFrame {
+
+    private GameLayer layer;
+    private boolean applied = false;
+
+    public RoomEditorCommander(GameLayer layer) {
+        this.layer = layer;
+    }
 
     static void popRoomUI(GameLayer layer) {
         new Thread(new Runnable() {
@@ -49,7 +56,7 @@ class RoomEditorCommander {
 
     private static void _popRoomUI(GameLayer layer) {
 
-        JFrame window = new JFrame();
+        RoomEditorCommander window = new RoomEditorCommander(layer);
         window.setTitle("Room Editor Commander");
         window.setSize(450, 500);
         //propertyPanel.setResizable(false);
@@ -58,7 +65,7 @@ class RoomEditorCommander {
         dialogGbc.fill = GridBagConstraints.HORIZONTAL;
 
         ///// active panel area
-        JPanel activePanel = createActivePanel(layer);
+        JPanel activePanel = window.createActivePanel(layer);
         ///// active panel area end
 
         dialogGbc.gridx = 0;
@@ -67,15 +74,12 @@ class RoomEditorCommander {
         window.add(activePanel, dialogGbc);
 
         //// property panel
-        JPanel propertyPanel = RoomEditorCommander.createRoomPropertyPanel(layer);
+        JPanel propertyPanel = window.createRoomPropertyPanel(layer);
         //// property end
 
         dialogGbc.gridx = 0;
         dialogGbc.gridy = 1;
         window.add(propertyPanel, dialogGbc);
-
-        JPanel propPanel = new JPanel();
-
 
         window.setVisible(true);
         window.addWindowListener(new WindowAdapter() {
@@ -87,7 +91,7 @@ class RoomEditorCommander {
         });
     }
 
-    private static JPanel createActivePanel(GameLayer layer) {
+    private JPanel createActivePanel(GameLayer layer) {
         JPanel activePanel = new JPanel();
         activePanel.setLayout(new GridBagLayout());
         activePanel.setBorder(BorderFactory.createTitledBorder("Editor Cmd"));
@@ -115,7 +119,7 @@ class RoomEditorCommander {
         return activePanel;
     }
 
-    private static JPanel createRoomPropertyPanel(GameLayer layer) {
+    private JPanel createRoomPropertyPanel(GameLayer layer) {
         JPanel propertyPanel = new JPanel();
         propertyPanel.setBorder(BorderFactory.createTitledBorder("Room Property"));
         propertyPanel.setLayout(new GridBagLayout());
@@ -255,7 +259,9 @@ class RoomEditorCommander {
                 width *= Const.BlockSize;
                 String wallpaperPath = wallpaperPathLabel.getText();
 
-                RoomEditorCommander.validateAndCreateRoomProperty(name, sanity, noise, height, width, wallpaperPath, layer);
+                if (RoomEditorCommander.this.validateAndCreateRoomProperty(name, sanity, noise, height, width, wallpaperPath, layer)) {
+                    RoomEditorCommander.this.applied = true;
+                }
             }
         });
         propertyPanel.add(apply, panelGbc);
@@ -267,6 +273,7 @@ class RoomEditorCommander {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 layer.post(new ClearRoomViewEvent(layer));
+                RoomEditorCommander.this.applied = false;
             }
         });
         propertyPanel.add(clear, panelGbc);
@@ -274,7 +281,7 @@ class RoomEditorCommander {
         return propertyPanel;
     }
 
-    private static boolean validateAndCreateRoomProperty(String name,
+    private boolean validateAndCreateRoomProperty(String name,
                                                          int sanity,
                                                          int noise,
                                                          int height,
