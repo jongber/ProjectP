@@ -27,20 +27,16 @@ public class PackedArray<T> implements Iterable<T>{
         this.indexMap.put(item, this.tailIndex);
     }
 
-    public void remove(T item) {
+    public boolean remove(T item) {
         Integer index = this.indexMap.get(item);
         if (index == null) {
-            return;
+            return false;
         }
 
-        this.remove(index);
+        return this.remove(index);
     }
 
-    private void remove(int index) {
-//        if (this.tailIndex < index) {
-//            // cannot remove..
-//            // do noting
-//        }
+    private boolean remove(int index) {
         if (this.tailIndex == index) {
             this.indexMap.remove(this.items[index]);
             this.items[index] = null;
@@ -54,6 +50,11 @@ public class PackedArray<T> implements Iterable<T>{
             this.items[this.tailIndex] = null;
             this.tailIndex --;
         }
+        else {
+            return false;
+        }
+
+        return true;
     }
 
     public void clearAll() {

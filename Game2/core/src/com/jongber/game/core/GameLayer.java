@@ -163,7 +163,13 @@ public class GameLayer {
         else {
             this.addObject(parent, child);
         }
+    }
 
+    public void removeObject(String parentName, GameObject child) {
+        List<GameObject> parents = this.getObjects(parentName);
+        for (GameObject object : parents) {
+            this.removeObject(object, child);
+        }
     }
 
     public void removeObject(GameObject parent, GameObject child) {

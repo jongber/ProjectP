@@ -14,7 +14,10 @@ public class AddPropEvent extends GameEvent {
     private String roomName;
     private String texturePath;
 
-    public AddPropEvent(GameLayer layer, String roomName, String texturePath) {
+    public GameObject created;
+
+    public AddPropEvent(GameLayer layer, String roomName, String texturePath, GameEvent.Callback callback) {
+        super(callback);
         this.layer = layer;
         this.roomName = roomName;
         this.texturePath = texturePath;
@@ -26,9 +29,9 @@ public class AddPropEvent extends GameEvent {
         TextureRegion region = new TextureRegion(texture);
         PropProperty p = new PropProperty(region);
 
-        GameObject object = new GameObject();
-        object.addComponent(p);
+        created = new GameObject();
+        created.addComponent(p);
 
-        this.layer.addObject(this.roomName, object);
+        this.layer.addObject(this.roomName, created);
     }
 }

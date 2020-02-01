@@ -29,8 +29,8 @@ public class GameObject {
         this.children.add(object);
     }
 
-    void removeChild(GameObject object) {
-        this.children.remove(object);
+    boolean removeChild(GameObject object) {
+        return this.children.remove(object);
     }
 
     public boolean hasComponent(Class type) {
