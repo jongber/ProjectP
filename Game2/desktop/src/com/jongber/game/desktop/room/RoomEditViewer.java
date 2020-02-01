@@ -123,5 +123,6 @@ public class RoomEditViewer extends ApplicationAdapter implements InputProcessor
         this.roomViewLayer.registerController(new RoomPropertyController());
         this.roomViewLayer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         this.roomViewLayer.registerController(new RoomPropsController());
+        this.roomViewLayer.getCameraWrapper().getCamera().zoom = 0.4f;
     }
 }
