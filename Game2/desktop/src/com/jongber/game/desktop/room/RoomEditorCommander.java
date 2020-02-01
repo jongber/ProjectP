@@ -54,9 +54,7 @@ public class RoomEditorCommander extends JFrame {
     private GameLayer layer;
     private PropertyArea property;
     private PropsArea props;
-
-    private JButton saveButton = new JButton("Save");
-    private JButton loadButton = new JButton("Load");
+    private SaveLoadArea saveLoadArea;
 
     public Timer timer;
 
@@ -64,6 +62,7 @@ public class RoomEditorCommander extends JFrame {
         this.layer = layer;
         this.property = new PropertyArea(layer, this);
         this.props = new PropsArea(layer, this, property.roomNameField);
+        this.saveLoadArea = new SaveLoadArea(this, layer);
 
         this.initTimer();
     }
@@ -137,16 +136,14 @@ public class RoomEditorCommander extends JFrame {
         this.property.onApplied();
         this.props.onApplied();
         this.timer.start();
-
-        this.saveButton.setEnabled(true);
+        this.saveLoadArea.onApplied();
     }
 
     public void onClear() {
         this.property.onClear();
         this.props.onClear();
         this.timer.stop();
-
-        this.saveButton.setEnabled(false);
+        this.saveLoadArea.onClear();
     }
 
     private JPanel createActivePanel(GameLayer layer) {
@@ -279,8 +276,8 @@ public class RoomEditorCommander extends JFrame {
     private JPanel createSaveLoadPanel() {
         JPanel panel = new JPanel();
 
-        panel.add(this.saveButton);
-        panel.add(this.loadButton);
+        panel.add(this.saveLoadArea.saveButton);
+        panel.add(this.saveLoadArea.loadButton);
 
         return panel;
     }
@@ -577,5 +574,37 @@ class PropsArea {
                 }));
 
         return true;
+    }
+}
+
+class SaveLoadArea {
+    private RoomEditorCommander cmd;
+    private GameLayer layer;
+
+    public JButton saveButton;
+    public JButton loadButton;
+
+    public SaveLoadArea(RoomEditorCommander cmd, GameLayer layer) {
+        this.cmd = cmd;
+        this.layer = layer;
+        initSave();
+        initLoad();
+    }
+
+    public void onApplied() {
+        saveButton.setEnabled(true);
+    }
+
+    public void onClear() {
+        saveButton.setEnabled(false);
+    }
+
+    private void initSave() {
+        saveButton = new JButton("Save");
+        this.saveButton.setEnabled(false);
+    }
+
+    private void initLoad() {
+        loadButton = new JButton("Load");
     }
 }
