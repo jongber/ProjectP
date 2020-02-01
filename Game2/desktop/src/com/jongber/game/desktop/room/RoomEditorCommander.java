@@ -319,7 +319,7 @@ public class RoomEditorCommander extends JFrame {
     private JPanel createPropsPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Editor Cmd"));
+        panel.setBorder(BorderFactory.createTitledBorder("Room props Cmd"));
 
         JScrollPane pane = new JScrollPane(propTable);
 
