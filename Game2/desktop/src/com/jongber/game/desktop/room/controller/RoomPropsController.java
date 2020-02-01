@@ -33,7 +33,7 @@ public class RoomPropsController extends InputControlAdapter implements Controll
     public void render(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
         for (GameObject object : this.objects) {
             PropProperty p = object.getComponent(PropProperty.class);
-            Vector2 pos = object.transform.getPos();
+            Vector2 pos = object.transform.getWorldPos();
 
             batch.draw(p.texture, pos.x, pos.y);
         }
@@ -45,7 +45,7 @@ public class RoomPropsController extends InputControlAdapter implements Controll
             batch.end();
 
             PropProperty p = this.selected.getComponent(PropProperty.class);
-            Vector2 pos = this.selected.transform.getPos();
+            Vector2 pos = this.selected.transform.getWorldPos();
             float x1 = pos.x;
             float y1 = pos.y;
 
@@ -69,7 +69,7 @@ public class RoomPropsController extends InputControlAdapter implements Controll
 
         for (GameObject object : this.objects) {
             PropProperty p = object.getComponent(PropProperty.class);
-            Vector2 pos = object.transform.getPos();
+            Vector2 pos = object.transform.getWorldPos();
 
             float x1 = pos.x, x2 = pos.x + p.texture.getRegionWidth();
             float y1 = pos.y, y2 = pos.y + p.texture.getRegionHeight();
@@ -99,7 +99,7 @@ public class RoomPropsController extends InputControlAdapter implements Controll
         Vector2 drag = new Vector2(worldX, worldY).sub(this.pressed);
         float len = drag.len();
         drag.nor();
-        drag.scl(len * 0.5f);
+        drag.scl(len * 0.8f);
 
         this.pressed.set(worldX, worldY);
 

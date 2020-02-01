@@ -1,13 +1,11 @@
 package com.jongber.game.core.controller;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.jongber.game.core.asset.FontManager;
 import com.jongber.game.core.GameObject;
@@ -63,7 +61,7 @@ public class TextController extends Controller implements Controller.Renderer, C
             BitmapFont font = this.fontManager.getFont(button.textBlock.fontSize);
             if (font != null) {
                 GlyphLayout layout = new GlyphLayout(font, button.textBlock.text, button.textBlock.color, button.width, button.align, true);
-                Vector2 pos = obj.transform.getPos();
+                Vector2 pos = obj.transform.getWorldPos();
 
                 shapeRenderer.setColor(button.background);
                 shapeRenderer.setProjectionMatrix(camera.getCamera().projection);
@@ -106,7 +104,7 @@ public class TextController extends Controller implements Controller.Renderer, C
     public boolean touchUp(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button) {
 
         for (GameObject obj : this.objs) {
-            Vector2 pos = obj.transform.getPos();
+            Vector2 pos = obj.transform.getWorldPos();
             TextComponent comp = obj.getComponent(TextComponent.class);
             BitmapFont font = this.fontManager.getFont(comp.textBlock.fontSize);
 
