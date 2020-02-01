@@ -33,32 +33,24 @@ public class BlockGridRenderer extends Controller implements Controller.PostRend
 
         batch.end();
 
-        Gdx.gl.glLineWidth(0.5f);
+        Gdx.gl.glLineWidth(1f);
         renderer.setProjectionMatrix(camera.getCamera().combined);
         renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(Color.DARK_GRAY);
         for (int i = -this.gridX; i < this.gridX; i += BlockSize) {
-
-            if (i == 0)
-                renderer.setColor(Color.LIGHT_GRAY);
-            else
-                renderer.setColor(Color.DARK_GRAY);
-
             renderer.line(i, -this.gridY, i, this.gridY);
         }
 
         for (int i = -this.gridY; i < this.gridY; i += BlockSize) {
-
-            if (i == 0)
-                renderer.setColor(Color.LIGHT_GRAY);
-            else
-                renderer.setColor(Color.DARK_GRAY);
-
             renderer.line(-this.gridX, i, this.gridX, i);
         }
 
-        //renderer.line(new Vector2(x1, y1), new Vector2(x1, y2));
+
+        renderer.setColor(Color.LIGHT_GRAY);
+        renderer.line(0, -this.gridY,0, this.gridY);
+        renderer.line(-this.gridX, 0, this.gridX, 0);
+
         renderer.end();
-        //Gdx.gl.glLineWidth(1);
 
         batch.begin();
     }

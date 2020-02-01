@@ -56,6 +56,7 @@ public class RoomEditorCommander extends JFrame {
     public RoomEditorCommander(GameLayer layer) {
         this.layer = layer;
         this.roomNameField = new JTextField(8);
+        this.roomNameField.setText("Room Name");
         this.initPropArea();
     }
 
