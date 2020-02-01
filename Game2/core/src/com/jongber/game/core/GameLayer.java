@@ -155,6 +155,17 @@ public class GameLayer {
         this.modified = true;
     }
 
+    public void addObject(String parentName, GameObject child) {
+        GameObject parent = this.getObjectAny(parentName);
+        if (parent == null) {
+            this.addObject(child);
+        }
+        else {
+            this.addObject(parent, child);
+        }
+
+    }
+
     public void removeObject(GameObject parent, GameObject child) {
         parent.removeChild(child);
         this.modified = true;

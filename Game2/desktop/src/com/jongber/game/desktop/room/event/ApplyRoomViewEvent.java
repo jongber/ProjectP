@@ -41,10 +41,10 @@ public class ApplyRoomViewEvent extends GameEvent {
         Texture tex = AssetManager.getTexture(this.wallpaperPath);
         TextureRegion region = new TextureRegion(tex, this.width, this.height);
 
-        RoomProperty p = new RoomProperty(name, wallpaperPath, region, width, height, sanity, noise);
+        RoomProperty p = new RoomProperty(region, width, height, sanity, noise);
 
         GameObject object = new GameObject();
-        object.name = p.name;
+        object.name = this.name;
         object.addComponent(p);
 
         this.layer.addObject(object);

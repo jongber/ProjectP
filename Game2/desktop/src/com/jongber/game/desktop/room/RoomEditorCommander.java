@@ -2,6 +2,7 @@ package com.jongber.game.desktop.room;
 
 import com.badlogic.gdx.Gdx;
 import com.jongber.game.core.GameLayer;
+import com.jongber.game.desktop.room.event.AddPropEvent;
 import com.jongber.game.desktop.room.event.ClearRoomViewEvent;
 import com.jongber.game.desktop.room.event.ShowGridEvent;
 import com.jongber.game.projectz.Const;
@@ -36,6 +37,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -44,15 +46,17 @@ import javax.swing.table.DefaultTableModel;
 public class RoomEditorCommander extends JFrame {
 
     private GameLayer layer;
+    private JTextField roomNameField;
     private String wallpaperPath = "";
     private JButton propAddButton = new JButton("Add prop");
     private JButton propDelButton = new JButton("Del prop ");
+    private JTable propTable;
     private DefaultTableModel propData = new DefaultTableModel();
 
     public RoomEditorCommander(GameLayer layer) {
         this.layer = layer;
-        propData.addColumn("Path");
-        propData.addColumn("Position");
+        this.roomNameField = new JTextField(8);
+        this.initPropArea();
     }
 
     static void popRoomUI(GameLayer layer) {
@@ -156,8 +160,7 @@ public class RoomEditorCommander extends JFrame {
 
         panelGbc.gridx = 1;
         panelGbc.gridy = 0;
-        TextField nameField = new TextField(8);
-        propertyPanel.add(nameField, panelGbc);
+        propertyPanel.add(this.roomNameField, panelGbc);
 
         // 2. sanity
         panelGbc.gridx = 0;
@@ -271,7 +274,7 @@ public class RoomEditorCommander extends JFrame {
         apply.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                String name = nameField.getText();
+                String name = RoomEditorCommander.this.roomNameField.getText();
                 int sanity = sanitySlider.getValue();
                 int noise = noiseSlider.getValue();
                 int height = 48;
@@ -306,8 +309,7 @@ public class RoomEditorCommander extends JFrame {
         panel.setLayout(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Editor Cmd"));
 
-        JTable table = new JTable(this.propData);
-        JScrollPane pane = new JScrollPane(table);
+        JScrollPane pane = new JScrollPane(propTable);
 
         panel.add(pane, BorderLayout.CENTER);
 
@@ -322,6 +324,46 @@ public class RoomEditorCommander extends JFrame {
 
         panel.add(buttonPanel, BorderLayout.EAST);
         return panel;
+    }
+
+    private void initPropArea() {
+        propData.addColumn("Name");
+        propData.addColumn("Path");
+        propData.addColumn("Position");
+        propTable = new JTable(this.propData);
+
+        propAddButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String basePath = System.getProperty("user.dir") +
+                        File.separator + "android" + File.separator + "assets";
+                File baseFile = new File(basePath);
+
+                JFileChooser fc = new JFileChooser(baseFile);
+                fc.setAcceptAllFileFilterUsed(false);
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "png", "PNG", "JPG", "jpg");
+                fc.setFileFilter(filter);
+
+                int i = fc.showOpenDialog(null);
+                if (i == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fc.getSelectedFile();
+                    if (selectedFile.getPath().contains(baseFile.getPath()) == false) {
+                        JOptionPane.showMessageDialog(null, "Invalid path, use only under android/asset");
+                        return;
+                    }
+                    String path = baseFile.toURI().relativize(selectedFile.toURI()).getPath();
+                    layer.post(new AddPropEvent(layer, RoomEditorCommander.this.roomNameField.getText(), path));
+                }
+            }
+        });
+
+        propDelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int row = RoomEditorCommander.this.propTable.getSelectedRow();
+                RoomEditorCommander.this.propData.removeRow(row);
+            }
+        });
     }
 
     private boolean validateAndCreateRoomProperty(String name,

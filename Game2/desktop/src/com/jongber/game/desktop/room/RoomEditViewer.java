@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
@@ -12,6 +11,7 @@ import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.room.controller.BlockGridRenderer;
 import com.jongber.game.desktop.room.controller.CameraController;
+import com.jongber.game.desktop.room.controller.RoomPropsController;
 import com.jongber.game.desktop.room.controller.RoomPropertyController;
 
 public class RoomEditViewer extends ApplicationAdapter implements InputProcessor {
@@ -122,5 +122,6 @@ public class RoomEditViewer extends ApplicationAdapter implements InputProcessor
         this.roomViewLayer.registerController(new CameraController());
         this.roomViewLayer.registerController(new RoomPropertyController());
         this.roomViewLayer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        this.roomViewLayer.registerController(new RoomPropsController());
     }
 }
