@@ -28,7 +28,7 @@ public class RoomPropertyController extends Controller implements Controller.Ren
             }
 
             // render texture
-            Vector2 pos = object.transform.getPos();
+            Vector2 pos = object.transform.getWorldPos();
             batch.draw(property.textureRegion, pos.x, pos.y, property.width, property.height);
         }
     }
@@ -45,7 +45,7 @@ public class RoomPropertyController extends Controller implements Controller.Ren
 
             int w = property.width / Const.BlockSize;
             int h = property.height / Const.BlockSize;
-            Vector2 pos = object.transform.getPos();
+            Vector2 pos = object.transform.getWorldPos();
 
             for (int i = 0; i < h; i++) {
                 batch.draw(left, pos.x, pos.y + i * Const.BlockSize);

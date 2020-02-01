@@ -1,6 +1,7 @@
 package com.jongber.game.desktop.room;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.event.GameEvent;
@@ -24,6 +25,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,7 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -55,15 +58,17 @@ public class RoomEditorCommander extends JFrame {
     private JButton propAddButton = new JButton("Add prop");
     private JButton propDelButton = new JButton("Del prop ");
     private JTable propTable;
-    private DefaultTableModel propData = new DefaultTableModel();
+    private DefaultTableModel propData;
 
     private final List<GameObject> propObjects = new ArrayList<>();
+    private Timer timer;
 
     public RoomEditorCommander(GameLayer layer) {
         this.layer = layer;
         this.roomNameField = new JTextField(8);
         this.roomNameField.setText("Room Name");
         this.initPropArea();
+        this.initTimer();
     }
 
     static void popRoomUI(GameLayer layer) {
@@ -334,6 +339,14 @@ public class RoomEditorCommander extends JFrame {
     }
 
     private void initPropArea() {
+
+        propData = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
         propData.addColumn("Path");
         propData.addColumn("Position");
         propTable = new JTable(this.propData);
@@ -359,7 +372,7 @@ public class RoomEditorCommander extends JFrame {
                     }
 
                     String path = baseFile.toURI().relativize(selectedFile.toURI()).getPath();
-                    RoomEditorCommander.this.validateAndAddProps(layer, path);
+                    onPropAdd(path);
                 }
             }
         });
@@ -368,16 +381,31 @@ public class RoomEditorCommander extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 int row = RoomEditorCommander.this.propTable.getSelectedRow();
-                RoomEditorCommander.this.propData.removeRow(row);
-                layer.post(new DelPropEvent(layer, roomNameField.getText(), propObjects.get(row)));
+                if (row >= 0) {
+                    RoomEditorCommander.this.onPropDelete(row);
+                }
+            }
+        });
+    }
+
+    private void initTimer() {
+        this.timer = new Timer(45, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                synchronized (RoomEditorCommander.this.propObjects) {
+                    int rows = RoomEditorCommander.this.propData.getRowCount();
+                    for (int i = 0; i < rows; ++i) {
+                        GameObject object = RoomEditorCommander.this.propObjects.get(i);
+                        Vector2 pos = object.transform.getLocalPos();
+
+                        RoomEditorCommander.this.propData.setValueAt(pos.toString(), i, 1);
+                    }
+                }
             }
         });
     }
 
     private boolean validateAndAddProps(GameLayer layer, String path) {
-
-        this.propData.addRow(new String[] {path, "0, 0"});
-
         layer.post(new AddPropEvent(layer,
                                     RoomEditorCommander.this.roomNameField.getText(),
                                     path,
@@ -386,6 +414,7 @@ public class RoomEditorCommander extends JFrame {
                                         public void callback(GameEvent event) {
                                             AddPropEvent e = (AddPropEvent)event;
                                             synchronized (RoomEditorCommander.this.propObjects) {
+                                                RoomEditorCommander.this.propData.addRow(new String[] {path, "0, 0"});
                                                 RoomEditorCommander.this.propObjects.add(e.created);
                                             }
                                         }
@@ -426,6 +455,26 @@ public class RoomEditorCommander extends JFrame {
         return true;
     }
 
+    private void onPropAdd(String path) {
+        RoomEditorCommander.this.validateAndAddProps(layer, path);
+
+        if (this.timer.isRunning() == false) {
+            this.timer.start();
+        }
+    }
+
+    private void onPropDelete(int row) {
+        synchronized (this.propObjects) {
+            RoomEditorCommander.this.propData.removeRow(row);
+            layer.post(new DelPropEvent(layer, roomNameField.getText(), propObjects.get(row)));
+            this.propObjects.remove(row);
+        }
+
+        if (propData.getRowCount() == 0) {
+            this.timer.stop();
+        }
+    }
+
     private void onApplied() {
         this.propAddButton.setEnabled(true);
         this.propDelButton.setEnabled(true);
@@ -443,5 +492,7 @@ public class RoomEditorCommander extends JFrame {
         synchronized (this.propObjects) {
             this.propObjects.clear();
         }
+
+        this.timer.stop();
     }
 }
