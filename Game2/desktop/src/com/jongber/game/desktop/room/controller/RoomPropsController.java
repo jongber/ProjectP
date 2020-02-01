@@ -99,7 +99,7 @@ public class RoomPropsController extends InputControlAdapter implements Controll
         Vector2 drag = new Vector2(worldX, worldY).sub(this.pressed);
         float len = drag.len();
         drag.nor();
-        drag.scl(len * 0.5f);
+        drag.scl(len * 0.8f);
 
         this.pressed.set(worldX, worldY);
 

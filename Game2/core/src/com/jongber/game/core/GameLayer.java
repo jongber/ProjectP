@@ -227,6 +227,10 @@ public class GameLayer {
         return objects;
     }
 
+    public OrthoCameraWrapper getCameraWrapper() {
+        return this.cameraWrapper;
+    }
+
     public void post(GameEvent event) {
         this.eventHandler.post(event);
     }
