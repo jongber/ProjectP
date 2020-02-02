@@ -7,7 +7,6 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.util.Tuple2;
-import com.jongber.game.desktop.room.component.RoomProperty;
 import com.jongber.game.desktop.room.event.AddPropEvent;
 import com.jongber.game.desktop.room.event.ClearRoomViewEvent;
 import com.jongber.game.desktop.room.event.DelPropEvent;
@@ -34,7 +33,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -178,6 +176,27 @@ class RoomEditorCommander extends JFrame {
 
     public void fromRoomJson(RoomJson json) {
         this.onClear();
+
+        property.roomNameField.setText(json.name);
+        property.sanitySlider.setValue(json.sanity);
+        property.widthSpinner.setValue(json.width / Const.BlockSize);
+        property.wallpaperPath = json.wallpaperPath;
+
+        ImageIcon icon = new ImageIcon(json.wallpaperPath);
+        Image image = icon.getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+        property.wallpaperLabel.setIcon(new ImageIcon(image));
+        property.wallpaperButton.setText("reload");
+        property.wallpaperLabel.setIcon(icon);
+
+        property.noiseSlider.setValue(json.noise);
+
+        property.validateAndCreateRoomProperty();
+
+        for (Tuple2<String, Vector2> item : json.props) {
+            props.validateAndAddProps(item.getItem1(), item.getItem2());
+        }
+
+        this.onApplied();
     }
 
     private JPanel createActivePanel() {
@@ -448,7 +467,7 @@ class PropertyArea {
         });
     }
 
-    private boolean validateAndCreateRoomProperty() {
+    boolean validateAndCreateRoomProperty() {
         String name = roomNameField.getText();
         int width = (Integer)this.widthSpinner.getValue();
         width *= Const.BlockSize;
@@ -550,7 +569,7 @@ class PropsArea {
                     }
 
                     String path = baseFile.toURI().relativize(selectedFile.toURI()).getPath();
-                    validateAndAddProps(path);
+                    validateAndAddProps(path, Vector2.Zero);
                 }
             }
         });
@@ -574,10 +593,11 @@ class PropsArea {
         });
     }
 
-    private void validateAndAddProps(String path) {
+    void validateAndAddProps(String path, Vector2 pos) {
         layer.post(new AddPropEvent(layer,
                 roomField.getText(),
                 path,
+                pos,
                 new GameEvent.Callback() {
                     @Override
                     public void callback(GameEvent event) {
