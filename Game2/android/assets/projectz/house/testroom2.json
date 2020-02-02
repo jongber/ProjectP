@@ -1,0 +1,32 @@
+{
+name: testroom2
+sanity: 50
+noise: 50
+height: 48
+width: 48
+wallpaperPath: projectz/house/wallpapers/3x3_1.png
+props: [
+	{
+		item1: {
+			class: java.lang.String
+			value: projectz/house/props/kichen_prop_2.png
+		}
+		item2: {
+			class: com.badlogic.gdx.math.Vector2
+			x: 18.17602
+			y: -3.7120025
+		}
+	}
+	{
+		item1: {
+			class: java.lang.String
+			value: projectz/house/props/kicken_prop_1.png
+		}
+		item2: {
+			class: com.badlogic.gdx.math.Vector2
+			x: -24.192009
+			y: -5.5040007
+		}
+	}
+]
+}
