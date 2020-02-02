@@ -1,6 +1,9 @@
 package com.jongber.game.core.util;
 
 import com.badlogic.gdx.utils.reflect.ArrayReflection;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -83,6 +86,7 @@ public class PackedArray<T> implements Iterable<T>{
     }
 
     @Override
+    @NotNull
     public Iterator<T> iterator() {
         return new PackedArrayIterator<T>(this.items, this.size());
     }

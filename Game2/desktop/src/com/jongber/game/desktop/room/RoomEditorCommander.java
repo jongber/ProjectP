@@ -63,7 +63,7 @@ class RoomEditorCommander extends JFrame {
     public RoomEditorCommander(GameLayer layer) {
         this.layer = layer;
         this.property = new PropertyArea(layer, this);
-        this.props = new PropsArea(layer, this, property.roomNameField);
+        this.props = new PropsArea(layer, property.roomNameField);
         this.saveLoadArea = new SaveLoadArea(this, layer);
 
         this.timer = new Timer(60, new ActionListener() {
@@ -468,7 +468,6 @@ class PropertyArea {
 
 class PropsArea {
     private GameLayer layer;
-    private RoomEditorCommander cmd;
     private JTextField roomField;
 
     public JButton propAddButton = new JButton("Add prop");
@@ -478,9 +477,8 @@ class PropsArea {
 
     public final List<GameObject> propObjects = new ArrayList<>();
 
-    public PropsArea(GameLayer layer, RoomEditorCommander cmd, JTextField roomField) {
+    public PropsArea(GameLayer layer, JTextField roomField) {
         this.layer = layer;
-        this.cmd = cmd;
         this.roomField = roomField;
 
         propData.addColumn("Path");
