@@ -2,7 +2,7 @@ package com.jongber.game.desktop.room.event;
 
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.event.GameEvent;
-import com.jongber.game.desktop.room.controller.BlockGridRenderer;
+import com.jongber.game.desktop.common.BlockGridRenderer;
 
 public class ShowGridEvent extends GameEvent {
 

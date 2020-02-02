@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.room.controller;
+package com.jongber.game.desktop.common;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

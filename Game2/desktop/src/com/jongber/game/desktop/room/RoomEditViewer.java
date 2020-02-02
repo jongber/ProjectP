@@ -9,8 +9,8 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
-import com.jongber.game.desktop.room.controller.BlockGridRenderer;
-import com.jongber.game.desktop.room.controller.CameraController;
+import com.jongber.game.desktop.common.BlockGridRenderer;
+import com.jongber.game.desktop.common.CameraController;
 import com.jongber.game.desktop.room.controller.RoomPropsController;
 import com.jongber.game.desktop.room.controller.RoomPropertyController;
 
