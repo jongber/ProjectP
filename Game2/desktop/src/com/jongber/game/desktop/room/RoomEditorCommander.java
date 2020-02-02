@@ -7,6 +7,7 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.util.Tuple2;
+import com.jongber.game.desktop.room.component.RoomProperty;
 import com.jongber.game.desktop.room.event.AddPropEvent;
 import com.jongber.game.desktop.room.event.ClearRoomViewEvent;
 import com.jongber.game.desktop.room.event.DelPropEvent;
@@ -27,10 +28,13 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -165,10 +169,15 @@ class RoomEditorCommander extends JFrame {
     }
 
     public void onClear() {
+        layer.post(new ClearRoomViewEvent(layer));
         this.property.onClear();
         this.props.onClear();
         this.timer.stop();
         this.saveLoadArea.onClear();
+    }
+
+    public void fromRoomJson(RoomJson json) {
+        this.onClear();
     }
 
     private JPanel createActivePanel() {
@@ -434,7 +443,6 @@ class PropertyArea {
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                layer.post(new ClearRoomViewEvent(layer));
                 cmd.onClear();
             }
         });
@@ -619,7 +627,7 @@ class SaveLoadArea {
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     File baseFile = new File(jsonPath + cmd.property.roomNameField.getText() + ".json");
-                    
+
                     JFileChooser fc = new JFileChooser(baseFile);
                     fc.setSelectedFile(baseFile);
                     fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
@@ -650,7 +658,6 @@ class SaveLoadArea {
                 }
                 catch (IOException e) {
                     e.printStackTrace();
-                    return;
                 }
             }
         });
@@ -658,38 +665,76 @@ class SaveLoadArea {
 
     private void saveJson(File file) {
         synchronized (cmd.props) {
-            RoomJson roomJson = new RoomJson();
-            roomJson.name = cmd.property.roomNameField.getText();
-
-            int rows = cmd.props.propData.getRowCount();
-            for (int i = 0; i < rows; ++i) {
-                GameObject object = cmd.props.propObjects.get(i);
-
-                String path = (String)cmd.props.propData.getValueAt(i, 0);
-                roomJson.props.add(new Tuple2<>(path, object.transform.getLocalPos()));
-            }
-
-            Json json = new Json();
-            String txt = json.prettyPrint(roomJson);
-            BufferedWriter writer = null;
             try {
-                writer = new BufferedWriter(new FileWriter(file));
+                RoomJson roomJson = createRoomJson();
+                Json json = new Json();
+                String txt = json.prettyPrint(roomJson);
+
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));;
                 writer.write(txt);
+                writer.close();
             }
             catch (IOException e) {
                 e.printStackTrace();
-            }
-            finally {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
 
     private void initLoad() {
         loadButton = new JButton("Load");
+        loadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JFileChooser fc = new JFileChooser(jsonPath);
+                fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+                int i = fc.showOpenDialog(null);
+                if (i == JFileChooser.APPROVE_OPTION) {
+                    File selected = fc.getSelectedFile();
+                    if (selected.exists() == false) return;
+
+                    StringBuilder sb = new StringBuilder();
+                    try (BufferedReader br = new BufferedReader(new FileReader(selected))) {
+
+                        // read line by line
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line).append("\n");
+                        }
+
+                    } catch (IOException e) {
+                        System.err.format("IOException: %s%n", e);
+                    }
+
+                    RoomJson roomJson = loadRoomJson(sb.toString());
+                    cmd.fromRoomJson(roomJson);
+                }
+            }
+        });
+    }
+
+    private RoomJson loadRoomJson(String jsonStr) {
+        Json json = new Json();
+        return json.fromJson(RoomJson.class, jsonStr);
+    }
+
+    private RoomJson createRoomJson() {
+        RoomJson json = new RoomJson();
+
+        json.name = cmd.property.roomNameField.getText();
+        json.height = cmd.property.heightBlock * Const.BlockSize;
+        json.width = (int)cmd.property.widthSpinner.getValue() * Const.BlockSize;
+        json.noise = cmd.property.noiseSlider.getValue();
+        json.sanity = cmd.property.sanitySlider.getValue();
+        json.wallpaperPath = cmd.property.wallpaperPath;
+
+        int rows = cmd.props.propData.getRowCount();
+        for (int i = 0; i < rows; ++i) {
+            GameObject object = cmd.props.propObjects.get(i);
+
+            String path = (String)cmd.props.propData.getValueAt(i, 0);
+            json.props.add(new Tuple2<>(path, object.transform.getLocalPos()));
+        }
+
+        return json;
     }
 }
