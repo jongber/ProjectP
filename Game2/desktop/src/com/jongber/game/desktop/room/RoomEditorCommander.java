@@ -25,7 +25,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,21 +52,18 @@ import javax.swing.table.DefaultTableModel;
 public class RoomEditorCommander extends JFrame {
 
     private GameLayer layer;
-    private JTextField roomNameField;
-    private String wallpaperPath = "";
-    private JButton propAddButton = new JButton("Add prop");
-    private JButton propDelButton = new JButton("Del prop ");
-    private JTable propTable;
-    private DefaultTableModel propData;
+    private PropertyArea property;
+    private PropsArea props;
+    private SaveLoadArea saveLoadArea;
 
-    private final List<GameObject> propObjects = new ArrayList<>();
-    private Timer timer;
+    public Timer timer;
 
     public RoomEditorCommander(GameLayer layer) {
         this.layer = layer;
-        this.roomNameField = new JTextField(8);
-        this.roomNameField.setText("Room Name");
-        this.initPropArea();
+        this.property = new PropertyArea(layer, this);
+        this.props = new PropsArea(layer, this, property.roomNameField);
+        this.saveLoadArea = new SaveLoadArea(this, layer);
+
         this.initTimer();
     }
 
@@ -85,39 +81,46 @@ public class RoomEditorCommander extends JFrame {
         RoomEditorCommander window = new RoomEditorCommander(layer);
         window.setTitle("Room Editor Commander");
         window.setSize(450, 500);
-        //propertyPanel.setResizable(false);
         window.setLayout(new GridBagLayout());
-        GridBagConstraints dialogGbc = new GridBagConstraints();
-        dialogGbc.fill = GridBagConstraints.HORIZONTAL;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         ///// active panel area
         JPanel activePanel = window.createActivePanel(layer);
         ///// active panel area end
 
-        dialogGbc.gridx = 0;
-        dialogGbc.gridy = 0;
-        dialogGbc.ipady = 10;
-        window.add(activePanel, dialogGbc);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.ipady = 10;
+        window.add(activePanel, gbc);
 
         //// property panel
         JPanel propertyPanel = window.createRoomPropertyPanel(layer);
         //// property end
 
-        dialogGbc.gridx = 0;
-        dialogGbc.gridy = 1;
-        window.add(propertyPanel, dialogGbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        window.add(propertyPanel, gbc);
 
         //// propObjects panel
         JPanel propsPanel = window.createPropsPanel();
         //// propObjects end
 
-        dialogGbc.gridx = 0;
-        dialogGbc.gridy = 2;
-        dialogGbc.weightx = 1;
-        dialogGbc.weighty = 0.3;
-        //dialogGbc.insets = new Insets(0,10,0,10);
-        dialogGbc.fill = GridBagConstraints.BOTH;
-        window.add(propsPanel, dialogGbc);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 1;
+        gbc.weighty = 0.3;
+        gbc.fill = GridBagConstraints.BOTH;
+        window.add(propsPanel, gbc);
+
+        //// save load panel
+        JPanel saveLoadPanel = window.createSaveLoadPanel();
+        //// save load panel end
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        window.add(saveLoadPanel, gbc);
 
         window.setVisible(true);
         window.addWindowListener(new WindowAdapter() {
@@ -127,6 +130,20 @@ public class RoomEditorCommander extends JFrame {
                 Gdx.app.exit();
             }
         });
+    }
+
+    public void onApplied() {
+        this.property.onApplied();
+        this.props.onApplied();
+        this.timer.start();
+        this.saveLoadArea.onApplied();
+    }
+
+    public void onClear() {
+        this.property.onClear();
+        this.props.onClear();
+        this.timer.stop();
+        this.saveLoadArea.onClear();
     }
 
     private JPanel createActivePanel(GameLayer layer) {
@@ -172,45 +189,25 @@ public class RoomEditorCommander extends JFrame {
 
         panelGbc.gridx = 1;
         panelGbc.gridy = 0;
-        propertyPanel.add(this.roomNameField, panelGbc);
+        propertyPanel.add(this.property.roomNameField, panelGbc);
 
         // 2. sanity
         panelGbc.gridx = 0;
         panelGbc.gridy = 1;
-        Label sanityLabel = new Label("Sanity: 50");
-        propertyPanel.add(sanityLabel, panelGbc);
+        propertyPanel.add(this.property.sanityLabel, panelGbc);
 
         panelGbc.gridx = 1;
         panelGbc.gridy = 1;
-        JSlider sanitySlider = new JSlider();
-        sanitySlider.setMinimum(0);
-        sanitySlider.setMaximum(100);
-        sanitySlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                sanityLabel.setText("Sanity: " + sanitySlider.getValue());
-            }
-        });
-        propertyPanel.add(sanitySlider, panelGbc);
+        propertyPanel.add(this.property.sanitySlider, panelGbc);
 
         // 3. noise
         panelGbc.gridx = 0;
         panelGbc.gridy = 2;
-        Label noiseLabel = new Label("Noise: 50");
-        propertyPanel.add(noiseLabel, panelGbc);
+        propertyPanel.add(this.property.noiseLabel, panelGbc);
 
         panelGbc.gridx = 1;
         panelGbc.gridy = 2;
-        JSlider noiseSlider = new JSlider();
-        noiseSlider.setMinimum(0);
-        noiseSlider.setMaximum(100);
-        noiseSlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                noiseLabel.setText("Noise: " + noiseSlider.getValue());
-            }
-        });
-        propertyPanel.add(noiseSlider, panelGbc);
+        propertyPanel.add(this.property.noiseSlider, panelGbc);
 
         // 4. height
         panelGbc.gridx = 0;
@@ -230,9 +227,7 @@ public class RoomEditorCommander extends JFrame {
 
         panelGbc.gridx = 1;
         panelGbc.gridy = 4;
-        JSpinner widthSpinner = new JSpinner();
-        widthSpinner.setValue(3);
-        propertyPanel.add(widthSpinner, panelGbc);
+        propertyPanel.add(this.property.widthSpinner, panelGbc);
 
         panelGbc.gridx = 2;
         panelGbc.gridy = 4;
@@ -241,12 +236,150 @@ public class RoomEditorCommander extends JFrame {
         // 6. wallpaper
         panelGbc.gridx = 0;
         panelGbc.gridy = 5;
-        JLabel wallpaperLabel = new JLabel("Wallpaper: ");
-        propertyPanel.add(wallpaperLabel, panelGbc);
+        propertyPanel.add(property.wallpaperLabel, panelGbc);
 
         panelGbc.gridx = 1;
         panelGbc.gridy = 5;
-        JButton wallpaperButton = new JButton("Load");
+        propertyPanel.add(property.wallpaperButton, panelGbc);
+
+        // 7. Apply & Clear
+        panelGbc.gridx = 1;
+        panelGbc.gridy = 6;
+        panelGbc.insets = new Insets(10,10,0,0);
+        propertyPanel.add(property.applyButton, panelGbc);
+
+        panelGbc.gridx = 2;
+        panelGbc.gridy = 6;
+        propertyPanel.add(property.clearButton, panelGbc);
+
+        return propertyPanel;
+    }
+
+    private JPanel createPropsPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder("Editor Cmd"));
+
+        JScrollPane pane = new JScrollPane(this.props.propTable);
+        panel.add(pane, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
+        buttonPanel.add(this.props.propAddButton);
+        buttonPanel.add(this.props.propDelButton);
+
+        panel.add(buttonPanel, BorderLayout.EAST);
+        return panel;
+    }
+
+    private JPanel createSaveLoadPanel() {
+        JPanel panel = new JPanel();
+
+        panel.add(this.saveLoadArea.saveButton);
+        panel.add(this.saveLoadArea.loadButton);
+
+        return panel;
+    }
+
+    private void initTimer() {
+        timer = new Timer(60, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                synchronized (props.propObjects) {
+                    int rows = props.propData.getRowCount();
+                    for (int i = 0; i < rows; ++i) {
+                        GameObject object = props.propObjects.get(i);
+                        Vector2 pos = object.transform.getLocalPos();
+
+                        props.propData.setValueAt(pos, i, 1);
+                    }
+                }
+            }
+        });
+    }
+}
+
+class PropertyArea {
+    private GameLayer layer;
+    private RoomEditorCommander cmd;
+
+    public JTextField roomNameField;
+
+    public Label sanityLabel;
+    public JSlider sanitySlider;
+
+    public Label noiseLabel;
+    public JSlider noiseSlider;
+
+    public int heightBlock = 3;
+    public JSpinner widthSpinner;
+
+    public String wallpaperPath = "";
+    public JLabel wallpaperLabel;
+    public JButton wallpaperButton;
+
+    public JButton applyButton;
+    public JButton clearButton;
+
+    public PropertyArea(GameLayer layer, RoomEditorCommander cmd) {
+        this.layer = layer;
+        this.cmd = cmd;
+
+        this.roomNameField = new JTextField(8);
+        this.roomNameField.setText("RoomName");
+
+        initSanity();
+        initNoise();
+        initWidth();
+        initWallpaper();
+        initApply();
+        initClear();
+    }
+
+    public void onApplied() {
+
+    }
+
+    public void onClear() {
+
+    }
+
+    private void initSanity() {
+        this.sanityLabel = new Label("Sanity: 50");
+
+        this.sanitySlider = new JSlider();
+        this.sanitySlider.setMinimum(0);
+        this.sanitySlider.setMaximum(100);
+        this.sanitySlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                sanityLabel.setText("Sanity: " + sanitySlider.getValue());
+            }
+        });
+    }
+
+    private void initNoise() {
+        this.noiseLabel = new Label("Noise: 50");
+        this.noiseSlider =  new JSlider();
+        this.noiseSlider.setMinimum(0);
+        this.noiseSlider.setMaximum(100);
+        this.noiseSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                noiseLabel.setText("Noise: " + noiseSlider.getValue());
+            }
+        });
+    }
+
+    private void initWidth() {
+        this.widthSpinner = new JSpinner();
+        this.widthSpinner.setValue(3);
+    }
+
+    private void initWallpaper() {
+        wallpaperLabel = new JLabel("Wallpaper: ");
+        wallpaperButton = new JButton("Load");
         wallpaperButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -267,7 +400,7 @@ public class RoomEditorCommander extends JFrame {
                         return;
                     }
 
-                    RoomEditorCommander.this.wallpaperPath = baseFile.toURI().relativize(selectedFile.toURI()).getPath();
+                    wallpaperPath = baseFile.toURI().relativize(selectedFile.toURI()).getPath();
 
                     ImageIcon icon = new ImageIcon(selectedFile.getAbsolutePath());
                     Image image = icon.getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
@@ -276,81 +409,110 @@ public class RoomEditorCommander extends JFrame {
                 }
             }
         });
-        propertyPanel.add(wallpaperButton, panelGbc);
+    }
 
-        // 7. Apply & Clear
-        panelGbc.gridx = 1;
-        panelGbc.gridy = 6;
-        panelGbc.insets = new Insets(10,10,0,0);
-        JButton apply = new JButton("\tApply property\t");
-        apply.addActionListener(new ActionListener() {
+    private void initApply() {
+        applyButton = new JButton("\tApply property\t");
+        applyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                String name = RoomEditorCommander.this.roomNameField.getText();
-                int sanity = sanitySlider.getValue();
-                int noise = noiseSlider.getValue();
-                int height = 48;
-                int width = (Integer)widthSpinner.getValue();
-                width *= Const.BlockSize;
-                String wallpaperPath = RoomEditorCommander.this.wallpaperPath;
-
-                if (RoomEditorCommander.this.validateAndCreateRoomProperty(name, sanity, noise, height, width, wallpaperPath, layer)) {
-                    RoomEditorCommander.this.onApplied();
+                if (validateAndCreateRoomProperty()) {
+                    PropertyArea.this.cmd.onApplied();
                 }
             }
         });
-        propertyPanel.add(apply, panelGbc);
+    }
 
-        panelGbc.gridx = 2;
-        panelGbc.gridy = 6;
-        JButton clear = new JButton("\t   Clear view   \t");
-        clear.addActionListener(new ActionListener() {
+    private void initClear() {
+        clearButton = new JButton("\t   Clear view   \t");
+        clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 layer.post(new ClearRoomViewEvent(layer));
-                RoomEditorCommander.this.onClear();
+                cmd.onClear();
             }
         });
-        propertyPanel.add(clear, panelGbc);
-
-        return propertyPanel;
     }
 
-    private JPanel createPropsPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Room props Cmd"));
+    private boolean validateAndCreateRoomProperty() {
+        String name = roomNameField.getText();
+        int width = (Integer)this.widthSpinner.getValue();
+        width *= Const.BlockSize;
+        int sanity = this.sanitySlider.getValue();
+        int noise = this.noiseSlider.getValue();
+        int height = this.heightBlock * Const.BlockSize;
 
-        JScrollPane pane = new JScrollPane(propTable);
+        if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Room name vacant!");
+            return false;
+        }
 
-        panel.add(pane, BorderLayout.CENTER);
+        if ((Integer)this.widthSpinner.getValue() <= 0) {
+            JOptionPane.showMessageDialog(null, "Width cannot under Zero!");
+            return false;
+        }
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        String basePath = System.getProperty("user.dir") +
+                File.separator + "android" +
+                File.separator + "assets" +
+                File.separator + wallpaperPath;
+        File f = new File(basePath);
+        if (f.isDirectory() || f.exists() == false) {
+            JOptionPane.showMessageDialog(null, "Where wallpaper !!");
+            return false;
+        }
 
-        this.propAddButton.setEnabled(false);
-        this.propDelButton.setEnabled(false);
+        layer.post(new ApplyRoomViewEvent(layer, name, sanity, noise, height, width, wallpaperPath));
 
-        buttonPanel.add(this.propAddButton);
-        buttonPanel.add(this.propDelButton);
-
-        panel.add(buttonPanel, BorderLayout.EAST);
-        return panel;
+        return true;
     }
+}
 
-    private void initPropArea() {
+class PropsArea {
+    private GameLayer layer;
+    private RoomEditorCommander cmd;
+    private JTextField roomField;
 
-        propData = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+    public JButton propAddButton = new JButton("Add prop");
+    public JButton propDelButton = new JButton("Del prop ");
+    public JTable propTable;
+    public DefaultTableModel propData = new DefaultTableModel();
+
+    public final List<GameObject> propObjects = new ArrayList<>();
+
+    public PropsArea(GameLayer layer, RoomEditorCommander cmd, JTextField roomField) {
+        this.layer = layer;
+        this.cmd = cmd;
+        this.roomField = roomField;
 
         propData.addColumn("Path");
         propData.addColumn("Position");
         propTable = new JTable(this.propData);
 
+        initPropAdd();
+        initPropDel();
+    }
+
+    public void onApplied() {
+        this.propAddButton.setEnabled(true);
+        this.propDelButton.setEnabled(true);
+    }
+
+    public void onClear() {
+        this.propAddButton.setEnabled(false);
+        this.propDelButton.setEnabled(false);
+
+        synchronized (this.propObjects) {
+            this.propObjects.clear();
+            int cnt = this.propData.getRowCount();
+            for (int i = 0; i < cnt; ++i) {
+                this.propData.removeRow(0);
+            }
+        }
+    }
+
+    private void initPropAdd() {
+        propAddButton.setEnabled(false);
         propAddButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -372,127 +534,77 @@ public class RoomEditorCommander extends JFrame {
                     }
 
                     String path = baseFile.toURI().relativize(selectedFile.toURI()).getPath();
-                    onPropAdd(path);
+                    validateAndAddProps(path);
                 }
             }
         });
+    }
 
+    private void initPropDel() {
+        propDelButton.setEnabled(false);
         propDelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                int row = RoomEditorCommander.this.propTable.getSelectedRow();
-                if (row >= 0) {
-                    RoomEditorCommander.this.onPropDelete(row);
-                }
-            }
-        });
-    }
-
-    private void initTimer() {
-        this.timer = new Timer(45, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                synchronized (RoomEditorCommander.this.propObjects) {
-                    int rows = RoomEditorCommander.this.propData.getRowCount();
-                    for (int i = 0; i < rows; ++i) {
-                        GameObject object = RoomEditorCommander.this.propObjects.get(i);
-                        Vector2 pos = object.transform.getLocalPos();
-
-                        RoomEditorCommander.this.propData.setValueAt(pos.toString(), i, 1);
+                synchronized (propObjects) {
+                    int row = propTable.getSelectedRow();
+                    if (row < 0) {
+                        return;
                     }
+
+                    propData.removeRow(row);
+                    layer.post(new DelPropEvent(layer, roomField.getText(), propObjects.get(row)));
                 }
             }
         });
     }
 
-    private boolean validateAndAddProps(GameLayer layer, String path) {
+    private boolean validateAndAddProps(String path) {
         layer.post(new AddPropEvent(layer,
-                                    RoomEditorCommander.this.roomNameField.getText(),
-                                    path,
-                                    new GameEvent.Callback() {
-                                        @Override
-                                        public void callback(GameEvent event) {
-                                            AddPropEvent e = (AddPropEvent)event;
-                                            synchronized (RoomEditorCommander.this.propObjects) {
-                                                RoomEditorCommander.this.propData.addRow(new String[] {path, "0, 0"});
-                                                RoomEditorCommander.this.propObjects.add(e.created);
-                                            }
-                                        }
-                                    }));
+                roomField.getText(),
+                path,
+                new GameEvent.Callback() {
+                    @Override
+                    public void callback(GameEvent event) {
+                        AddPropEvent e = (AddPropEvent)event;
+                        synchronized (PropsArea.this.propObjects) {
+                            PropsArea.this.propData.addRow(new String[] {path, "0, 0"});
+                            PropsArea.this.propObjects.add(e.created);
+                        }
+                    }
+                }));
 
         return true;
     }
+}
 
-    private boolean validateAndCreateRoomProperty(String name,
-                                                         int sanity,
-                                                         int noise,
-                                                         int height,
-                                                         int width,
-                                                         String wallpaperPath, GameLayer layer) {
+class SaveLoadArea {
+    private RoomEditorCommander cmd;
+    private GameLayer layer;
 
-        if (name.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Room name vacant!");
-            return false;
-        }
+    public JButton saveButton;
+    public JButton loadButton;
 
-        if (width <= 0) {
-            JOptionPane.showMessageDialog(null, "Width cannot under Zero!");
-            return false;
-        }
+    public SaveLoadArea(RoomEditorCommander cmd, GameLayer layer) {
+        this.cmd = cmd;
+        this.layer = layer;
+        initSave();
 
-        String basePath = System.getProperty("user.dir") +
-                File.separator + "android" +
-                File.separator + "assets" +
-                File.separator + wallpaperPath;
-        File f = new File(basePath);
-        if (f.isDirectory() || f.exists() == false) {
-            JOptionPane.showMessageDialog(null, "Where wallpaper !!");
-            return false;
-        }
-
-        layer.post(new ApplyRoomViewEvent(layer, name, sanity, noise, height, width, wallpaperPath));
-
-        return true;
     }
 
-    private void onPropAdd(String path) {
-        RoomEditorCommander.this.validateAndAddProps(layer, path);
-
-        if (this.timer.isRunning() == false) {
-            this.timer.start();
-        }
+    public void onApplied() {
+        saveButton.setEnabled(true);
     }
 
-    private void onPropDelete(int row) {
-        synchronized (this.propObjects) {
-            RoomEditorCommander.this.propData.removeRow(row);
-            layer.post(new DelPropEvent(layer, roomNameField.getText(), propObjects.get(row)));
-            this.propObjects.remove(row);
-        }
-
-        if (propData.getRowCount() == 0) {
-            this.timer.stop();
-        }
+    public void onClear() {
+        saveButton.setEnabled(false);
     }
 
-    private void onApplied() {
-        this.propAddButton.setEnabled(true);
-        this.propDelButton.setEnabled(true);
+    private void initSave() {
+        saveButton = new JButton("Save");
+        this.saveButton.setEnabled(false);
     }
 
-    private void onClear() {
-        int cnt = this.propData.getRowCount();
-        for (int i = 0; i < cnt; ++i) {
-            this.propData.removeRow(0);
-        }
-
-        this.propAddButton.setEnabled(false);
-        this.propDelButton.setEnabled(false);
-
-        synchronized (this.propObjects) {
-            this.propObjects.clear();
-        }
-
-        this.timer.stop();
+    private void initLoad() {
+        loadButton = new JButton("Load");
     }
 }
