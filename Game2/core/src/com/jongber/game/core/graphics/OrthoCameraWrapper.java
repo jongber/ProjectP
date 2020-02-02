@@ -8,8 +8,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class OrthoCameraWrapper {
-    private OrthographicCamera camera = new OrthographicCamera();
-    private Viewport viewport;
+    private final OrthographicCamera camera = new OrthographicCamera();
+    private final Viewport viewport;
 
     public OrthoCameraWrapper(int w, int h) {
         this.viewport = new FitViewport(w, h, this.camera);

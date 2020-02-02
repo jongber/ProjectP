@@ -6,9 +6,9 @@ import java.util.List;
 
 public class AnimationAsset {
 
-    private String name;
-    private TextureRegion[] regions;
-    private int[] frameDuration;
+    private final String name;
+    private final TextureRegion[] regions;
+    private final int[] frameDuration;
 
     public AnimationAsset(String name, TextureRegion[] regions, List<Integer> durations) {
         this.regions = regions;

@@ -9,8 +9,8 @@ import java.util.HashMap;
 public class AssetManager {
 
     // think about hash collision..because key is string..!
-    private static HashMap<String, FileHandle> fileHandles = new HashMap<>();
-    private static HashMap<String, Texture> textureAssets = new HashMap<>();
+    private final static HashMap<String, FileHandle> fileHandles = new HashMap<>();
+    private final static HashMap<String, Texture> textureAssets = new HashMap<>();
 
     public static FileHandle getFile(String path) {
 

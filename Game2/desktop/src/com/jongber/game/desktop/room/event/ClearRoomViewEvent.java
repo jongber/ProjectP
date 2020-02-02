@@ -5,7 +5,7 @@ import com.jongber.game.core.event.GameEvent;
 
 public class ClearRoomViewEvent extends GameEvent {
 
-    private GameLayer layer;
+    private final GameLayer layer;
 
     public ClearRoomViewEvent(GameLayer layer) {
         this.layer = layer;

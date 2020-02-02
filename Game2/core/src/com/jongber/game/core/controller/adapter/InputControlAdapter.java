@@ -49,11 +49,9 @@ public class InputControlAdapter extends Controller implements Controller.InputP
 
     @Override
     public void build(List<GameObject> graph) {
-
     }
 
     @Override
     public void dispose() {
-
     }
 }

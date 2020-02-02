@@ -10,13 +10,13 @@ import com.jongber.game.desktop.room.component.RoomProperty;
 
 public class ApplyRoomViewEvent extends GameEvent {
 
-    private GameLayer layer;
-    private String name;
-    private int sanity;
-    private int noise;
-    private int height;
-    private int width;
-    private String wallpaperPath;
+    private final GameLayer layer;
+    private final String name;
+    private final int sanity;
+    private final int noise;
+    private final int height;
+    private final int width;
+    private final String wallpaperPath;
 
     public ApplyRoomViewEvent(GameLayer layer,
                               String name,

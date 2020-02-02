@@ -6,7 +6,7 @@ import com.jongber.game.core.graphics.OrthoCameraWrapper;
 
 public class CameraController extends InputControlAdapter {
     private boolean wheel = false;
-    private Vector2 pressed = new Vector2();
+    private final Vector2 pressed = new Vector2();
 
     @Override
     public boolean touchDown(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button) {

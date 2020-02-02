@@ -101,7 +101,7 @@ class RoomEditorCommander extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         ///// active panel area
-        JPanel activePanel = window.createActivePanel(layer);
+        JPanel activePanel = window.createActivePanel();
         ///// active panel area end
 
         gbc.gridx = 0;
@@ -110,7 +110,7 @@ class RoomEditorCommander extends JFrame {
         window.add(activePanel, gbc);
 
         //// property panel
-        JPanel propertyPanel = window.createRoomPropertyPanel(layer);
+        JPanel propertyPanel = window.createRoomPropertyPanel();
         //// property end
 
         gbc.gridx = 0;
@@ -161,7 +161,7 @@ class RoomEditorCommander extends JFrame {
         this.saveLoadArea.onClear();
     }
 
-    private JPanel createActivePanel(GameLayer layer) {
+    private JPanel createActivePanel() {
         JPanel activePanel = new JPanel();
         activePanel.setLayout(new GridBagLayout());
         activePanel.setBorder(BorderFactory.createTitledBorder("Editor Cmd"));
@@ -189,7 +189,7 @@ class RoomEditorCommander extends JFrame {
         return activePanel;
     }
 
-    private JPanel createRoomPropertyPanel(GameLayer layer) {
+    private JPanel createRoomPropertyPanel() {
         JPanel propertyPanel = new JPanel();
         propertyPanel.setBorder(BorderFactory.createTitledBorder("Room Property"));
         propertyPanel.setLayout(new GridBagLayout());
@@ -554,7 +554,7 @@ class PropsArea {
         });
     }
 
-    private boolean validateAndAddProps(String path) {
+    private void validateAndAddProps(String path) {
         layer.post(new AddPropEvent(layer,
                 roomField.getText(),
                 path,
@@ -569,7 +569,7 @@ class PropsArea {
                     }
                 }));
 
-        return true;
+        return;
     }
 }
 

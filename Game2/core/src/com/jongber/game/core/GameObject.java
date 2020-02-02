@@ -10,11 +10,11 @@ import java.util.Map;
 public class GameObject {
 
     private GameObject parent;
-    private PackedArray<GameObject> children = new PackedArray<>();
-    private Map<Class, Component> componentMap = new HashMap<>();
+    private final PackedArray<GameObject> children = new PackedArray<>();
+    private final Map<Class, Component> componentMap = new HashMap<>();
 
     public String name = "";
-    public TransformComponent transform = new TransformComponent();
+    public final TransformComponent transform = new TransformComponent();
 
     public GameObject() {
         this.parent = null;

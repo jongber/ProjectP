@@ -12,10 +12,10 @@ import java.util.List;
 public class BlockGridRenderer extends Controller implements Controller.PostRenderer {
 
     private final int BlockSize = 16;
-    private ShapeRenderer renderer = new ShapeRenderer();
+    private final ShapeRenderer renderer = new ShapeRenderer();
 
-    private int gridX;
-    private int gridY;
+    private final int gridX;
+    private final int gridY;
 
     public boolean showGrid = true;
 

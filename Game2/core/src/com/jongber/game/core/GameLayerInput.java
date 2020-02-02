@@ -9,8 +9,8 @@ import java.util.List;
 
 public class GameLayerInput implements InputProcessor {
 
-    private List<Controller.InputProcessor> inputProcessors;
-    private OrthoCameraWrapper cameraWrapper;
+    private final List<Controller.InputProcessor> inputProcessors;
+    private final OrthoCameraWrapper cameraWrapper;
 
     public GameLayerInput(List<Controller.InputProcessor> inputs,
                           OrthoCameraWrapper cameraWrapper) {

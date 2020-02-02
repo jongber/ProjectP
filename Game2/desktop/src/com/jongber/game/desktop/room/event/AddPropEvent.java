@@ -10,9 +10,9 @@ import com.jongber.game.desktop.room.component.PropProperty;
 
 public class AddPropEvent extends GameEvent {
 
-    private GameLayer layer;
-    private String roomName;
-    private String texturePath;
+    private final GameLayer layer;
+    private final String roomName;
+    private final String texturePath;
 
     public GameObject created;
 
