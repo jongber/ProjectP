@@ -588,6 +588,7 @@ class SaveLoadArea {
         this.cmd = cmd;
         this.layer = layer;
         initSave();
+        initLoad();
 
     }
 
