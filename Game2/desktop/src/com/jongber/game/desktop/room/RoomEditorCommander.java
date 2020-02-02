@@ -473,13 +473,20 @@ class PropsArea {
     public JButton propAddButton = new JButton("Add prop");
     public JButton propDelButton = new JButton("Del prop ");
     public JTable propTable;
-    public DefaultTableModel propData = new DefaultTableModel();
+    public DefaultTableModel propData;
 
     public final List<GameObject> propObjects = new ArrayList<>();
 
     public PropsArea(GameLayer layer, JTextField roomField) {
         this.layer = layer;
         this.roomField = roomField;
+
+        propData = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
         propData.addColumn("Path");
         propData.addColumn("Position");
