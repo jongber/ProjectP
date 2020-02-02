@@ -68,6 +68,9 @@ class RoomEditorCommander extends JFrame {
     final Timer timer;
 
     RoomEditorCommander(GameLayer layer) {
+        this.basePath = System.getProperty("user.dir") +
+                File.separator + "android" + File.separator + "assets";
+
         this.layer = layer;
         this.property = new PropertyArea(layer, this);
         this.props = new PropsArea(layer, this, property.roomNameField);
@@ -87,9 +90,6 @@ class RoomEditorCommander extends JFrame {
                 }
             }
         });
-
-        basePath = System.getProperty("user.dir") +
-                File.separator + "android" + File.separator + "assets";
     }
 
     static void popRoomUI(GameLayer layer) {
@@ -588,13 +588,16 @@ class PropsArea {
 class SaveLoadArea {
     private RoomEditorCommander cmd;
     private GameLayer layer;
+    private String jsonPath;
 
-    public JButton saveButton;
-    public JButton loadButton;
+    JButton saveButton;
+    JButton loadButton;
 
     public SaveLoadArea(RoomEditorCommander cmd, GameLayer layer) {
         this.cmd = cmd;
         this.layer = layer;
+        this.jsonPath = cmd.basePath + File.separator + "projectz"
+                + File.separator + "house" + File.separator;
         initSave();
         initLoad();
 
@@ -614,28 +617,26 @@ class SaveLoadArea {
         this.saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                File baseFile = new File(cmd.basePath);
-                JFileChooser fc = new JFileChooser(baseFile);
-                fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+                try {
+                    File baseFile = new File(jsonPath + cmd.property.roomNameField.getText() + ".json");
+                    
+                    JFileChooser fc = new JFileChooser(baseFile);
+                    fc.setSelectedFile(baseFile);
+                    fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
 
-                int i = fc.showSaveDialog(null);
-                if (i == JFileChooser.APPROVE_OPTION) {
-                    String extension = fc.getFileFilter().getDescription();
-                    File f = fc.getSelectedFile();
-                    if (f.getPath().endsWith(extension) == false) {
-                        f = new File(f.getPath() + "." + extension);
-                    }
+                    int i = fc.showSaveDialog(null);
+                    if (i == JFileChooser.APPROVE_OPTION) {
+                        String extension = fc.getFileFilter().getDescription();
+                        File f = fc.getSelectedFile();
+                        if (f.getPath().endsWith(extension) == false) {
+                            f = new File(f.getPath() + "." + extension);
+                        }
 
-                    try {
                         if (f.exists() == false) {
                             f.createNewFile();
                         }
                         else {
-                            int confirm = JOptionPane.showConfirmDialog(
-                                    null,
-                                    "Exist file, overwrite?",
-                                    "Caution",
-                                    JOptionPane.YES_NO_OPTION);
+                            int confirm = JOptionPane.showConfirmDialog(null, "Exist file, overwrite?", "Caution", JOptionPane.YES_NO_OPTION);
                             if (confirm != 0) {
                                 return;
                             }
@@ -646,9 +647,10 @@ class SaveLoadArea {
 
                         saveJson(f);
                     }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                    return;
                 }
             }
         });
