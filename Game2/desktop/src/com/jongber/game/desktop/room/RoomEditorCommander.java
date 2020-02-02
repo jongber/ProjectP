@@ -182,11 +182,10 @@ class RoomEditorCommander extends JFrame {
         property.widthSpinner.setValue(json.width / Const.BlockSize);
         property.wallpaperPath = json.wallpaperPath;
 
-        ImageIcon icon = new ImageIcon(json.wallpaperPath);
+        ImageIcon icon = new ImageIcon(basePath + File.separator + json.wallpaperPath);
         Image image = icon.getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
         property.wallpaperLabel.setIcon(new ImageIcon(image));
         property.wallpaperButton.setText("reload");
-        property.wallpaperLabel.setIcon(icon);
 
         property.noiseSlider.setValue(json.noise);
 
