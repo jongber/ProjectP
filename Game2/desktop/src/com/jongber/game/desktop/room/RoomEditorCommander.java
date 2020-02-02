@@ -49,14 +49,16 @@ import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
-public class RoomEditorCommander extends JFrame {
+
+class RoomEditorCommander extends JFrame {
 
     private GameLayer layer;
-    private PropertyArea property;
-    private PropsArea props;
-    private SaveLoadArea saveLoadArea;
 
-    public Timer timer;
+    public final PropertyArea property;
+    public final PropsArea props;
+    public final SaveLoadArea saveLoadArea;
+
+    public final Timer timer;
 
     public RoomEditorCommander(GameLayer layer) {
         this.layer = layer;
@@ -64,7 +66,20 @@ public class RoomEditorCommander extends JFrame {
         this.props = new PropsArea(layer, this, property.roomNameField);
         this.saveLoadArea = new SaveLoadArea(this, layer);
 
-        this.initTimer();
+        this.timer = new Timer(60, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                synchronized (props) {
+                    int rows = props.propData.getRowCount();
+                    for (int i = 0; i < rows; ++i) {
+                        GameObject object = props.propObjects.get(i);
+                        Vector2 pos = object.transform.getLocalPos();
+
+                        props.propData.setValueAt(pos, i, 1);
+                    }
+                }
+            }
+        });
     }
 
     static void popRoomUI(GameLayer layer) {
@@ -281,23 +296,6 @@ public class RoomEditorCommander extends JFrame {
 
         return panel;
     }
-
-    private void initTimer() {
-        timer = new Timer(60, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                synchronized (props.propObjects) {
-                    int rows = props.propData.getRowCount();
-                    for (int i = 0; i < rows; ++i) {
-                        GameObject object = props.propObjects.get(i);
-                        Vector2 pos = object.transform.getLocalPos();
-
-                        props.propData.setValueAt(pos, i, 1);
-                    }
-                }
-            }
-        });
-    }
 }
 
 class PropertyArea {
@@ -502,7 +500,7 @@ class PropsArea {
         this.propAddButton.setEnabled(false);
         this.propDelButton.setEnabled(false);
 
-        synchronized (this.propObjects) {
+        synchronized (this) {
             this.propObjects.clear();
             int cnt = this.propData.getRowCount();
             for (int i = 0; i < cnt; ++i) {
@@ -545,7 +543,7 @@ class PropsArea {
         propDelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                synchronized (propObjects) {
+                synchronized (PropsArea.this) {
                     int row = propTable.getSelectedRow();
                     if (row < 0) {
                         return;
@@ -566,7 +564,7 @@ class PropsArea {
                     @Override
                     public void callback(GameEvent event) {
                         AddPropEvent e = (AddPropEvent)event;
-                        synchronized (PropsArea.this.propObjects) {
+                        synchronized (PropsArea.this) {
                             PropsArea.this.propData.addRow(new String[] {path, "0, 0"});
                             PropsArea.this.propObjects.add(e.created);
                         }
@@ -603,6 +601,35 @@ class SaveLoadArea {
     private void initSave() {
         saveButton = new JButton("Save");
         this.saveButton.setEnabled(false);
+        this.saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                synchronized (cmd.props) {
+//                    RoomJson roomJson = new RoomJson();
+//                    roomJson.name = cmd.property.roomNameField.getText();
+//
+//                    int rows = cmd.props.propData.getRowCount();
+//                    for (int i = 0; i < rows; ++i) {
+//                        GameObject object = cmd.props.propObjects.get(i);
+//
+//                        String path = (String)cmd.props.propData.getValueAt(i, 0);
+//                        roomJson.props.add(new Tuple2<>(path, object.transform.getLocalPos()));
+//                    }
+//
+//                    Json json = new Json();
+//                    String txt = json.prettyPrint(roomJson);
+//
+//                    RoomJson readFrom = json.fromJson(RoomJson.class, txt);
+//
+//                    System.out.println(readFrom.name);
+//                    for (int i = 0; i < readFrom.props.size(); ++i) {
+//                        String path = readFrom.props.get(i).getItem1();
+//                        Vector2 pos = readFrom.props.get(i).getItem2();
+//                        System.out.println("path " + path + " pos " + pos.toString());
+//                    }
+                }
+            }
+        });
     }
 
     private void initLoad() {
