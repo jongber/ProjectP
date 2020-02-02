@@ -2,15 +2,18 @@ package com.jongber.game.desktop.room;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.event.GameEvent;
+import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.room.event.AddPropEvent;
 import com.jongber.game.desktop.room.event.ClearRoomViewEvent;
 import com.jongber.game.desktop.room.event.DelPropEvent;
 import com.jongber.game.desktop.room.event.ShowGridEvent;
 import com.jongber.game.projectz.Const;
 import com.jongber.game.desktop.room.event.ApplyRoomViewEvent;
+import com.jongber.game.projectz.json.RoomJson;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -24,7 +27,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,16 +60,17 @@ class RoomEditorCommander extends JFrame {
 
     private GameLayer layer;
 
-    public final PropertyArea property;
-    public final PropsArea props;
-    public final SaveLoadArea saveLoadArea;
+    final String basePath;
+    final PropertyArea property;
+    final PropsArea props;
+    final SaveLoadArea saveLoadArea;
 
-    public final Timer timer;
+    final Timer timer;
 
-    public RoomEditorCommander(GameLayer layer) {
+    RoomEditorCommander(GameLayer layer) {
         this.layer = layer;
         this.property = new PropertyArea(layer, this);
-        this.props = new PropsArea(layer, property.roomNameField);
+        this.props = new PropsArea(layer, this, property.roomNameField);
         this.saveLoadArea = new SaveLoadArea(this, layer);
 
         this.timer = new Timer(60, new ActionListener() {
@@ -80,6 +87,9 @@ class RoomEditorCommander extends JFrame {
                 }
             }
         });
+
+        basePath = System.getProperty("user.dir") +
+                File.separator + "android" + File.separator + "assets";
     }
 
     static void popRoomUI(GameLayer layer) {
@@ -302,25 +312,25 @@ class PropertyArea {
     private GameLayer layer;
     private RoomEditorCommander cmd;
 
-    public JTextField roomNameField;
+    JTextField roomNameField;
 
-    public Label sanityLabel;
-    public JSlider sanitySlider;
+    Label sanityLabel;
+    JSlider sanitySlider;
 
-    public Label noiseLabel;
-    public JSlider noiseSlider;
+    Label noiseLabel;
+    JSlider noiseSlider;
 
-    public int heightBlock = 3;
-    public JSpinner widthSpinner;
+    int heightBlock = 3;
+    JSpinner widthSpinner;
 
-    public String wallpaperPath = "";
-    public JLabel wallpaperLabel;
-    public JButton wallpaperButton;
+    String wallpaperPath = "";
+    JLabel wallpaperLabel;
+    JButton wallpaperButton;
 
-    public JButton applyButton;
-    public JButton clearButton;
+    JButton applyButton;
+    JButton clearButton;
 
-    public PropertyArea(GameLayer layer, RoomEditorCommander cmd) {
+    PropertyArea(GameLayer layer, RoomEditorCommander cmd) {
         this.layer = layer;
         this.cmd = cmd;
 
@@ -381,9 +391,7 @@ class PropertyArea {
         wallpaperButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                String basePath = System.getProperty("user.dir") +
-                        File.separator + "android" + File.separator + "assets";
-                File baseFile = new File(basePath);
+                File baseFile = new File(cmd.basePath);
 
                 JFileChooser fc = new JFileChooser(baseFile);
                 fc.setAcceptAllFileFilterUsed(false);
@@ -450,10 +458,7 @@ class PropertyArea {
             return false;
         }
 
-        String basePath = System.getProperty("user.dir") +
-                File.separator + "android" +
-                File.separator + "assets" +
-                File.separator + wallpaperPath;
+        String basePath = cmd.basePath + File.separator + wallpaperPath;
         File f = new File(basePath);
         if (f.isDirectory() || f.exists() == false) {
             JOptionPane.showMessageDialog(null, "Where wallpaper !!");
@@ -469,6 +474,7 @@ class PropertyArea {
 class PropsArea {
     private GameLayer layer;
     private JTextField roomField;
+    RoomEditorCommander cmd;
 
     public JButton propAddButton = new JButton("Add prop");
     public JButton propDelButton = new JButton("Del prop ");
@@ -477,9 +483,10 @@ class PropsArea {
 
     public final List<GameObject> propObjects = new ArrayList<>();
 
-    public PropsArea(GameLayer layer, JTextField roomField) {
+    public PropsArea(GameLayer layer, RoomEditorCommander cmd, JTextField roomField) {
         this.layer = layer;
         this.roomField = roomField;
+        this.cmd = cmd;
 
         propData = new DefaultTableModel() {
             @Override
@@ -519,9 +526,7 @@ class PropsArea {
         propAddButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                String basePath = System.getProperty("user.dir") +
-                        File.separator + "android" + File.separator + "assets";
-                File baseFile = new File(basePath);
+                File baseFile = new File(cmd.basePath);
 
                 JFileChooser fc = new JFileChooser(baseFile);
                 fc.setAcceptAllFileFilterUsed(false);
@@ -609,32 +614,77 @@ class SaveLoadArea {
         this.saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                synchronized (cmd.props) {
-//                    RoomJson roomJson = new RoomJson();
-//                    roomJson.name = cmd.property.roomNameField.getText();
-//
-//                    int rows = cmd.props.propData.getRowCount();
-//                    for (int i = 0; i < rows; ++i) {
-//                        GameObject object = cmd.props.propObjects.get(i);
-//
-//                        String path = (String)cmd.props.propData.getValueAt(i, 0);
-//                        roomJson.props.add(new Tuple2<>(path, object.transform.getLocalPos()));
-//                    }
-//
-//                    Json json = new Json();
-//                    String txt = json.prettyPrint(roomJson);
-//
-//                    RoomJson readFrom = json.fromJson(RoomJson.class, txt);
-//
-//                    System.out.println(readFrom.name);
-//                    for (int i = 0; i < readFrom.props.size(); ++i) {
-//                        String path = readFrom.props.get(i).getItem1();
-//                        Vector2 pos = readFrom.props.get(i).getItem2();
-//                        System.out.println("path " + path + " pos " + pos.toString());
-//                    }
+                File baseFile = new File(cmd.basePath);
+                JFileChooser fc = new JFileChooser(baseFile);
+                fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+
+                int i = fc.showSaveDialog(null);
+                if (i == JFileChooser.APPROVE_OPTION) {
+                    String extension = fc.getFileFilter().getDescription();
+                    File f = fc.getSelectedFile();
+                    if (f.getPath().endsWith(extension) == false) {
+                        f = new File(f.getPath() + "." + extension);
+                    }
+
+                    try {
+                        if (f.exists() == false) {
+                            f.createNewFile();
+                        }
+                        else {
+                            int confirm = JOptionPane.showConfirmDialog(
+                                    null,
+                                    "Exist file, overwrite?",
+                                    "Caution",
+                                    JOptionPane.YES_NO_OPTION);
+                            if (confirm != 0) {
+                                return;
+                            }
+
+                            f.delete();
+                            f.createNewFile();
+                        }
+
+                        saveJson(f);
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
+    }
+
+    private void saveJson(File file) {
+        synchronized (cmd.props) {
+            RoomJson roomJson = new RoomJson();
+            roomJson.name = cmd.property.roomNameField.getText();
+
+            int rows = cmd.props.propData.getRowCount();
+            for (int i = 0; i < rows; ++i) {
+                GameObject object = cmd.props.propObjects.get(i);
+
+                String path = (String)cmd.props.propData.getValueAt(i, 0);
+                roomJson.props.add(new Tuple2<>(path, object.transform.getLocalPos()));
+            }
+
+            Json json = new Json();
+            String txt = json.prettyPrint(roomJson);
+            BufferedWriter writer = null;
+            try {
+                writer = new BufferedWriter(new FileWriter(file));
+                writer.write(txt);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            finally {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void initLoad() {
