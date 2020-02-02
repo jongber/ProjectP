@@ -202,7 +202,7 @@ class RoomEditorCommander extends JFrame {
     private JPanel createActivePanel() {
         JPanel activePanel = new JPanel();
         activePanel.setLayout(new GridBagLayout());
-        activePanel.setBorder(BorderFactory.createTitledBorder("Editor Cmd"));
+        activePanel.setBorder(BorderFactory.createTitledBorder("Viewer Cmd"));
         GridBagConstraints activeGbc = new GridBagConstraints();
 
         // 1. show grid
@@ -311,7 +311,7 @@ class RoomEditorCommander extends JFrame {
     private JPanel createPropsPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Editor Cmd"));
+        panel.setBorder(BorderFactory.createTitledBorder("Prop list"));
 
         JScrollPane pane = new JScrollPane(this.props.propTable);
         panel.add(pane, BorderLayout.CENTER);
