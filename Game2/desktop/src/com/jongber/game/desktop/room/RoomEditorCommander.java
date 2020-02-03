@@ -532,6 +532,14 @@ class PropsArea {
     public void onApplied() {
         this.propAddButton.setEnabled(true);
         this.propDelButton.setEnabled(true);
+
+        synchronized (this) {
+            this.propObjects.clear();
+            int cnt = this.propData.getRowCount();
+            for (int i = 0; i < cnt; ++i) {
+                this.propData.removeRow(0);
+            }
+        }
     }
 
     public void onClear() {

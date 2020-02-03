@@ -30,6 +30,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
         fpsLayer.registerController(new PerfRenderer());
 
         Gdx.input.setInputProcessor(this);
+        MapEditorCmd.popMapEditorCmd(mapLayer);
     }
 
     @Override
