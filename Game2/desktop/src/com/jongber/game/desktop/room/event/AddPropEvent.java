@@ -11,10 +11,15 @@ import com.jongber.game.desktop.room.component.PropProperty;
 
 public class AddPropEvent extends GameEvent {
 
+    public interface Callback {
+        void callback(GameObject created);
+    }
+
     private final GameLayer layer;
     private final String roomName;
     private final String texturePath;
     private final Vector2 pos = new Vector2();
+    private Callback callback;
 
     public GameObject created;
 
@@ -22,12 +27,12 @@ public class AddPropEvent extends GameEvent {
                         String roomName,
                         String texturePath,
                         Vector2 pos,
-                        GameEvent.Callback callback) {
-        super(callback);
+                        AddPropEvent.Callback callback) {
         this.pos.set(pos);
         this.layer = layer;
         this.roomName = roomName;
         this.texturePath = texturePath;
+        this.callback = callback;
     }
 
     @Override
@@ -41,5 +46,7 @@ public class AddPropEvent extends GameEvent {
         created.transform.local.setToTranslation(this.pos);
 
         this.layer.addObject(this.roomName, created);
+
+        this.callback.callback(created);
     }
 }

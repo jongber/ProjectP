@@ -2,11 +2,11 @@ package com.jongber.game.desktop.room;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Json;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.util.Tuple2;
+import com.jongber.game.desktop.common.Utility;
 import com.jongber.game.desktop.room.event.AddPropEvent;
 import com.jongber.game.desktop.room.event.ClearRoomViewEvent;
 import com.jongber.game.desktop.room.event.DelPropEvent;
@@ -27,11 +27,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,9 +136,9 @@ class RoomEditorCommander extends JFrame {
         gbc.fill = GridBagConstraints.BOTH;
         window.add(propsPanel, gbc);
 
-        //// save load panel
+        //// write load panel
         JPanel saveLoadPanel = window.createSaveLoadPanel();
-        //// save load panel end
+        //// write load panel end
 
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -605,13 +601,12 @@ class PropsArea {
                 roomField.getText(),
                 path,
                 pos,
-                new GameEvent.Callback() {
+                new AddPropEvent.Callback() {
                     @Override
-                    public void callback(GameEvent event) {
-                        AddPropEvent e = (AddPropEvent)event;
+                    public void callback(GameObject created) {
                         synchronized (PropsArea.this) {
                             PropsArea.this.propData.addRow(new String[] {path, "0, 0"});
-                            PropsArea.this.propObjects.add(e.created);
+                            PropsArea.this.propObjects.add(created);
                         }
                     }
                 }));
@@ -692,18 +687,8 @@ class SaveLoadArea {
 
     private void saveJson(File file) {
         synchronized (cmd.props) {
-            try {
-                RoomJson roomJson = createRoomJson();
-                Json json = new Json();
-                String txt = json.prettyPrint(roomJson);
-
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file));;
-                writer.write(txt);
-                writer.close();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
+            RoomJson roomJson = createRoomJson();
+            Utility.writeJson(roomJson, file);
         }
     }
 
@@ -719,29 +704,11 @@ class SaveLoadArea {
                     File selected = fc.getSelectedFile();
                     if (selected.exists() == false) return;
 
-                    StringBuilder sb = new StringBuilder();
-                    try (BufferedReader br = new BufferedReader(new FileReader(selected))) {
-
-                        // read line by line
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line).append("\n");
-                        }
-
-                    } catch (IOException e) {
-                        System.err.format("IOException: %s%n", e);
-                    }
-
-                    RoomJson roomJson = loadRoomJson(sb.toString());
+                    RoomJson roomJson = Utility.readJson(RoomJson.class, selected);
                     cmd.fromRoomJson(roomJson);
                 }
             }
         });
-    }
-
-    private RoomJson loadRoomJson(String jsonStr) {
-        Json json = new Json();
-        return json.fromJson(RoomJson.class, jsonStr);
     }
 
     private RoomJson createRoomJson() {

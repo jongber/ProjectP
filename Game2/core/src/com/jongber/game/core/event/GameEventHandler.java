@@ -17,7 +17,7 @@ public class GameEventHandler {
         synchronized (this) {
             while (this.queue.peek() != null) {
                 GameEvent event = this.queue.remove();
-                event.handleWithCallback();
+                event.handle();
             }
         }
     }
