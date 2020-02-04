@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.room.component;
+package com.jongber.game.desktop.viewer.component;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jongber.game.core.component.Component;

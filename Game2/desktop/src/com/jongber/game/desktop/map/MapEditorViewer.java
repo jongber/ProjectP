@@ -8,34 +8,34 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
-import com.jongber.game.desktop.common.BlockGridRenderer;
-import com.jongber.game.desktop.common.CameraController;
+import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
+import com.jongber.game.desktop.viewer.controller.CameraController;
 
 
 public class MapEditorViewer extends ApplicationAdapter implements InputProcessor {
 
     private SpriteBatch batch;
-    private GameLayer mapLayer;
+    private GameLayer roomLayer;
     private GameLayer fpsLayer;
 
     @Override
     public void create () {
         batch = new SpriteBatch();
 
-        mapLayer = new GameLayer();
-        mapLayer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        mapLayer.registerController(new CameraController());
+        roomLayer = new GameLayer();
+        roomLayer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        roomLayer.registerController(new CameraController());
 
         fpsLayer = new GameLayer();
         fpsLayer.registerController(new PerfRenderer());
 
         Gdx.input.setInputProcessor(this);
-        MapEditorCmd.popMapEditorCmd(mapLayer);
+        MapEditorCmd.popMapEditorCmd(roomLayer);
     }
 
     @Override
     public void resize (int width, int height) {
-        mapLayer.resize(width, height);
+        roomLayer.resize(width, height);
     }
 
     @Override
@@ -46,10 +46,10 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
         float elapsed = Gdx.graphics.getDeltaTime();
 
         batch.begin();
-        this.mapLayer.update(elapsed);
+        this.roomLayer.update(elapsed);
         this.fpsLayer.update(elapsed);
 
-        this.mapLayer.render(batch, elapsed);
+        this.roomLayer.render(batch, elapsed);
         this.fpsLayer.render(batch, elapsed);
         batch.end();
     }
@@ -57,7 +57,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public void dispose () {
         batch.dispose();
-        mapLayer.dispose();
+        roomLayer.dispose();
         fpsLayer.dispose();
         AssetManager.dispose();
     }
@@ -80,7 +80,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-        this.mapLayer.getInput().touchDown(screenX, screenY, pointer, button);
+        this.roomLayer.getInput().touchDown(screenX, screenY, pointer, button);
 
         return false;
     }
@@ -88,7 +88,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-        this.mapLayer.getInput().touchUp(screenX, screenY, pointer, button);
+        this.roomLayer.getInput().touchUp(screenX, screenY, pointer, button);
 
         return false;
     }
@@ -96,7 +96,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
-        this.mapLayer.getInput().touchDragged(screenX, screenY, pointer);
+        this.roomLayer.getInput().touchDragged(screenX, screenY, pointer);
 
         return false;
     }
@@ -109,7 +109,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public boolean scrolled(int amount) {
 
-        this.mapLayer.getInput().scrolled(amount);
+        this.roomLayer.getInput().scrolled(amount);
 
         return false;
     }

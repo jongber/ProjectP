@@ -8,8 +8,8 @@ import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.util.Tuple2;
-import com.jongber.game.desktop.room.component.PropProperty;
-import com.jongber.game.desktop.room.component.RoomProperty;
+import com.jongber.game.desktop.viewer.component.PropProperty;
+import com.jongber.game.desktop.viewer.component.RoomProperty;
 import com.jongber.game.projectz.json.RoomJson;
 
 public class AddRoomEvent extends GameEvent {
@@ -22,7 +22,7 @@ public class AddRoomEvent extends GameEvent {
     GameLayer layer;
     RoomJson json;
 
-    public AddRoomEvent(GameLayer layer, Callback callback, RoomJson json) {
+    public AddRoomEvent(GameLayer layer, RoomJson json, Callback callback) {
         this.layer = layer;
         this.callback = callback;
         this.json = json;

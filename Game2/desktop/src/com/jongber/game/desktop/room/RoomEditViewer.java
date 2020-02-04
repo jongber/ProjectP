@@ -9,10 +9,11 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
-import com.jongber.game.desktop.common.BlockGridRenderer;
-import com.jongber.game.desktop.common.CameraController;
+import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
+import com.jongber.game.desktop.viewer.controller.CameraController;
 import com.jongber.game.desktop.room.controller.RoomPropsController;
-import com.jongber.game.desktop.room.controller.RoomPropertyController;
+import com.jongber.game.desktop.viewer.controller.RoomPropertyRenderer;
+import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
 
 public class RoomEditViewer extends ApplicationAdapter implements InputProcessor {
 
@@ -120,9 +121,10 @@ public class RoomEditViewer extends ApplicationAdapter implements InputProcessor
         this.roomViewLayer = new GameLayer();
         this.roomViewLayer.registerController(new TextureRenderer());
         this.roomViewLayer.registerController(new CameraController());
-        this.roomViewLayer.registerController(new RoomPropertyController());
+        this.roomViewLayer.registerController(new RoomPropertyRenderer());
         this.roomViewLayer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         this.roomViewLayer.registerController(new RoomPropsController());
+        this.roomViewLayer.registerController(new RoomPropsRenderer());
         this.roomViewLayer.getCameraWrapper().getCamera().zoom = 0.4f;
     }
 }

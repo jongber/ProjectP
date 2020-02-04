@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.common;
+package com.jongber.game.desktop;
 import com.badlogic.gdx.utils.Json;
 
 import java.io.BufferedReader;

@@ -4,19 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.controller.adapter.InputControlAdapter;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import com.jongber.game.desktop.room.component.PropProperty;
-import com.jongber.game.desktop.room.component.RoomProperty;
+import com.jongber.game.desktop.viewer.component.PropProperty;
 
 import java.util.List;
 
-public class RoomPropsController extends InputControlAdapter implements Controller.Renderer, Controller.PostRenderer {
+public class RoomPropsController extends InputControlAdapter implements Controller.PostRenderer {
 
     List<GameObject> objects;
     private GameObject selected;
@@ -30,31 +27,6 @@ public class RoomPropsController extends InputControlAdapter implements Controll
 
     @Override
     public void dispose() {
-    }
-
-    @Override
-    public void render(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
-        GameObject parent = null;
-        Rectangle scissors = new Rectangle();
-
-        for (GameObject object : this.objects) {
-            if (parent != object.getParent()) {
-                parent = object.getParent();
-                Vector2 pPos = parent.transform.getWorldPos();
-                RoomProperty r = parent.getComponent(RoomProperty.class);
-
-                Rectangle cliBounds = new Rectangle(pPos.x, pPos.y, r.width, r.height);
-                ScissorStack.calculateScissors(camera.getCamera(), batch.getTransformMatrix(), cliBounds, scissors);
-            }
-
-            if (ScissorStack.pushScissors(scissors)) {
-                PropProperty p = object.getComponent(PropProperty.class);
-                Vector2 pos = object.transform.getWorldPos();
-                batch.draw(p.texture, pos.x, pos.y);
-                batch.flush();
-                ScissorStack.popScissors();
-            }
-        }
     }
 
     @Override

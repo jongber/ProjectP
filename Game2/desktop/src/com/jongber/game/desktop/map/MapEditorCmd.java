@@ -3,8 +3,9 @@ package com.jongber.game.desktop.map;
 import com.badlogic.gdx.Gdx;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
-import com.jongber.game.desktop.common.Utility;
-import com.jongber.game.desktop.room.event.ShowGridEvent;
+import com.jongber.game.desktop.Utility;
+import com.jongber.game.desktop.map.event.AddRoomEvent;
+import com.jongber.game.desktop.viewer.event.ShowGridEvent;
 import com.jongber.game.projectz.json.RoomJson;
 
 import java.awt.GridBagConstraints;
@@ -32,14 +33,16 @@ import javax.swing.table.DefaultTableModel;
 
 class MapEditorCmd extends JFrame {
 
-    private GameLayer layer;
+    GameLayer roomLayer;
     String basePath;
 
-    private MapEditorCmd(GameLayer layer) {
+    RoomArea roomArea;
+
+    private MapEditorCmd(GameLayer roomLayer) {
         super();
-        this.layer = layer;
+        this.roomLayer = roomLayer;
         this.basePath = System.getProperty("user.dir") +
-                File.separator + "android" + File.separator + "assets";
+                File.separator + "android" + File.separator + "assets" + File.separator + "projectz";
     }
 
     static void popMapEditorCmd(GameLayer layer) {
@@ -75,6 +78,13 @@ class MapEditorCmd extends JFrame {
         gbc.ipady = 10;
         this.add(activePanel, gbc);
 
+        ///// room panel area
+        JPanel roomPanel = this.createRoomPanel();
+        ///// room panel area end
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        this.add(roomPanel, gbc);
+
         setVisible(true);
     }
 
@@ -98,7 +108,7 @@ class MapEditorCmd extends JFrame {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 boolean checked = e.getStateChange() == ItemEvent.SELECTED;
-                layer.post(new ShowGridEvent(layer, checked));
+                roomLayer.post(new ShowGridEvent(roomLayer, checked));
             }
         });
         activePanel.add(gridCheck, activeGbc);
@@ -107,8 +117,12 @@ class MapEditorCmd extends JFrame {
     }
 
     private JPanel createRoomPanel() {
+        roomArea = new RoomArea(this.roomLayer, this);
+
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createTitledBorder("Room area"));
+
+        panel.add(roomArea.addButton);
 
         return panel;
     }
@@ -123,6 +137,8 @@ class RoomArea {
     JButton delButton = new JButton("Del room ");
     JTable roomTable;
     DefaultTableModel roomData;
+
+    List<GameObject> rooms = new ArrayList<>();
 
     public final List<GameObject> propObjects = new ArrayList<>();
 
@@ -174,7 +190,14 @@ class RoomArea {
     }
 
     private void addRoom(RoomJson json) {
+        AddRoomEvent e = new AddRoomEvent(layer, json, new AddRoomEvent.Callback() {
+            @Override
+            public void callback(GameObject created) {
+                RoomArea.this.rooms.add(created);
+            }
+        });
 
+        this.layer.post(e);
     }
 }
 

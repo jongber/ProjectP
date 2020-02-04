@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.common;
+package com.jongber.game.desktop.viewer.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

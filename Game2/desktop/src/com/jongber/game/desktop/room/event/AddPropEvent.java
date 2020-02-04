@@ -7,7 +7,7 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.event.GameEvent;
-import com.jongber.game.desktop.room.component.PropProperty;
+import com.jongber.game.desktop.viewer.component.PropProperty;
 
 public class AddPropEvent extends GameEvent {
 

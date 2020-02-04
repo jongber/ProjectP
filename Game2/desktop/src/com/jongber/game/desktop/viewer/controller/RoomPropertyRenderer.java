@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.room.controller;
+package com.jongber.game.desktop.viewer.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,13 +8,13 @@ import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import com.jongber.game.desktop.room.component.RoomProperty;
+import com.jongber.game.desktop.viewer.component.RoomProperty;
 import com.jongber.game.projectz.Const;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomPropertyController extends Controller implements Controller.Renderer, Controller.PostRenderer {
+public class RoomPropertyRenderer extends Controller implements Controller.Renderer, Controller.PostRenderer {
 
     private List<GameObject> objs = new ArrayList<>();
 
@@ -23,7 +23,7 @@ public class RoomPropertyController extends Controller implements Controller.Ren
         for (GameObject object : this.objs) {
             RoomProperty property = object.getComponent(RoomProperty.class);
             if (property == null) {
-                Gdx.app.error("RoomPropertyController", "RoomProperty is null");
+                Gdx.app.error("RoomPropertyRenderer", "RoomProperty is null");
                 continue;
             }
 

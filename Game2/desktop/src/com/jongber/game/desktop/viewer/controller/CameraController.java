@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.common;
+package com.jongber.game.desktop.viewer.controller;
 
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.controller.adapter.InputControlAdapter;
