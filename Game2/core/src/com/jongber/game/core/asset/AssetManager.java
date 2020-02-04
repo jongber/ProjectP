@@ -34,7 +34,11 @@ public class AssetManager {
             return textureAssets.get(filename);
         }
         else {
-            return loadTexture(filename);
+            Texture texture = new Texture(filename);
+
+            textureAssets.put(filename, texture);
+
+            return texture;
         }
     }
 
@@ -44,14 +48,6 @@ public class AssetManager {
             tex.dispose();
             textureAssets.remove(filename);
         }
-    }
-
-    private static Texture loadTexture(String filename) {
-        Texture texture = new Texture(filename);
-
-        textureAssets.put(filename, texture);
-
-        return texture;
     }
 
     public static void dispose() {

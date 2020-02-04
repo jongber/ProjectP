@@ -136,12 +136,16 @@ public class GameLayer {
     }
 
     public void removeObject(GameObject object) {
-        if (object.getParent() != null) {
-            Gdx.app.error("GameLayer", "cannot remove gameobject, object has parent " + object.name);
-            return;
+        GameObject parent = object.getParent();
+
+        if (parent != null) {
+            parent.removeChild(object);
+        }
+        else
+        {
+            this.objects.remove(object);
         }
 
-        this.objects.remove(object);
         this.modified = true;
     }
 
@@ -165,18 +169,6 @@ public class GameLayer {
         }
     }
 
-    public void removeObject(String parentName, GameObject child) {
-        List<GameObject> parents = this.getObjects(parentName);
-        for (GameObject object : parents) {
-            this.removeObject(object, child);
-        }
-    }
-
-    public void removeObject(GameObject parent, GameObject child) {
-        parent.removeChild(child);
-        this.modified = true;
-    }
-
     public void resetObject() {
         this.objects.clearAll();
 
@@ -198,17 +190,6 @@ public class GameLayer {
         for (GameObject obj : this.objects) {
             if (obj.name.equals(name)) {
                 objs.add(obj);
-            }
-        }
-
-        return objs;
-    }
-
-    public <T> List<T> getObjects(Class<T> type) {
-        List<T> objs = new ArrayList<>();
-        for (GameObject obj : this.objects) {
-            if (type.isInstance(obj)) {
-                objs.add(type.cast(obj));
             }
         }
 

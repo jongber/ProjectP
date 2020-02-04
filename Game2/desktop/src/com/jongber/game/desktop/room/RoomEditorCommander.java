@@ -589,7 +589,7 @@ class PropsArea {
                     }
 
                     propData.removeRow(row);
-                    layer.post(new DelPropEvent(layer, roomField.getText(), propObjects.get(row)));
+                    layer.post(new DelPropEvent(layer, propObjects.get(row)));
                 }
             }
         });

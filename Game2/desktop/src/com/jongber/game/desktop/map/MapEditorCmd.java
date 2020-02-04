@@ -6,6 +6,7 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.map.event.AddRoomEvent;
+import com.jongber.game.desktop.map.event.DelRoomEvent;
 import com.jongber.game.desktop.viewer.event.ShowGridEvent;
 import com.jongber.game.projectz.json.RoomJson;
 
@@ -248,7 +249,9 @@ class RoomArea {
             if (row < 0) return;
 
             this.roomData.removeRow(row);
-            this.rooms.remove(row);
+            GameObject removed = this.rooms.remove(row);
+
+            layer.post(new DelRoomEvent(layer, removed));
         }
     }
 
