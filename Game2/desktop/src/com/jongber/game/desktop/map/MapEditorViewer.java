@@ -122,5 +122,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
         roomLayer.registerController(new RoomPropertyRenderer());
         roomLayer.registerController(new RoomPropsRenderer());
         roomLayer.registerController(new RoomController());
+
+        roomLayer.getCameraWrapper().setZoom(0.4f);
     }
 }
