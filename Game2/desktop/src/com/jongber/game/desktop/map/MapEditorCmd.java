@@ -1,6 +1,7 @@
 package com.jongber.game.desktop.map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.desktop.Utility;
@@ -8,6 +9,7 @@ import com.jongber.game.desktop.map.event.AddRoomEvent;
 import com.jongber.game.desktop.viewer.event.ShowGridEvent;
 import com.jongber.game.projectz.json.RoomJson;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -21,19 +23,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 class MapEditorCmd extends JFrame {
 
-    GameLayer roomLayer;
+    private GameLayer roomLayer;
     String basePath;
 
     RoomArea roomArea;
@@ -83,6 +88,8 @@ class MapEditorCmd extends JFrame {
         ///// room panel area end
         gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.weightx = 0.3;
         this.add(roomPanel, gbc);
 
         setVisible(true);
@@ -120,9 +127,19 @@ class MapEditorCmd extends JFrame {
         roomArea = new RoomArea(this.roomLayer, this);
 
         JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Room area"));
 
-        panel.add(roomArea.addButton);
+        JScrollPane scroll = new JScrollPane(roomArea.roomTable);
+        panel.add(scroll, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
+        buttonPanel.add(roomArea.addButton);
+        buttonPanel.add(roomArea.delButton);
+
+        panel.add(buttonPanel, BorderLayout.EAST);
 
         return panel;
     }
@@ -139,8 +156,7 @@ class RoomArea {
     DefaultTableModel roomData;
 
     List<GameObject> rooms = new ArrayList<>();
-
-    public final List<GameObject> propObjects = new ArrayList<>();
+    Timer timer;
 
     public RoomArea(GameLayer layer, MapEditorCmd cmd) {
         this.layer = layer;
@@ -148,6 +164,30 @@ class RoomArea {
         this.basePath = cmd.basePath + File.separator + "house" + File.separator + "room";
         initTable();
         initAdd();
+        initDel();
+
+        initTimer();
+    }
+
+    private void initTimer() {
+        timer = new Timer(50, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                synchronized (this) {
+                    int rows = roomData.getRowCount();
+                    for (int i = 0; i < rows; ++i) {
+                        GameObject object = rooms.get(i);
+                        Vector2 localPos = object.transform.getLocalPos();
+                        Vector2 worldPos = object.transform.getWorldPos();
+
+                        roomData.setValueAt(localPos, i, 1);
+                        roomData.setValueAt(worldPos, i, 2);
+                    }
+                }
+            }
+        });
+
+        timer.start();
     }
 
     private void initTable() {
@@ -159,7 +199,8 @@ class RoomArea {
         };
 
         roomData.addColumn("Name");
-        roomData.addColumn("Pos");
+        roomData.addColumn("Local pos");
+        roomData.addColumn("World pos");
 
         roomTable = new JTable(roomData);
     }
@@ -175,6 +216,7 @@ class RoomArea {
                 if (i == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
                     RoomJson json = Utility.readJson(RoomJson.class, file);
+                    addRoom(json);
                 }
             }
         });
@@ -184,7 +226,7 @@ class RoomArea {
         delButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                onRoomDelete();
             }
         });
     }
@@ -193,11 +235,32 @@ class RoomArea {
         AddRoomEvent e = new AddRoomEvent(layer, json, new AddRoomEvent.Callback() {
             @Override
             public void callback(GameObject created) {
-                RoomArea.this.rooms.add(created);
+                RoomArea.this.onRoomAdd(created);
             }
         });
 
         this.layer.post(e);
+    }
+
+    private void onRoomDelete() {
+        synchronized (this) {
+            int row = this.roomTable.getSelectedRow();
+            if (row < 0) return;
+
+            this.roomData.removeRow(row);
+            this.rooms.remove(row);
+        }
+    }
+
+    private void onRoomAdd(GameObject created) {
+        synchronized (this) {
+            this.rooms.add(created);
+            this.roomData.addRow(new String[] {
+                    created.name,
+                    created.transform.getLocalPos().toString(),
+                    created.transform.getWorldPos().toString()
+            });
+        }
     }
 }
 

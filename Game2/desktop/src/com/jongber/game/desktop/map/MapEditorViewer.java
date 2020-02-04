@@ -8,8 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
+import com.jongber.game.desktop.map.controller.RoomController;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
 import com.jongber.game.desktop.viewer.controller.CameraController;
+import com.jongber.game.desktop.viewer.controller.RoomPropertyRenderer;
+import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
 
 
 public class MapEditorViewer extends ApplicationAdapter implements InputProcessor {
@@ -22,9 +25,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     public void create () {
         batch = new SpriteBatch();
 
-        roomLayer = new GameLayer();
-        roomLayer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        roomLayer.registerController(new CameraController());
+        this.initRoomLayer();
 
         fpsLayer = new GameLayer();
         fpsLayer.registerController(new PerfRenderer());
@@ -112,5 +113,14 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
         this.roomLayer.getInput().scrolled(amount);
 
         return false;
+    }
+
+    private void initRoomLayer() {
+        roomLayer = new GameLayer();
+        roomLayer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        roomLayer.registerController(new CameraController());
+        roomLayer.registerController(new RoomPropertyRenderer());
+        roomLayer.registerController(new RoomPropsRenderer());
+        roomLayer.registerController(new RoomController());
     }
 }

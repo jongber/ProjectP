@@ -18,9 +18,9 @@ public class AddRoomEvent extends GameEvent {
         void callback(GameObject created);
     }
 
-    Callback callback;
-    GameLayer layer;
-    RoomJson json;
+    private Callback callback;
+    private GameLayer layer;
+    private RoomJson json;
 
     public AddRoomEvent(GameLayer layer, RoomJson json, Callback callback) {
         this.layer = layer;
@@ -53,5 +53,7 @@ public class AddRoomEvent extends GameEvent {
 
             this.layer.addObject(room, created);
         }
+
+        this.callback.callback(room);
     }
 }
