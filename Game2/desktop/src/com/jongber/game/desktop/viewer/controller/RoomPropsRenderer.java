@@ -30,6 +30,8 @@ public class RoomPropsRenderer extends Controller implements Controller.Renderer
         GameObject parent = null;
         Rectangle scissors = new Rectangle();
 
+        batch.flush();
+
         for (GameObject object : this.objects) {
             if (parent != object.getParent()) {
                 parent = object.getParent();
@@ -38,7 +40,6 @@ public class RoomPropsRenderer extends Controller implements Controller.Renderer
 
                 Rectangle cliBounds = new Rectangle(pPos.x, pPos.y, r.width, r.height);
                 ScissorStack.calculateScissors(camera.getCamera(), batch.getTransformMatrix(), cliBounds, scissors);
-                batch.flush();
             }
 
             if (ScissorStack.pushScissors(scissors)) {
