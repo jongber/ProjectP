@@ -11,6 +11,7 @@ import com.jongber.game.core.controller.adapter.InputControlAdapter;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
 import com.jongber.game.desktop.viewer.component.PropProperty;
 import com.jongber.game.desktop.viewer.component.RoomProperty;
+import com.jongber.game.projectz.Const;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class RoomController extends InputControlAdapter implements Controller.Po
             float x1 = pos.x;
             float y1 = pos.y;
 
-            Gdx.gl.glLineWidth(5f);
+            Gdx.gl.glLineWidth(3f);
             renderer.setProjectionMatrix(camera.getCamera().combined);
             renderer.begin(ShapeRenderer.ShapeType.Line);
             renderer.setColor(Color.RED);
@@ -80,8 +81,8 @@ public class RoomController extends InputControlAdapter implements Controller.Po
             return false;
 
         Vector2 local = this.selected.transform.getLocalPos();
-        local.x = Math.round(local.x / 16) * 16.0f;
-        local.y = Math.round(local.y / 16) * 16.0f;
+        local.x = Math.round(local.x / Const.BlockSize) * Const.BlockSize;
+        local.y = Math.round(local.y / Const.BlockSize) * Const.BlockSize;
 
         this.selected.transform.local.setToTranslation(local);
 
