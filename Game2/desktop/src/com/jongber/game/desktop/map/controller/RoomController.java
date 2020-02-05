@@ -76,6 +76,15 @@ public class RoomController extends InputControlAdapter implements Controller.Po
 
     @Override
     public boolean touchUp(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button) {
+        if (this.selected == null)
+            return false;
+
+        Vector2 local = this.selected.transform.getLocalPos();
+        local.x = Math.round(local.x / 16) * 16.0f;
+        local.y = Math.round(local.y / 16) * 16.0f;
+
+        this.selected.transform.local.setToTranslation(local);
+
         this.selected = null;
         return false;
     }
