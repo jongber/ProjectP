@@ -46,6 +46,7 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -60,9 +61,9 @@ class RoomEditorCommander extends JFrame {
     final String basePath;
     final PropertyArea property;
     final PropsArea props;
-    final SaveLoadArea saveLoadArea;
+    private final SaveLoadArea saveLoadArea;
 
-    final Timer timer;
+    private final Timer timer;
 
     RoomEditorCommander(GameLayer layer) {
         this.basePath = System.getProperty("user.dir") +
@@ -403,7 +404,8 @@ class PropertyArea {
     }
 
     private void initWidth() {
-        this.widthSpinner = new JSpinner();
+        SpinnerNumberModel model = new SpinnerNumberModel(3, 3, 50, 1);
+        this.widthSpinner = new JSpinner(model);
         this.widthSpinner.setValue(3);
     }
 

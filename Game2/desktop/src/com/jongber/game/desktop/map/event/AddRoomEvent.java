@@ -41,7 +41,7 @@ public class AddRoomEvent extends GameEvent {
         room.name = json.name;
         room.addComponent(p);
 
-        this.layer.addObject(MapEditorViewer.RoomHead, room);
+        this.layer.addObject(room);
 
         for (Tuple2<String, Vector2> tuple : json.props) {
             Texture texture = AssetManager.getTexture(tuple.getItem1());

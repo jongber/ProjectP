@@ -32,7 +32,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -40,22 +42,25 @@ import javax.swing.table.DefaultTableModel;
 class MapEditorCmd extends JFrame {
 
     private GameLayer roomLayer;
+    private GameLayer backLayer;
     String basePath;
 
-    RoomArea roomArea;
+    private MapSizeArea sizeArea;
+    private RoomArea roomArea;
 
-    private MapEditorCmd(GameLayer roomLayer) {
+    private MapEditorCmd(GameLayer roomLayer, GameLayer backLayer) {
         super();
+        this.backLayer = backLayer;
         this.roomLayer = roomLayer;
         this.basePath = System.getProperty("user.dir") +
                 File.separator + "android" + File.separator + "assets" + File.separator + "projectz";
     }
 
-    static void popMapEditorCmd(GameLayer layer) {
+    static void popMapEditorCmd(GameLayer roomLayer, GameLayer backLayer) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                MapEditorCmd cmd = new MapEditorCmd(layer);
+                MapEditorCmd cmd = new MapEditorCmd(roomLayer, backLayer);
                 cmd.init();
             }
         }).start();
@@ -84,14 +89,24 @@ class MapEditorCmd extends JFrame {
         gbc.ipady = 10;
         this.add(activePanel, gbc);
 
+        ///// size panel area
+        JPanel sizeArea = createSizePanel();
+        ///// size panel area
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        //gbc.ipady = 10;
+        this.add(sizeArea, gbc);
+
         ///// room panel area
         JPanel roomPanel = this.createRoomPanel();
         ///// room panel area end
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.weightx = 1;
         gbc.weightx = 0.3;
         this.add(roomPanel, gbc);
+
+        this.setRoomAreaEnable(false);
 
         setVisible(true);
     }
@@ -127,7 +142,8 @@ class MapEditorCmd extends JFrame {
     private JPanel createRoomPanel() {
         roomArea = new RoomArea(this.roomLayer, this);
 
-        JPanel panel = new JPanel();
+        JPanel panel = roomArea.panel;
+
         panel.setLayout(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Room area"));
 
@@ -144,23 +160,81 @@ class MapEditorCmd extends JFrame {
 
         return panel;
     }
+
+    private JPanel createSizePanel() {
+        this.sizeArea = new MapSizeArea(this.backLayer, this);
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createTitledBorder("Map Size area"));
+
+        panel.add(new JLabel("Width :"));
+        panel.add(sizeArea.widthSpinner);
+        panel.add(new JLabel("Height :"));
+        panel.add(sizeArea.heightSpinner);
+        panel.add(sizeArea.applyButton);
+
+        return panel;
+    }
+
+    private void setRoomAreaEnable(boolean enable) {
+        this.roomArea.setEnable(enable);
+    }
+
+    public void onMapSizeApply() {
+
+    }
+}
+
+class MapSizeArea {
+    private GameLayer layer;
+    private MapEditorCmd cmd;
+
+    JSpinner widthSpinner;
+    JSpinner heightSpinner;
+    JButton applyButton;
+
+    MapSizeArea(GameLayer layer, MapEditorCmd cmd) {
+        this.layer = layer;
+        this.cmd = cmd;
+
+        this.initSpinners();
+        this.initButton();
+    }
+
+    private void initSpinners() {
+        SpinnerNumberModel model = new SpinnerNumberModel(16, 3, 100, 1);
+        this.widthSpinner = new JSpinner(model);
+
+        model = new SpinnerNumberModel(9, 9, 100, 1);
+        this.heightSpinner = new JSpinner(model);
+    }
+
+    private void initButton() {
+        this.applyButton = new JButton("Apply");
+        this.applyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cmd.onMapSizeApply();
+            }
+        });
+    }
 }
 
 class RoomArea {
-    GameLayer layer;
-    MapEditorCmd cmd;
-    String basePath;
+    private GameLayer roomLayer;
+    private MapEditorCmd cmd;
+    private String basePath;
 
+    JPanel panel = new JPanel();
     JButton addButton = new JButton("Add room");
     JButton delButton = new JButton("Del room ");
     JTable roomTable;
-    DefaultTableModel roomData;
+    private DefaultTableModel roomData;
 
-    List<GameObject> rooms = new ArrayList<>();
-    Timer timer;
+    private List<GameObject> rooms = new ArrayList<>();
+    private Timer timer;
 
-    public RoomArea(GameLayer layer, MapEditorCmd cmd) {
-        this.layer = layer;
+    RoomArea(GameLayer roomLayer, MapEditorCmd cmd) {
+        this.roomLayer = roomLayer;
         this.cmd = cmd;
         this.basePath = cmd.basePath + File.separator + "house" + File.separator + "room";
         initTable();
@@ -168,6 +242,20 @@ class RoomArea {
         initDel();
 
         initTimer();
+    }
+
+    void setEnable(boolean enable) {
+        this.roomTable.setEnabled(enable);
+        this.addButton.setEnabled(enable);
+        this.delButton.setEnabled(enable);
+        this.panel.setEnabled(enable);
+        if (enable) {
+            if (!this.timer.isRunning())
+                this.timer.start();
+        }
+        else {
+            this.timer.stop();
+        }
     }
 
     private void initTimer() {
@@ -233,25 +321,28 @@ class RoomArea {
     }
 
     private void addRoom(RoomJson json) {
-        AddRoomEvent e = new AddRoomEvent(layer, json, new AddRoomEvent.Callback() {
+        AddRoomEvent e = new AddRoomEvent(roomLayer, json, new AddRoomEvent.Callback() {
             @Override
             public void callback(GameObject created) {
                 RoomArea.this.onRoomAdd(created);
             }
         });
 
-        this.layer.post(e);
+        this.roomLayer.post(e);
     }
 
     private void onRoomDelete() {
+        deleteRoom(this.roomTable.getSelectedRow());
+    }
+
+    private void deleteRoom(int row) {
         synchronized (this) {
-            int row = this.roomTable.getSelectedRow();
-            if (row < 0) return;
+            if (row < 0 || row >= this.roomData.getRowCount()) return;
 
             this.roomData.removeRow(row);
             GameObject removed = this.rooms.remove(row);
 
-            layer.post(new DelRoomEvent(layer, removed));
+            roomLayer.post(new DelRoomEvent(roomLayer, removed));
         }
     }
 
