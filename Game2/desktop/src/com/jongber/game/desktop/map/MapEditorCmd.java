@@ -1,13 +1,16 @@
 package com.jongber.game.desktop.map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.desktop.Utility;
+import com.jongber.game.desktop.map.event.AddBorderEvent;
 import com.jongber.game.desktop.map.event.AddRoomEvent;
 import com.jongber.game.desktop.map.event.DelRoomEvent;
 import com.jongber.game.desktop.viewer.event.ShowGridEvent;
+import com.jongber.game.projectz.Const;
 import com.jongber.game.projectz.json.RoomJson;
 
 import java.awt.BorderLayout;
@@ -180,7 +183,7 @@ class MapEditorCmd extends JFrame {
     }
 
     public void onMapSizeApply() {
-
+        this.roomArea.setEnable(true);
     }
 }
 
@@ -213,6 +216,11 @@ class MapSizeArea {
         this.applyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
+                int width = (int)widthSpinner.getValue() * Const.BlockSize;
+                int height = (int)heightSpinner.getValue() * Const.BlockSize;
+                layer.post(new AddBorderEvent(layer, Color.RED, 5, 0, 0, width, height));
+
                 cmd.onMapSizeApply();
             }
         });
