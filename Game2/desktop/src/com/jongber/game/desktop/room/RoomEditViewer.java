@@ -17,13 +17,11 @@ import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
 
 public class RoomEditViewer extends ApplicationAdapter implements InputProcessor {
 
-    private SpriteBatch batch;
     private GameLayer roomViewLayer;
     private GameLayer fpsViewLayer;
 
     @Override
     public void create () {
-        this.batch = new SpriteBatch();
         this.createRoomViewer();
 
         this.fpsViewLayer = new GameLayer();
@@ -48,18 +46,15 @@ public class RoomEditViewer extends ApplicationAdapter implements InputProcessor
 
         float elapsed = Gdx.graphics.getDeltaTime();
 
-        batch.begin();
         this.roomViewLayer.update(elapsed);
         this.fpsViewLayer.update(elapsed);
 
-        this.roomViewLayer.render(batch, elapsed);
-        this.fpsViewLayer.render(batch, elapsed);
-        batch.end();
+        this.roomViewLayer.render(elapsed);
+        this.fpsViewLayer.render(elapsed);
     }
 
     @Override
     public void dispose () {
-        this.batch.dispose();
         this.roomViewLayer.dispose();
         AssetManager.dispose();
     }

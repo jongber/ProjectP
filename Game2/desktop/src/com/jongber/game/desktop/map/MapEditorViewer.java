@@ -20,15 +20,12 @@ import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
 
 public class MapEditorViewer extends ApplicationAdapter implements InputProcessor {
 
-    private SpriteBatch batch;
     private GameLayer backLayer;
     private GameLayer roomLayer;
     private GameLayer fpsLayer;
 
     @Override
     public void create () {
-        batch = new SpriteBatch();
-
         this.initRoomLayer();
         this.initBackLayer();
 
@@ -51,20 +48,17 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
 
         float elapsed = Gdx.graphics.getDeltaTime();
 
-        batch.begin();
         this.backLayer.update(elapsed);
         this.roomLayer.update(elapsed);
         this.fpsLayer.update(elapsed);
 
-        this.backLayer.render(batch, elapsed);
-        this.roomLayer.render(batch, elapsed);
-        this.fpsLayer.render(batch, elapsed);
-        batch.end();
+        this.backLayer.render(elapsed);
+        this.roomLayer.render(elapsed);
+        this.fpsLayer.render(elapsed);
     }
 
     @Override
     public void dispose () {
-        batch.dispose();
         roomLayer.dispose();
         fpsLayer.dispose();
         AssetManager.dispose();

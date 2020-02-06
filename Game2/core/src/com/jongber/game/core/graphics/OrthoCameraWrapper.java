@@ -30,6 +30,10 @@ public class OrthoCameraWrapper {
         this.viewport.update(w, h);
     }
 
+    public Viewport getViewport() {
+        return this.viewport;
+    }
+
     public void setPosition(float x, float y) {
         this.camera.position.x = x;
         this.camera.position.y = y;

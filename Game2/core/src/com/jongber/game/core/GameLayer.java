@@ -16,6 +16,7 @@ import java.util.List;
 
 public class GameLayer {
 
+    private SpriteBatch batch;
     private OrthoCameraWrapper cameraWrapper;
 
     private SceneGraph graph = new SceneGraph();
@@ -37,6 +38,7 @@ public class GameLayer {
     public GameLayer() {
         this.cameraWrapper = new OrthoCameraWrapper(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.layerInput = new GameLayerInput(this.inputProcessors, this.cameraWrapper);
+        this.batch = new SpriteBatch();
     }
 
     public GameLayer(Viewport viewport) {
@@ -100,9 +102,10 @@ public class GameLayer {
         return null;
     }
 
-    public void render(SpriteBatch batch, float elapsed) {
+    public void render(float elapsed) {
 
         this.cameraWrapper.update(batch);
+        batch.begin();
 
         for (Controller.Renderer renderer : this.renders) {
             renderer.render(batch, this.cameraWrapper, elapsed);
@@ -111,6 +114,8 @@ public class GameLayer {
         for (Controller.PostRenderer renderer : this.postRenders) {
             renderer.postRender(batch, this.cameraWrapper, elapsed);
         }
+
+        batch.end();
     }
 
     public void update(float elapsed) {
@@ -224,6 +229,7 @@ public class GameLayer {
         for (Controller controller : this.controllers) {
             controller.dispose();
         }
+        this.batch.dispose();
     }
 
     private void build() {

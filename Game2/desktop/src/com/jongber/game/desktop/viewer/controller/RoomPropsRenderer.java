@@ -39,7 +39,8 @@ public class RoomPropsRenderer extends Controller implements Controller.Renderer
                 RoomProperty r = parent.getComponent(RoomProperty.class);
 
                 Rectangle cliBounds = new Rectangle(pPos.x, pPos.y, r.width, r.height);
-                ScissorStack.calculateScissors(camera.getCamera(), batch.getTransformMatrix(), cliBounds, scissors);
+                camera.getViewport().calculateScissors(batch.getTransformMatrix(), cliBounds, scissors);
+                //ScissorStack.calculateScissors(camera.getCamera(), batch.getTransformMatrix(), cliBounds, scissors);
             }
 
             if (ScissorStack.pushScissors(scissors)) {
