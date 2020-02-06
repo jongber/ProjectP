@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.desktop.Utility;
-import com.jongber.game.desktop.map.event.AddBorderEvent;
+import com.jongber.game.desktop.map.event.MapSizeEvent;
 import com.jongber.game.desktop.map.event.AddRoomEvent;
 import com.jongber.game.desktop.map.event.DelRoomEvent;
 import com.jongber.game.desktop.viewer.event.ShowGridEvent;
@@ -182,7 +182,7 @@ class MapEditorCmd extends JFrame {
         this.roomArea.setEnable(enable);
     }
 
-    public void onMapSizeApply() {
+    void onMapSizeApply() {
         this.roomArea.setEnable(true);
     }
 }
@@ -219,7 +219,7 @@ class MapSizeArea {
 
                 int width = (int)widthSpinner.getValue() * Const.BlockSize;
                 int height = (int)heightSpinner.getValue() * Const.BlockSize;
-                layer.post(new AddBorderEvent(layer, Color.RED, 5, 0, 0, width, height));
+                layer.post(new MapSizeEvent(layer, Color.RED, 3, 0, 0, width, height));
 
                 cmd.onMapSizeApply();
             }
@@ -340,17 +340,20 @@ class RoomArea {
     }
 
     private void onRoomDelete() {
-        deleteRoom(this.roomTable.getSelectedRow());
+        this.deleteRooms(this.roomTable.getSelectedRows());
     }
 
-    private void deleteRoom(int row) {
+    private void deleteRooms(int[] rows) {
         synchronized (this) {
-            if (row < 0 || row >= this.roomData.getRowCount()) return;
+            if (rows.length == 0)
+                return;
 
-            this.roomData.removeRow(row);
-            GameObject removed = this.rooms.remove(row);
+            for (int i = rows.length - 1; i >= 0; --i) {
+                this.roomData.removeRow(i);
+                GameObject removed = this.rooms.remove(i);
 
-            roomLayer.post(new DelRoomEvent(roomLayer, removed));
+                roomLayer.post(new DelRoomEvent(roomLayer, removed));
+            }
         }
     }
 
