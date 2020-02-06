@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
-import com.jongber.game.core.controller.Controller;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.map.event.MapSizeEvent;
 import com.jongber.game.desktop.map.event.AddRoomEvent;
@@ -50,6 +49,7 @@ class MapEditorCmd extends JFrame {
     String basePath;
 
     private MapSizeArea sizeArea;
+    private MapPropsArea propsArea;
     private RoomArea roomArea;
 
     private MapEditorCmd(GameLayer roomLayer, GameLayer backLayer) {
@@ -100,15 +100,23 @@ class MapEditorCmd extends JFrame {
         gbc.gridy = 1;
         this.add(sizeArea, gbc);
 
+        ///// propsPanel panel area
+        JPanel propsPanel = createMapPropsArea();
+        ///// propsPanel panel area
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 1;
+        this.add(propsPanel, gbc);
+
         ///// room panel area
         JPanel roomPanel = this.createRoomPanel();
         ///// room panel area end
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.weightx = 1;
         this.add(roomPanel, gbc);
 
-        this.setRoomAreaEnable(false);
+        this.setDetailArea(false);
 
         setVisible(true);
     }
@@ -179,12 +187,31 @@ class MapEditorCmd extends JFrame {
         return panel;
     }
 
-    private void setRoomAreaEnable(boolean enable) {
-        this.roomArea.setEnable(enable);
+    private JPanel createMapPropsArea() {
+        propsArea = new MapPropsArea(this.backLayer, this);
+
+        JPanel panel = propsArea.panel;
+
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder("Map Props area"));
+
+        JScrollPane scroll = new JScrollPane(propsArea.table);
+        panel.add(scroll, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
+        buttonPanel.add(propsArea.addButton);
+        buttonPanel.add(propsArea.delButton);
+
+        panel.add(buttonPanel, BorderLayout.EAST);
+
+        return panel;
     }
 
-    void onMapSizeApply() {
-        this.roomArea.setEnable(true);
+    void setDetailArea(boolean enable) {
+        this.roomArea.setEnable(enable);
+        this.propsArea.setEnable(enable);
     }
 }
 
@@ -231,9 +258,105 @@ class MapSizeArea {
                         0, 0,
                         width, height, groundHeight));
 
-                cmd.onMapSizeApply();
+                cmd.setDetailArea(true);
             }
         });
+    }
+}
+
+class MapPropsArea {
+    GameLayer layer;
+    MapEditorCmd cmd;
+
+    JPanel panel = new JPanel();
+    JButton addButton = new JButton("Add Map Prop");
+    JButton delButton = new JButton("Del Map Prop ");
+    JTable table;
+    private DefaultTableModel data;
+
+    private List<GameObject> objects = new ArrayList<>();
+    private Timer timer;
+
+    MapPropsArea(GameLayer layer, MapEditorCmd cmd) {
+        this.layer = layer;
+        this.cmd = cmd;
+
+        this.initAdd();
+        this.initDel();
+        this.initTable();
+        this.initTimer();
+    }
+
+    void setEnable(boolean enable) {
+        this.table.setEnabled(enable);
+        this.addButton.setEnabled(enable);
+        this.delButton.setEnabled(enable);
+        this.panel.setEnabled(enable);
+        if (enable) {
+            if (!this.timer.isRunning())
+                this.timer.start();
+        }
+        else {
+            this.timer.stop();
+        }
+    }
+
+    private void initAdd() {
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JFileChooser fc = new JFileChooser(cmd.basePath);
+                fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+
+                int i = fc.showOpenDialog(null);
+                if (i == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                }
+            }
+        });
+    }
+
+    private void initDel() {
+        delButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+            }
+        });
+    }
+
+    private void initTable() {
+        data = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        data.addColumn("Path");
+        data.addColumn("Position");
+
+        table = new JTable(data);
+    }
+
+    private void initTimer() {
+        timer = new Timer(50, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                synchronized (this) {
+                    int rows = data.getRowCount();
+                    for (int i = 0; i < rows; ++i) {
+                        GameObject object = objects.get(i);
+                        Vector2 localPos = object.transform.getLocalPos();
+                        Vector2 worldPos = object.transform.getWorldPos();
+
+                        data.setValueAt(localPos, i, 1);
+                        data.setValueAt(worldPos, i, 2);
+                    }
+                }
+            }
+        });
+
+        timer.start();
     }
 }
 
