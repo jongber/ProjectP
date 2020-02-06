@@ -8,6 +8,7 @@ import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.util.Tuple2;
+import com.jongber.game.desktop.map.MapEditorViewer;
 import com.jongber.game.desktop.viewer.component.PropProperty;
 import com.jongber.game.desktop.viewer.component.RoomProperty;
 import com.jongber.game.projectz.json.RoomJson;
@@ -40,7 +41,7 @@ public class AddRoomEvent extends GameEvent {
         room.name = json.name;
         room.addComponent(p);
 
-        this.layer.addObject(room);
+        this.layer.addObject(MapEditorViewer.RoomHead, room);
 
         for (Tuple2<String, Vector2> tuple : json.props) {
             Texture texture = AssetManager.getTexture(tuple.getItem1());

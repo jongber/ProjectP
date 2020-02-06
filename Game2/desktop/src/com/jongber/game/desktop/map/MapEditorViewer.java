@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.game.core.GameLayer;
+import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.desktop.map.controller.RoomController;
@@ -17,8 +18,10 @@ import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
 
 public class MapEditorViewer extends ApplicationAdapter implements InputProcessor {
 
+    public static final String RoomHead = "_RoomHead";
+
     private SpriteBatch batch;
-    private GameLayer roomLayer;
+    private GameLayer layer;
     private GameLayer fpsLayer;
 
     @Override
@@ -31,12 +34,12 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
         fpsLayer.registerController(new PerfRenderer());
 
         Gdx.input.setInputProcessor(this);
-        MapEditorCmd.popMapEditorCmd(roomLayer);
+        MapEditorCmd.popMapEditorCmd(layer);
     }
 
     @Override
     public void resize (int width, int height) {
-        roomLayer.resize(width, height);
+        layer.resize(width, height);
     }
 
     @Override
@@ -47,10 +50,10 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
         float elapsed = Gdx.graphics.getDeltaTime();
 
         batch.begin();
-        this.roomLayer.update(elapsed);
+        this.layer.update(elapsed);
         this.fpsLayer.update(elapsed);
 
-        this.roomLayer.render(batch, elapsed);
+        this.layer.render(batch, elapsed);
         this.fpsLayer.render(batch, elapsed);
         batch.end();
     }
@@ -58,7 +61,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public void dispose () {
         batch.dispose();
-        roomLayer.dispose();
+        layer.dispose();
         fpsLayer.dispose();
         AssetManager.dispose();
     }
@@ -81,7 +84,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-        this.roomLayer.getInput().touchDown(screenX, screenY, pointer, button);
+        this.layer.getInput().touchDown(screenX, screenY, pointer, button);
 
         return false;
     }
@@ -89,7 +92,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-        this.roomLayer.getInput().touchUp(screenX, screenY, pointer, button);
+        this.layer.getInput().touchUp(screenX, screenY, pointer, button);
 
         return false;
     }
@@ -97,7 +100,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
-        this.roomLayer.getInput().touchDragged(screenX, screenY, pointer);
+        this.layer.getInput().touchDragged(screenX, screenY, pointer);
 
         return false;
     }
@@ -110,19 +113,21 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public boolean scrolled(int amount) {
 
-        this.roomLayer.getInput().scrolled(amount);
+        this.layer.getInput().scrolled(amount);
 
         return false;
     }
 
     private void initRoomLayer() {
-        roomLayer = new GameLayer();
-        roomLayer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        roomLayer.registerController(new CameraController());
-        roomLayer.registerController(new RoomPropertyRenderer());
-        roomLayer.registerController(new RoomPropsRenderer());
-        roomLayer.registerController(new RoomController());
+        layer = new GameLayer();
+        layer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        layer.registerController(new CameraController());
+        layer.registerController(new RoomPropertyRenderer());
+        layer.registerController(new RoomPropsRenderer());
+        layer.registerController(new RoomController());
 
-        roomLayer.getCameraWrapper().setZoom(0.4f);
+        layer.addObject( new GameObject(MapEditorViewer.RoomHead));
+
+        layer.getCameraWrapper().setZoom(0.4f);
     }
 }

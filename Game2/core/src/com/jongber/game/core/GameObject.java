@@ -16,6 +16,11 @@ public class GameObject {
     public String name = "";
     public final TransformComponent transform = new TransformComponent();
 
+    public GameObject(String name) {
+        this();
+        this.name = name;
+    }
+
     public GameObject() {
         this.parent = null;
     }
