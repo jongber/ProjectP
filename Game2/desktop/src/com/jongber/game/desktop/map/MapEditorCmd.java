@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
+import com.jongber.game.core.controller.Controller;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.map.event.MapSizeEvent;
 import com.jongber.game.desktop.map.event.AddRoomEvent;
@@ -173,6 +174,8 @@ class MapEditorCmd extends JFrame {
         panel.add(sizeArea.widthSpinner);
         panel.add(new JLabel("Height :"));
         panel.add(sizeArea.heightSpinner);
+        panel.add(new JLabel("Ground :"));
+        panel.add(sizeArea.groundSpinner);
         panel.add(sizeArea.applyButton);
 
         return panel;
@@ -193,6 +196,7 @@ class MapSizeArea {
 
     JSpinner widthSpinner;
     JSpinner heightSpinner;
+    JSpinner groundSpinner;
     JButton applyButton;
 
     MapSizeArea(GameLayer layer, MapEditorCmd cmd) {
@@ -209,6 +213,9 @@ class MapSizeArea {
 
         model = new SpinnerNumberModel(9, 9, 100, 1);
         this.heightSpinner = new JSpinner(model);
+
+        model = new SpinnerNumberModel(3, 1, 100, 1);
+        this.groundSpinner = new JSpinner(model);
     }
 
     private void initButton() {
@@ -219,7 +226,12 @@ class MapSizeArea {
 
                 int width = (int)widthSpinner.getValue() * Const.BlockSize;
                 int height = (int)heightSpinner.getValue() * Const.BlockSize;
-                layer.post(new MapSizeEvent(layer, Color.RED, 3, 0, 0, width, height));
+                int groundHeight = (int)groundSpinner.getValue() * Const.BlockSize;
+                layer.post(new MapSizeEvent(layer,
+                        Color.RED,
+                        3,
+                        0, 0,
+                        width, height, groundHeight));
 
                 cmd.onMapSizeApply();
             }

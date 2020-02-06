@@ -13,6 +13,7 @@ import com.jongber.game.desktop.map.controller.RoomController;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
 import com.jongber.game.desktop.viewer.controller.BorderPostRenderer;
 import com.jongber.game.desktop.viewer.controller.CameraController;
+import com.jongber.game.desktop.viewer.controller.GroundPostRenderer;
 import com.jongber.game.desktop.viewer.controller.RoomPropertyRenderer;
 import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
 
@@ -128,6 +129,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     private void initBackLayer() {
         backLayer = new GameLayer();
         backLayer.registerController(new CameraController());
+        backLayer.registerController(new GroundPostRenderer());
         backLayer.registerController(new BorderPostRenderer());
     }
 
