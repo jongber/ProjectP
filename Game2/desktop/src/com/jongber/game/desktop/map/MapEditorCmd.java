@@ -72,7 +72,7 @@ class MapEditorCmd extends JFrame {
 
     private void init() {
         setTitle("Map Editor Commander");
-        setSize(400, 400);
+        setSize(450, 400);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
@@ -98,7 +98,6 @@ class MapEditorCmd extends JFrame {
         ///// size panel area
         gbc.gridx = 0;
         gbc.gridy = 1;
-        //gbc.ipady = 10;
         this.add(sizeArea, gbc);
 
         ///// room panel area
@@ -107,7 +106,6 @@ class MapEditorCmd extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 1;
-        gbc.weightx = 0.3;
         this.add(roomPanel, gbc);
 
         this.setRoomAreaEnable(false);
