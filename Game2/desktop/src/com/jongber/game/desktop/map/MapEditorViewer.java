@@ -11,6 +11,7 @@ import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.map.controller.RoomController;
+import com.jongber.game.desktop.map.controller.TextureMover;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
 import com.jongber.game.desktop.viewer.controller.BorderPostRenderer;
 import com.jongber.game.desktop.viewer.controller.CameraController;
@@ -44,7 +45,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
 
     @Override
     public void render () {
-        Gdx.gl.glClearColor(0.45f, 0.45f, 0.45f, 1);
+        Gdx.gl.glClearColor(0.78f, 0.78f, 0.78f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         float elapsed = Gdx.graphics.getDeltaTime();
@@ -83,8 +84,9 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-        this.backLayer.getInput().touchDown(screenX, screenY, pointer, button);
-        this.roomLayer.getInput().touchDown(screenX, screenY, pointer, button);
+        if (!this.roomLayer.getInput().touchDown(screenX, screenY, pointer, button)) {
+            this.backLayer.getInput().touchDown(screenX, screenY, pointer, button);
+        }
 
         return false;
     }
@@ -92,8 +94,9 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-        this.backLayer.getInput().touchUp(screenX, screenY, pointer, button);
-        this.roomLayer.getInput().touchUp(screenX, screenY, pointer, button);
+        if (!this.roomLayer.getInput().touchUp(screenX, screenY, pointer, button)) {
+            this.backLayer.getInput().touchUp(screenX, screenY, pointer, button);
+        }
 
         return false;
     }
@@ -101,8 +104,8 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
-        this.backLayer.getInput().touchDragged(screenX, screenY, pointer);
         this.roomLayer.getInput().touchDragged(screenX, screenY, pointer);
+        this.backLayer.getInput().touchDragged(screenX, screenY, pointer);
 
         return false;
     }
@@ -127,6 +130,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
         backLayer.registerController(new GroundPostRenderer());
         backLayer.registerController(new BorderPostRenderer());
         backLayer.registerController(new TextureRenderer());
+        backLayer.registerController(new TextureMover());
     }
 
     private void initRoomLayer() {

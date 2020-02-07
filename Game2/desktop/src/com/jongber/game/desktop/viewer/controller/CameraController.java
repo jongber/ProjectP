@@ -14,7 +14,7 @@ public class CameraController extends InputControlAdapter {
         if (button == 2) {
             wheel = true;
             this.pressed.set(worldX, worldY);
-            return true;
+            return false;
         }
 
         return false;
@@ -26,7 +26,7 @@ public class CameraController extends InputControlAdapter {
         if (button == 2 && this.wheel) {
             this.pressed.setZero();
             this.wheel = false;
-            return true;
+            return false;
         }
 
         return false;
@@ -43,8 +43,6 @@ public class CameraController extends InputControlAdapter {
 
             camera.addPosition(drag);
             this.pressed.set(worldX, worldY);
-
-            return true;
         }
 
         return false;
