@@ -7,7 +7,7 @@ import com.jongber.game.core.GameObject;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.room.event.AddPropEvent;
-import com.jongber.game.desktop.room.event.ClearRoomViewEvent;
+import com.jongber.game.desktop.viewer.event.ClearAllEvent;
 import com.jongber.game.desktop.room.event.DelPropEvent;
 import com.jongber.game.desktop.viewer.event.ShowGridEvent;
 import com.jongber.game.projectz.Const;
@@ -163,7 +163,7 @@ class RoomEditorCommander extends JFrame {
     }
 
     public void onClear() {
-        layer.post(new ClearRoomViewEvent(layer));
+        layer.post(new ClearAllEvent(layer));
         this.property.onClear();
         this.props.onClear();
         this.timer.stop();

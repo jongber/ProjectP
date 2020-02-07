@@ -11,6 +11,7 @@ import com.jongber.game.desktop.map.event.AddTextureEvent;
 import com.jongber.game.desktop.map.event.MapSizeEvent;
 import com.jongber.game.desktop.map.event.AddRoomEvent;
 import com.jongber.game.desktop.map.event.DelObjectEvent;
+import com.jongber.game.desktop.viewer.event.ClearAllEvent;
 import com.jongber.game.desktop.viewer.event.ShowGridEvent;
 import com.jongber.game.projectz.Const;
 import com.jongber.game.projectz.json.MapJson;
@@ -77,7 +78,7 @@ class MapEditorCmd extends JFrame {
 
     private void init() {
         setTitle("Map Editor Commander");
-        setSize(450, 400);
+        setSize(450, 450);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
@@ -162,7 +163,7 @@ class MapEditorCmd extends JFrame {
     }
 
     private JPanel createSaveLoadPanel() {
-        slArea = new SaveLoadArea(this.roomLayer, this.backLayer, this);
+        slArea = new SaveLoadArea(this);
         JPanel panel = new JPanel();
 
         panel.add(slArea.saveButton);
@@ -247,6 +248,18 @@ class MapEditorCmd extends JFrame {
         this.propsArea.setEnable(enable);
         this.slArea.setEnable(enable);
     }
+
+    void onLoad(MapJson json) {
+        clear();
+        this.infoArea.onLoad(json);
+        this.propsArea.onLoad(json);
+        this.roomArea.onLoad(json);
+    }
+
+    void clear() {
+        this.propsArea.clear();
+        this.roomArea.clear();
+    }
 }
 
 class MapInfoArea {
@@ -270,6 +283,14 @@ class MapInfoArea {
         this.initButton();
     }
 
+    void onLoad(MapJson json) {
+        this.nameText.setText(json.name);
+        this.widthSpinner.setValue(json.width);
+        this.heightSpinner.setValue(json.height);
+        this.groundSpinner.setValue(json.groundHeight);
+        this.apply();
+    }
+
     private void initSpinners() {
         SpinnerNumberModel model = new SpinnerNumberModel(16, 3, 100, 1);
         this.widthSpinner = new JSpinner(model);
@@ -286,34 +307,32 @@ class MapInfoArea {
         this.applyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                int width = (int)widthSpinner.getValue() * Const.BlockSize;
-                int height = (int)heightSpinner.getValue() * Const.BlockSize;
-                int groundHeight = (int)groundSpinner.getValue() * Const.BlockSize;
-                layer.post(new MapSizeEvent(layer,
-                        Color.RED,
-                        3,
-                        0, 0,
-                        width, height, groundHeight));
-
-                cmd.setDetailArea(true);
+                apply();
             }
         });
+    }
+
+    private void apply() {
+        int width = (int)widthSpinner.getValue() * Const.BlockSize;
+        int height = (int)heightSpinner.getValue() * Const.BlockSize;
+        int groundHeight = (int)groundSpinner.getValue() * Const.BlockSize;
+        layer.post(new MapSizeEvent(layer,
+                Color.RED,
+                3,
+                0, 0,
+                width, height, groundHeight));
+
+        cmd.setDetailArea(true);
     }
 }
 
 class SaveLoadArea {
-    private GameLayer roomLayer;
-    private GameLayer backLayer;
-    private String jsonPath;
     private MapEditorCmd cmd;
 
     JButton saveButton;
     JButton loadButton;
 
-    public SaveLoadArea(GameLayer roomLayer, GameLayer backLayer, MapEditorCmd cmd) {
-        this.roomLayer = roomLayer;
-        this.backLayer = backLayer;
+    public SaveLoadArea(MapEditorCmd cmd) {
         this.cmd = cmd;
 
         this.initSave();
@@ -342,13 +361,13 @@ class SaveLoadArea {
                             return;
                     }
 
-                    onSave(f);
+                    save(f);
                 }
             }
         });
     }
 
-    private void onSave(File file) {
+    private void save(File file) {
         MapJson json = new MapJson();
         json.name = cmd.infoArea.nameText.getText();
         json.width = (int)cmd.infoArea.widthSpinner.getValue();
@@ -367,7 +386,8 @@ class SaveLoadArea {
 
         synchronized (cmd.roomArea) {
             for (Tuple2<GameObject, RoomJson> item : cmd.roomArea.rooms) {
-                json.rooms.add(item.getItem2());
+                Tuple2<RoomJson, Vector2> jsonElem = new Tuple2<>(item.getItem2(), item.getItem1().transform.getLocalPos());
+                json.rooms.add(jsonElem);
             }
         }
 
@@ -383,13 +403,16 @@ class SaveLoadArea {
                 fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
                 int i = fc.showOpenDialog(null);
                 if (i == JFileChooser.APPROVE_OPTION) {
-                    Utility.readJson(MapJson.class, fc.getSelectedFile());
+                    MapJson json = Utility.readJson(MapJson.class, fc.getSelectedFile());
+                    load(json);
                 }
             }
         });
     }
 
-    private void onLoad() {
+    private void load(MapJson json) {
+        cmd.clear();
+        cmd.onLoad(json);
     }
 
     public void setEnable(boolean enable) {
@@ -437,6 +460,24 @@ class MapPropsArea {
         }
     }
 
+    void onLoad(MapJson json) {
+        for (Tuple2<String, Vector2> prop : json.backProps) {
+            onAddProp(prop.getItem1(), prop.getItem2());
+        }
+    }
+
+    void clear() {
+        synchronized (this) {
+            this.timer.stop();
+            this.layer.post(new ClearAllEvent(this.layer));
+            int rows = this.data.getRowCount();
+            for (int i = 0; i < rows; ++i) {
+                this.data.removeRow(0);
+            }
+            objects.clear();
+        }
+    }
+
     private void initAdd() {
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -454,16 +495,17 @@ class MapPropsArea {
                     }
 
                     String path = assetDir.toURI().relativize(file.toURI()).getPath();
-                    onAddProp(path);
+                    onAddProp(path, Vector2.Zero);
                 }
             }
         });
     }
 
-    private void onAddProp(String path) {
+    private void onAddProp(String path, Vector2 pos) {
         this.layer.post(new AddTextureEvent(this.layer, path, new AddTextureEvent.Callback() {
             @Override
             public void callback(AddTextureEvent event, GameObject created) {
+                created.transform.local.setToTranslation(pos);
                 objects.add(created);
                 data.addRow(new String[] { event.texturePath, created.transform.getWorldPos().toString() });
             }
@@ -571,6 +613,24 @@ class RoomArea {
         }
     }
 
+    void onLoad(MapJson json) {
+        for (Tuple2<RoomJson, Vector2> tuple : json.rooms) {
+            addRoom(tuple.getItem1(), tuple.getItem2());
+        }
+    }
+
+    void clear() {
+        synchronized (this) {
+            this.timer.stop();
+            this.roomLayer.post(new ClearAllEvent(roomLayer));
+            int rows = this.roomData.getRowCount();
+            for (int i = 0; i < rows; i++) {
+                this.roomData.removeRow(0);
+            }
+            this.rooms.clear();
+        }
+    }
+
     private void initTimer() {
         timer = new Timer(50, new ActionListener() {
             @Override
@@ -618,7 +678,7 @@ class RoomArea {
                 if (i == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
                     RoomJson json = Utility.readJson(RoomJson.class, file);
-                    addRoom(json);
+                    addRoom(json, Vector2.Zero);
                 }
             }
         });
@@ -633,11 +693,11 @@ class RoomArea {
         });
     }
 
-    private void addRoom(RoomJson json) {
+    private void addRoom(RoomJson json, Vector2 pos) {
         AddRoomEvent e = new AddRoomEvent(roomLayer, json, new AddRoomEvent.Callback() {
             @Override
             public void callback(GameObject created) {
-                RoomArea.this.onRoomAdd(created, json);
+                RoomArea.this.onRoomAdd(created, json, pos);
             }
         });
 
@@ -662,8 +722,9 @@ class RoomArea {
         }
     }
 
-    private void onRoomAdd(GameObject created, RoomJson json) {
+    private void onRoomAdd(GameObject created, RoomJson json, Vector2 pos) {
         synchronized (this) {
+            created.transform.local.setToTranslation(pos);
             this.rooms.add(new Tuple2<>(created, json));
             this.roomData.addRow(new String[] {
                     created.name,

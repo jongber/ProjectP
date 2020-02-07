@@ -1,13 +1,13 @@
-package com.jongber.game.desktop.room.event;
+package com.jongber.game.desktop.viewer.event;
 
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.event.GameEvent;
 
-public class ClearRoomViewEvent extends GameEvent {
+public class ClearAllEvent extends GameEvent {
 
     private final GameLayer layer;
 
-    public ClearRoomViewEvent(GameLayer layer) {
+    public ClearAllEvent(GameLayer layer) {
         this.layer = layer;
     }
 

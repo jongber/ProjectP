@@ -13,5 +13,5 @@ public class MapJson {
     public int groundHeight;
 
     public List<Tuple2<String, Vector2>> backProps = new ArrayList<>();
-    public List<RoomJson> rooms = new ArrayList<>();
+    public List<Tuple2<RoomJson, Vector2>> rooms = new ArrayList<>();
 }
