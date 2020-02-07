@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapJson {
+    public String name;
     public int width;
     public int height;
     public int groundHeight;

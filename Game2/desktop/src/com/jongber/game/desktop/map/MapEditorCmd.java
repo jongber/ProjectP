@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
-import com.jongber.game.core.component.TextureComponent;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.map.event.AddTextureEvent;
@@ -16,7 +15,6 @@ import com.jongber.game.desktop.viewer.event.ShowGridEvent;
 import com.jongber.game.projectz.Const;
 import com.jongber.game.projectz.json.MapJson;
 import com.jongber.game.projectz.json.RoomJson;
-
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -42,6 +40,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -53,7 +52,7 @@ class MapEditorCmd extends JFrame {
     private GameLayer backLayer;
     String basePath;
 
-    MapSizeArea sizeArea;
+    MapInfoArea infoArea;
     MapPropsArea propsArea;
     RoomArea roomArea;
     SaveLoadArea slArea;
@@ -100,7 +99,7 @@ class MapEditorCmd extends JFrame {
         this.add(activePanel, gbc);
 
         ///// size panel area
-        JPanel sizeArea = createSizePanel();
+        JPanel sizeArea = createMapInfoPanel();
         ///// size panel area
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -194,18 +193,29 @@ class MapEditorCmd extends JFrame {
         return panel;
     }
 
-    private JPanel createSizePanel() {
-        this.sizeArea = new MapSizeArea(this.backLayer, this);
+    private JPanel createMapInfoPanel() {
+        this.infoArea = new MapInfoArea(this.backLayer, this);
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createTitledBorder("Map Size area"));
+        panel.setLayout (new BorderLayout());
 
-        panel.add(new JLabel("Width :"));
-        panel.add(sizeArea.widthSpinner);
-        panel.add(new JLabel("Height :"));
-        panel.add(sizeArea.heightSpinner);
-        panel.add(new JLabel("Ground :"));
-        panel.add(sizeArea.groundSpinner);
-        panel.add(sizeArea.applyButton);
+        JPanel namePanel = new JPanel();
+        namePanel.add(new JLabel("Map Name :"));
+        namePanel.add(this.infoArea.nameText);
+        panel.add(namePanel, BorderLayout.NORTH);
+
+        JPanel sizePanel = new JPanel();
+        sizePanel.add(new JLabel("Width :"));
+        sizePanel.add(infoArea.widthSpinner);
+        sizePanel.add(new JLabel("Height :"));
+        sizePanel.add(infoArea.heightSpinner);
+        sizePanel.add(new JLabel("Ground :"));
+        sizePanel.add(infoArea.groundSpinner);
+        panel.add(sizePanel, BorderLayout.CENTER);
+
+        JPanel btPanel = new JPanel();
+        btPanel.add(infoArea.applyButton);
+        panel.add(btPanel, BorderLayout.SOUTH);
 
         return panel;
     }
@@ -239,18 +249,22 @@ class MapEditorCmd extends JFrame {
     }
 }
 
-class MapSizeArea {
+class MapInfoArea {
     private GameLayer layer;
     private MapEditorCmd cmd;
 
+    JTextField nameText;
     JSpinner widthSpinner;
     JSpinner heightSpinner;
     JSpinner groundSpinner;
     JButton applyButton;
 
-    MapSizeArea(GameLayer layer, MapEditorCmd cmd) {
+    MapInfoArea(GameLayer layer, MapEditorCmd cmd) {
         this.layer = layer;
         this.cmd = cmd;
+
+        this.nameText = new JTextField(8);
+        this.nameText.setText("NewMap");
 
         this.initSpinners();
         this.initButton();
@@ -311,10 +325,23 @@ class SaveLoadArea {
         this.saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
+                String jsonPath = cmd.basePath
+                        + File.separator + cmd.infoArea.nameText.getText() + ".json";
+
                 JFileChooser fc = new JFileChooser(cmd.basePath);
+                fc.setSelectedFile(new File(jsonPath));
+                fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+
                 int i = fc.showSaveDialog(null);
                 if (i == JFileChooser.APPROVE_OPTION) {
                     File f = fc.getSelectedFile();
+                    if (f.exists()) {
+                        int r = JOptionPane.showConfirmDialog(null, "Exist file, overwrite?", "Caution", JOptionPane.YES_NO_OPTION);
+                        if (r != 0)
+                            return;
+                    }
+
                     onSave(f);
                 }
             }
@@ -323,9 +350,10 @@ class SaveLoadArea {
 
     private void onSave(File file) {
         MapJson json = new MapJson();
-        json.width = (int)cmd.sizeArea.widthSpinner.getValue();
-        json.height = (int)cmd.sizeArea.heightSpinner.getValue();
-        json.groundHeight = (int)cmd.sizeArea.groundSpinner.getValue();
+        json.name = cmd.infoArea.nameText.getText();
+        json.width = (int)cmd.infoArea.widthSpinner.getValue();
+        json.height = (int)cmd.infoArea.heightSpinner.getValue();
+        json.groundHeight = (int)cmd.infoArea.groundSpinner.getValue();
 
         synchronized (cmd.propsArea) {
             int rows = cmd.propsArea.data.getRowCount();
