@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
+import com.jongber.game.core.component.TextureComponent;
 import com.jongber.game.desktop.Utility;
+import com.jongber.game.desktop.map.event.AddTextureEvent;
 import com.jongber.game.desktop.map.event.MapSizeEvent;
 import com.jongber.game.desktop.map.event.AddRoomEvent;
-import com.jongber.game.desktop.map.event.DelRoomEvent;
+import com.jongber.game.desktop.map.event.DelObjectEvent;
 import com.jongber.game.desktop.viewer.event.ShowGridEvent;
 import com.jongber.game.projectz.Const;
 import com.jongber.game.projectz.json.RoomJson;
@@ -33,6 +35,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -57,7 +60,7 @@ class MapEditorCmd extends JFrame {
         this.backLayer = backLayer;
         this.roomLayer = roomLayer;
         this.basePath = System.getProperty("user.dir") +
-                File.separator + "android" + File.separator + "assets" + File.separator + "projectz";
+                File.separator + "android" + File.separator + "assets";
     }
 
     static void popMapEditorCmd(GameLayer roomLayer, GameLayer backLayer) {
@@ -265,8 +268,9 @@ class MapSizeArea {
 }
 
 class MapPropsArea {
-    GameLayer layer;
-    MapEditorCmd cmd;
+    private GameLayer layer;
+    private String basePath;
+    private MapEditorCmd cmd;
 
     JPanel panel = new JPanel();
     JButton addButton = new JButton("Add Map Prop");
@@ -279,6 +283,8 @@ class MapPropsArea {
 
     MapPropsArea(GameLayer layer, MapEditorCmd cmd) {
         this.layer = layer;
+        this.basePath = cmd.basePath
+                + File.separator + "projectz";
         this.cmd = cmd;
 
         this.initAdd();
@@ -305,23 +311,60 @@ class MapPropsArea {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                JFileChooser fc = new JFileChooser(cmd.basePath);
-                fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+                JFileChooser fc = new JFileChooser(basePath);
+                fc.setFileFilter(new FileNameExtensionFilter("image files", "png", "PNG", "JPG", "jpg"));
 
                 int i = fc.showOpenDialog(null);
                 if (i == JFileChooser.APPROVE_OPTION) {
+                    File assetDir = new File(cmd.basePath);
                     File file = fc.getSelectedFile();
+                    if (!file.getPath().contains(assetDir.getPath())) {
+                        JOptionPane.showMessageDialog(null, "Invalid path, use only under android/asset");
+                        return;
+                    }
+
+                    String path = assetDir.toURI().relativize(file.toURI()).getPath();
+                    onAddProp(path);
                 }
             }
         });
+    }
+
+    private void onAddProp(String path) {
+        this.layer.post(new AddTextureEvent(this.layer, path, new AddTextureEvent.Callback() {
+            @Override
+            public void callback(AddTextureEvent event, GameObject created) {
+                objects.add(created);
+                data.addRow(new String[] { event.texturePath, created.transform.getWorldPos().toString() });
+            }
+        }));
     }
 
     private void initDel() {
         delButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                onDelProp();
             }
         });
+    }
+
+    private void onDelProp() {
+        int[] selected = this.table.getSelectedRows();
+        delProps(selected);
+    }
+
+    private void delProps(int[] rows) {
+        synchronized (this) {
+            if (rows.length == 0)
+                return;
+
+            for (int i = rows.length - 1; i >= 0; --i) {
+                this.data.removeRow(i);
+                GameObject removed = this.objects.remove(i);
+                this.layer.post(new DelObjectEvent(this.layer, removed));
+            }
+        }
     }
 
     private void initTable() {
@@ -346,11 +389,9 @@ class MapPropsArea {
                     int rows = data.getRowCount();
                     for (int i = 0; i < rows; ++i) {
                         GameObject object = objects.get(i);
-                        Vector2 localPos = object.transform.getLocalPos();
                         Vector2 worldPos = object.transform.getWorldPos();
 
-                        data.setValueAt(localPos, i, 1);
-                        data.setValueAt(worldPos, i, 2);
+                        data.setValueAt(worldPos, i, 1);
                     }
                 }
             }
@@ -362,7 +403,6 @@ class MapPropsArea {
 
 class RoomArea {
     private GameLayer roomLayer;
-    private MapEditorCmd cmd;
     private String basePath;
 
     JPanel panel = new JPanel();
@@ -376,8 +416,10 @@ class RoomArea {
 
     RoomArea(GameLayer roomLayer, MapEditorCmd cmd) {
         this.roomLayer = roomLayer;
-        this.cmd = cmd;
-        this.basePath = cmd.basePath + File.separator + "house" + File.separator + "room";
+        this.basePath = cmd.basePath
+                + File.separator + "projectz"
+                + File.separator + "house"
+                + File.separator + "room";
         initTable();
         initAdd();
         initDel();
@@ -485,7 +527,7 @@ class RoomArea {
                 this.roomData.removeRow(i);
                 GameObject removed = this.rooms.remove(i);
 
-                roomLayer.post(new DelRoomEvent(roomLayer, removed));
+                roomLayer.post(new DelObjectEvent(roomLayer, removed));
             }
         }
     }

@@ -9,6 +9,11 @@ public class TextureComponent extends Component{
   public Vector2 pivot = new Vector2();
 
   public TextureComponent(TextureRegion region) {
+    this(region, 0, 0);
+  }
+
+  public TextureComponent(TextureRegion region, float x, float y) {
     this.region = region;
+    this.pivot.set(x, y);
   }
 }

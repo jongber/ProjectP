@@ -65,7 +65,7 @@ class RoomEditorCommander extends JFrame {
 
     private final Timer timer;
 
-    RoomEditorCommander(GameLayer layer) {
+    private RoomEditorCommander(GameLayer layer) {
         this.basePath = System.getProperty("user.dir") +
                 File.separator + "android" + File.separator + "assets";
 
@@ -497,7 +497,7 @@ class PropertyArea {
 class PropsArea {
     private GameLayer layer;
     private JTextField roomField;
-    RoomEditorCommander cmd;
+    private RoomEditorCommander cmd;
 
     public JButton propAddButton = new JButton("Add prop");
     public JButton propDelButton = new JButton("Del prop ");
@@ -561,8 +561,7 @@ class PropsArea {
 
                 JFileChooser fc = new JFileChooser(baseFile);
                 fc.setAcceptAllFileFilterUsed(false);
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "png", "PNG", "JPG", "jpg");
-                fc.setFileFilter(filter);
+                fc.setFileFilter(new FileNameExtensionFilter("image files", "png", "PNG", "JPG", "jpg"));
 
                 int i = fc.showOpenDialog(null);
                 if (i == JFileChooser.APPROVE_OPTION) {
@@ -611,8 +610,6 @@ class PropsArea {
                         }
                     }
                 }));
-
-        return;
     }
 }
 

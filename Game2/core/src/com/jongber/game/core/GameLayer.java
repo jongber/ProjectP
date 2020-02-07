@@ -181,6 +181,9 @@ public class GameLayer {
     }
 
     public GameObject getObjectAny(String name) {
+        if (name == null)
+            return null;
+
         List<GameObject> objs = this.getObjects(name);
 
         if (objs.size() == 0)

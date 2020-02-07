@@ -9,6 +9,7 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
+import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.map.controller.RoomController;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
 import com.jongber.game.desktop.viewer.controller.BorderPostRenderer;
@@ -125,6 +126,7 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
         backLayer.registerController(new CameraController());
         backLayer.registerController(new GroundPostRenderer());
         backLayer.registerController(new BorderPostRenderer());
+        backLayer.registerController(new TextureRenderer());
     }
 
     private void initRoomLayer() {
