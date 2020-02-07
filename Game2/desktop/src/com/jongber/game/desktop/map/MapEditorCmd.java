@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.component.TextureComponent;
+import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.map.event.AddTextureEvent;
 import com.jongber.game.desktop.map.event.MapSizeEvent;
@@ -13,6 +14,7 @@ import com.jongber.game.desktop.map.event.AddRoomEvent;
 import com.jongber.game.desktop.map.event.DelObjectEvent;
 import com.jongber.game.desktop.viewer.event.ShowGridEvent;
 import com.jongber.game.projectz.Const;
+import com.jongber.game.projectz.json.MapJson;
 import com.jongber.game.projectz.json.RoomJson;
 
 import java.awt.BorderLayout;
@@ -51,9 +53,10 @@ class MapEditorCmd extends JFrame {
     private GameLayer backLayer;
     String basePath;
 
-    private MapSizeArea sizeArea;
-    private MapPropsArea propsArea;
-    private RoomArea roomArea;
+    MapSizeArea sizeArea;
+    MapPropsArea propsArea;
+    RoomArea roomArea;
+    SaveLoadArea slArea;
 
     private MapEditorCmd(GameLayer roomLayer, GameLayer backLayer) {
         super();
@@ -119,6 +122,13 @@ class MapEditorCmd extends JFrame {
         gbc.weightx = 1;
         this.add(roomPanel, gbc);
 
+        ///// save load panel
+        JPanel saveLoadPanel = this.createSaveLoadPanel();
+        ///// save load panel end
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        this.add(saveLoadPanel, gbc);
+
         this.setDetailArea(false);
 
         setVisible(true);
@@ -150,6 +160,16 @@ class MapEditorCmd extends JFrame {
         activePanel.add(gridCheck, activeGbc);
 
         return activePanel;
+    }
+
+    private JPanel createSaveLoadPanel() {
+        slArea = new SaveLoadArea(this.roomLayer, this.backLayer, this);
+        JPanel panel = new JPanel();
+
+        panel.add(slArea.saveButton);
+        panel.add(slArea.loadButton);
+
+        return panel;
     }
 
     private JPanel createRoomPanel() {
@@ -215,6 +235,7 @@ class MapEditorCmd extends JFrame {
     void setDetailArea(boolean enable) {
         this.roomArea.setEnable(enable);
         this.propsArea.setEnable(enable);
+        this.slArea.setEnable(enable);
     }
 }
 
@@ -267,6 +288,87 @@ class MapSizeArea {
     }
 }
 
+class SaveLoadArea {
+    private GameLayer roomLayer;
+    private GameLayer backLayer;
+    private String jsonPath;
+    private MapEditorCmd cmd;
+
+    JButton saveButton;
+    JButton loadButton;
+
+    public SaveLoadArea(GameLayer roomLayer, GameLayer backLayer, MapEditorCmd cmd) {
+        this.roomLayer = roomLayer;
+        this.backLayer = backLayer;
+        this.cmd = cmd;
+
+        this.initSave();
+        this.initLoad();
+    }
+
+    private void initSave() {
+        this.saveButton = new JButton("Save");
+        this.saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JFileChooser fc = new JFileChooser(cmd.basePath);
+                int i = fc.showSaveDialog(null);
+                if (i == JFileChooser.APPROVE_OPTION) {
+                    File f = fc.getSelectedFile();
+                    onSave(f);
+                }
+            }
+        });
+    }
+
+    private void onSave(File file) {
+        MapJson json = new MapJson();
+        json.width = (int)cmd.sizeArea.widthSpinner.getValue();
+        json.height = (int)cmd.sizeArea.heightSpinner.getValue();
+        json.groundHeight = (int)cmd.sizeArea.groundSpinner.getValue();
+
+        synchronized (cmd.propsArea) {
+            int rows = cmd.propsArea.data.getRowCount();
+            for (int i = 0; i < rows; ++i) {
+                GameObject object = cmd.propsArea.objects.get(i);
+                String path = (String)cmd.propsArea.data.getValueAt(i, 0);
+                Tuple2<String, Vector2> info = new Tuple2<>(path, object.transform.getLocalPos());
+                json.backProps.add(info);
+            }
+        }
+
+        synchronized (cmd.roomArea) {
+            for (Tuple2<GameObject, RoomJson> item : cmd.roomArea.rooms) {
+                json.rooms.add(item.getItem2());
+            }
+        }
+
+        Utility.writeJson(json, file);
+    }
+
+    private void initLoad() {
+        this.loadButton = new JButton("Load");
+        this.loadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JFileChooser fc = new JFileChooser(cmd.basePath);
+                fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+                int i = fc.showOpenDialog(null);
+                if (i == JFileChooser.APPROVE_OPTION) {
+                    Utility.readJson(MapJson.class, fc.getSelectedFile());
+                }
+            }
+        });
+    }
+
+    private void onLoad() {
+    }
+
+    public void setEnable(boolean enable) {
+        this.saveButton.setEnabled(enable);
+    }
+}
+
 class MapPropsArea {
     private GameLayer layer;
     private String basePath;
@@ -276,9 +378,9 @@ class MapPropsArea {
     JButton addButton = new JButton("Add Map Prop");
     JButton delButton = new JButton("Del Map Prop ");
     JTable table;
-    private DefaultTableModel data;
+    DefaultTableModel data;
 
-    private List<GameObject> objects = new ArrayList<>();
+    List<GameObject> objects = new ArrayList<>();
     private Timer timer;
 
     MapPropsArea(GameLayer layer, MapEditorCmd cmd) {
@@ -411,7 +513,7 @@ class RoomArea {
     JTable roomTable;
     private DefaultTableModel roomData;
 
-    private List<GameObject> rooms = new ArrayList<>();
+    List<Tuple2<GameObject, RoomJson>> rooms = new ArrayList<>();
     private Timer timer;
 
     RoomArea(GameLayer roomLayer, MapEditorCmd cmd) {
@@ -448,7 +550,7 @@ class RoomArea {
                 synchronized (this) {
                     int rows = roomData.getRowCount();
                     for (int i = 0; i < rows; ++i) {
-                        GameObject object = rooms.get(i);
+                        GameObject object = rooms.get(i).getItem1();
                         Vector2 localPos = object.transform.getLocalPos();
                         Vector2 worldPos = object.transform.getWorldPos();
 
@@ -507,7 +609,7 @@ class RoomArea {
         AddRoomEvent e = new AddRoomEvent(roomLayer, json, new AddRoomEvent.Callback() {
             @Override
             public void callback(GameObject created) {
-                RoomArea.this.onRoomAdd(created);
+                RoomArea.this.onRoomAdd(created, json);
             }
         });
 
@@ -525,16 +627,16 @@ class RoomArea {
 
             for (int i = rows.length - 1; i >= 0; --i) {
                 this.roomData.removeRow(i);
-                GameObject removed = this.rooms.remove(i);
+                Tuple2<GameObject, RoomJson> removed = this.rooms.remove(i);
 
-                roomLayer.post(new DelObjectEvent(roomLayer, removed));
+                roomLayer.post(new DelObjectEvent(roomLayer, removed.getItem1()));
             }
         }
     }
 
-    private void onRoomAdd(GameObject created) {
+    private void onRoomAdd(GameObject created, RoomJson json) {
         synchronized (this) {
-            this.rooms.add(created);
+            this.rooms.add(new Tuple2<>(created, json));
             this.roomData.addRow(new String[] {
                     created.name,
                     created.transform.getLocalPos().toString(),
