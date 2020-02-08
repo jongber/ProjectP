@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.map.component;
+package com.jongber.game.desktop.editor.map.component;
 
 import com.jongber.game.core.component.Component;
 

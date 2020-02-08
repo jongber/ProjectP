@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.map.controller;
+package com.jongber.game.desktop.editor.room.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -10,21 +10,19 @@ import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.controller.adapter.InputControlAdapter;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
 import com.jongber.game.desktop.viewer.component.PropProperty;
-import com.jongber.game.desktop.viewer.component.RoomProperty;
-import com.jongber.game.projectz.Const;
 
 import java.util.List;
 
-public class RoomController extends InputControlAdapter implements Controller.PostRenderer {
+public class RoomPropsController extends InputControlAdapter implements Controller.PostRenderer {
 
-    List<GameObject> rooms;
-    GameObject selected = null;
-    Vector2 pressed = new Vector2();
-    ShapeRenderer renderer = new ShapeRenderer();
+    List<GameObject> objects;
+    private GameObject selected;
+    private ShapeRenderer renderer = new ShapeRenderer();
+    private Vector2 pressed = new Vector2();
 
     @Override
     public void build(List<GameObject> graph) {
-        this.rooms = this.buildSimple(graph, RoomProperty.class);
+        this.objects = this.buildSimple(graph, PropProperty.class);
     }
 
     @Override
@@ -36,16 +34,16 @@ public class RoomController extends InputControlAdapter implements Controller.Po
         if (this.selected != null) {
             batch.end();
 
-            RoomProperty p = this.selected.getComponent(RoomProperty.class);
+            PropProperty p = this.selected.getComponent(PropProperty.class);
             Vector2 pos = this.selected.transform.getWorldPos();
             float x1 = pos.x;
             float y1 = pos.y;
 
-            Gdx.gl.glLineWidth(3f);
+            Gdx.gl.glLineWidth(5f);
             renderer.setProjectionMatrix(camera.getCamera().combined);
             renderer.begin(ShapeRenderer.ShapeType.Line);
             renderer.setColor(Color.RED);
-            renderer.rect(x1, y1, p.width, p.height);
+            renderer.rect(x1, y1, p.texture.getRegionWidth(), p.texture.getRegionHeight());
             renderer.end();
 
             batch.begin();
@@ -54,16 +52,17 @@ public class RoomController extends InputControlAdapter implements Controller.Po
 
     @Override
     public boolean touchDown(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button) {
+
         if (button != 0) {
             return false;
         }
 
-        for (GameObject object : this.rooms) {
-            RoomProperty p = object.getComponent(RoomProperty.class);
+        for (GameObject object : this.objects) {
+            PropProperty p = object.getComponent(PropProperty.class);
             Vector2 pos = object.transform.getWorldPos();
 
-            float x1 = pos.x, x2 = pos.x + p.width;
-            float y1 = pos.y, y2 = pos.y + p.height;
+            float x1 = pos.x, x2 = pos.x + p.texture.getRegionWidth();
+            float y1 = pos.y, y2 = pos.y + p.texture.getRegionHeight();
 
             if (x1 < worldX && worldX < x2 && y1 < worldY && worldY < y2) {
                 this.selected = object;
@@ -77,15 +76,6 @@ public class RoomController extends InputControlAdapter implements Controller.Po
 
     @Override
     public boolean touchUp(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button) {
-        if (this.selected == null)
-            return false;
-
-        Vector2 local = this.selected.transform.getLocalPos();
-        local.x = Math.round(local.x / Const.BlockSize) * Const.BlockSize;
-        local.y = Math.round(local.y / Const.BlockSize) * Const.BlockSize;
-
-        this.selected.transform.local.setToTranslation(local);
-
         this.selected = null;
         return false;
     }
@@ -107,14 +97,13 @@ public class RoomController extends InputControlAdapter implements Controller.Po
 
         return true;
     }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
 }
+
+
+
+
+
+
+
+
+

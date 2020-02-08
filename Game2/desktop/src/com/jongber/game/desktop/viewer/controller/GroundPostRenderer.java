@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import com.jongber.game.desktop.map.component.GroundProperty;
+import com.jongber.game.desktop.editor.map.component.GroundProperty;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.map;
+package com.jongber.game.desktop.editor.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -7,10 +7,10 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
-import com.jongber.game.desktop.map.event.AddTextureEvent;
-import com.jongber.game.desktop.map.event.MapSizeEvent;
-import com.jongber.game.desktop.map.event.AddRoomEvent;
-import com.jongber.game.desktop.map.event.DelObjectEvent;
+import com.jongber.game.desktop.editor.map.event.AddTextureEvent;
+import com.jongber.game.desktop.editor.map.event.MapSizeEvent;
+import com.jongber.game.desktop.editor.map.event.AddRoomEvent;
+import com.jongber.game.desktop.editor.map.event.DelObjectEvent;
 import com.jongber.game.desktop.viewer.event.ClearAllEvent;
 import com.jongber.game.desktop.viewer.event.ShowGridEvent;
 import com.jongber.game.projectz.Const;

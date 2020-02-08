@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.room;
+package com.jongber.game.desktop.editor.room;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -6,12 +6,12 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
-import com.jongber.game.desktop.room.event.AddPropEvent;
+import com.jongber.game.desktop.editor.room.event.AddPropEvent;
 import com.jongber.game.desktop.viewer.event.ClearAllEvent;
-import com.jongber.game.desktop.room.event.DelPropEvent;
+import com.jongber.game.desktop.editor.room.event.DelPropEvent;
 import com.jongber.game.desktop.viewer.event.ShowGridEvent;
 import com.jongber.game.projectz.Const;
-import com.jongber.game.desktop.room.event.ApplyRoomViewEvent;
+import com.jongber.game.desktop.editor.room.event.ApplyRoomViewEvent;
 import com.jongber.game.projectz.json.RoomJson;
 
 import java.awt.BorderLayout;

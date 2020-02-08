@@ -1,17 +1,14 @@
-package com.jongber.game.desktop.map;
+package com.jongber.game.desktop.editor.map;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.game.core.GameLayer;
-import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
-import com.jongber.game.desktop.map.controller.RoomController;
-import com.jongber.game.desktop.map.controller.TextureMover;
+import com.jongber.game.desktop.editor.map.controller.RoomController;
+import com.jongber.game.desktop.editor.map.controller.TextureMover;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
 import com.jongber.game.desktop.viewer.controller.BorderPostRenderer;
 import com.jongber.game.desktop.viewer.controller.CameraController;
@@ -20,14 +17,13 @@ import com.jongber.game.desktop.viewer.controller.RoomPropertyRenderer;
 import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
 
 
-public class MapEditorViewer extends ApplicationAdapter implements InputProcessor {
+public class MapEditorViewer extends GameLayer implements InputProcessor {
 
     private GameLayer backLayer;
     private GameLayer roomLayer;
     private GameLayer fpsLayer;
 
-    @Override
-    public void create () {
+    public MapEditorViewer () {
         this.initRoomLayer();
         this.initBackLayer();
 
@@ -44,15 +40,16 @@ public class MapEditorViewer extends ApplicationAdapter implements InputProcesso
     }
 
     @Override
-    public void render () {
-        Gdx.gl.glClearColor(0.78f, 0.78f, 0.78f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        float elapsed = Gdx.graphics.getDeltaTime();
-
+    public void update(float elapsed) {
         this.backLayer.update(elapsed);
         this.roomLayer.update(elapsed);
         this.fpsLayer.update(elapsed);
+    }
+
+    @Override
+    public void render (float elapsed) {
+        Gdx.gl.glClearColor(0.78f, 0.78f, 0.78f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         this.backLayer.render(elapsed);
         this.roomLayer.render(elapsed);

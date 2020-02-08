@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.map.event;
+package com.jongber.game.desktop.editor.map.event;
 
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;

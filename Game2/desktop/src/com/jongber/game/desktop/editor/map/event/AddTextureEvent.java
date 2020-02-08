@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.map.event;
+package com.jongber.game.desktop.editor.map.event;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

@@ -1,27 +1,24 @@
-package com.jongber.game.desktop.room;
+package com.jongber.game.desktop.editor.room;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
 import com.jongber.game.desktop.viewer.controller.CameraController;
-import com.jongber.game.desktop.room.controller.RoomPropsController;
+import com.jongber.game.desktop.editor.room.controller.RoomPropsController;
 import com.jongber.game.desktop.viewer.controller.RoomPropertyRenderer;
 import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
 
-public class RoomEditViewer extends ApplicationAdapter implements InputProcessor {
+public class RoomEditViewer extends GameLayer implements InputProcessor {
 
     private GameLayer roomViewLayer;
     private GameLayer fpsViewLayer;
 
-    @Override
-    public void create () {
+    public RoomEditViewer() {
         this.createRoomViewer();
 
         this.fpsViewLayer = new GameLayer();
@@ -40,14 +37,15 @@ public class RoomEditViewer extends ApplicationAdapter implements InputProcessor
     }
 
     @Override
-    public void render () {
-        Gdx.gl.glClearColor(0.45f, 0.45f, 0.45f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        float elapsed = Gdx.graphics.getDeltaTime();
-
+    public void update(float elapsed) {
         this.roomViewLayer.update(elapsed);
         this.fpsViewLayer.update(elapsed);
+    }
+
+    @Override
+    public void render (float elapsed) {
+        Gdx.gl.glClearColor(0.45f, 0.45f, 0.45f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         this.roomViewLayer.render(elapsed);
         this.fpsViewLayer.render(elapsed);

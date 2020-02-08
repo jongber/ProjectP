@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.room.event;
+package com.jongber.game.desktop.editor.room.event;
 
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;

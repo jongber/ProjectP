@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.map.controller;
+package com.jongber.game.desktop.editor.map.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -10,8 +10,6 @@ import com.jongber.game.core.component.TextureComponent;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.controller.adapter.InputControlAdapter;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import com.jongber.game.desktop.viewer.component.RoomProperty;
-import com.jongber.game.projectz.Const;
 
 import java.util.List;
 
