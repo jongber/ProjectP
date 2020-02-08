@@ -702,8 +702,13 @@ class SaveLoadArea {
                     File selected = fc.getSelectedFile();
                     if (selected.exists() == false) return;
 
-                    RoomJson roomJson = Utility.readJson(RoomJson.class, selected);
-                    cmd.fromRoomJson(roomJson);
+                    try {
+                        RoomJson roomJson = Utility.readJson(RoomJson.class, selected);
+                        cmd.fromRoomJson(roomJson);
+                    }
+                    catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Invalid json file, Room json file ");
+                    }
                 }
             }
         });

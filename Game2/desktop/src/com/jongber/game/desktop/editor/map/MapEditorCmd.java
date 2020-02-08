@@ -403,8 +403,13 @@ class SaveLoadArea {
                 fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
                 int i = fc.showOpenDialog(null);
                 if (i == JFileChooser.APPROVE_OPTION) {
-                    MapJson json = Utility.readJson(MapJson.class, fc.getSelectedFile());
-                    load(json);
+                    try {
+                        MapJson json = Utility.readJson(MapJson.class, fc.getSelectedFile());
+                        load(json);
+                    }
+                    catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Invalid json file, Map json file plz");
+                    }
                 }
             }
         });
