@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.jongber.game.desktop.editor.map.MapEditorViewer;
 import com.jongber.game.desktop.editor.room.RoomEditLayer;
 
-import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -22,7 +24,8 @@ public class EditorCmd extends JFrame {
             @Override
             public void run() {
                 EditorCmd window = new EditorCmd(viewer);
-                window.setSize(200, 100);
+                window.setSize(200, 200);
+                window.setTitle("Editor Commander");
                 window.init();
                 window.setVisible(true);
             }
@@ -42,7 +45,10 @@ public class EditorCmd extends JFrame {
             }
         });
 
-        setLayout(new FlowLayout());
+        setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
 
         JButton button = new JButton("Map");
         button.addActionListener(new ActionListener() {
@@ -53,7 +59,12 @@ public class EditorCmd extends JFrame {
                 EditorCmd.this.dispose();
             }
         });
-        this.add(button);
+
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.weightx = 1;
+        this.add(button, gbc);
 
         button = new JButton("Room");
         button.addActionListener(new ActionListener() {
@@ -64,6 +75,10 @@ public class EditorCmd extends JFrame {
                 EditorCmd.this.dispose();
             }
         });
-        this.add(button);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        this.add(button, gbc);
     }
 }
