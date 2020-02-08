@@ -7,6 +7,7 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
+import com.jongber.game.desktop.editor.EditorViewLayer;
 import com.jongber.game.desktop.editor.map.controller.RoomController;
 import com.jongber.game.desktop.editor.map.controller.TextureMover;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
@@ -17,10 +18,10 @@ import com.jongber.game.desktop.viewer.controller.RoomPropertyRenderer;
 import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
 
 
-public class MapEditorViewer extends GameLayer implements InputProcessor {
+public class MapEditorViewer extends EditorViewLayer implements InputProcessor {
 
-    private GameLayer backLayer;
-    private GameLayer roomLayer;
+    public GameLayer backLayer;
+    public GameLayer roomLayer;
     private GameLayer fpsLayer;
 
     public MapEditorViewer () {
@@ -31,7 +32,7 @@ public class MapEditorViewer extends GameLayer implements InputProcessor {
         fpsLayer.registerController(new PerfRenderer());
 
         Gdx.input.setInputProcessor(this);
-        MapEditorCmd.popMapEditorCmd(roomLayer, this.backLayer);
+        MapEditorCmd.popMapEditorCmd(this);
     }
 
     @Override

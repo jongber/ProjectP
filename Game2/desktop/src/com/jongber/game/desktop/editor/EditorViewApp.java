@@ -3,11 +3,11 @@ package com.jongber.game.desktop.editor;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.jongber.game.core.GameLayer;
+import com.badlogic.gdx.graphics.GL20;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.event.GameEventHandler;
 
-public class EditorViewer extends ApplicationAdapter implements InputProcessor {
+public class EditorViewApp extends ApplicationAdapter implements InputProcessor {
 
     class ChangeViewEvent extends GameEvent {
 
@@ -19,11 +19,12 @@ public class EditorViewer extends ApplicationAdapter implements InputProcessor {
 
         @Override
         public void handle() {
-            if (EditorViewer.this.viewer != null)
-                EditorViewer.this.viewer.dispose();
+            if (EditorViewApp.this.layer != null)
+                EditorViewApp.this.layer.dispose();
             try {
-                EditorViewer.this.viewer = (GameLayer)type.newInstance();
-                viewer.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                EditorViewApp.this.layer = (EditorViewLayer)type.newInstance();
+                layer.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                layer.setEditorApp(EditorViewApp.this);
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -32,7 +33,18 @@ public class EditorViewer extends ApplicationAdapter implements InputProcessor {
         }
     }
 
-    GameLayer viewer;
+    class ResetViewEvent extends GameEvent {
+
+        @Override
+        public void handle() {
+            if (layer != null) {
+                layer.dispose();
+                layer = null;
+            }
+        }
+    }
+
+    EditorViewLayer layer;
     GameEventHandler handler = new GameEventHandler();
 
     @Override
@@ -42,31 +54,40 @@ public class EditorViewer extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public void resize (int width, int height) {
-        if (viewer != null) {
-            viewer.resize(width, height);
+        if (layer != null) {
+            layer.resize(width, height);
         }
     }
 
     @Override
     public void render () {
+
+        Gdx.gl.glClearColor(0.45f, 0.45f, 0.45f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         handler.handle();
 
         float elapsed = Gdx.graphics.getDeltaTime();
-        if (viewer != null) {
-            viewer.update(elapsed);
-            viewer.render(elapsed);
+        if (layer != null) {
+            layer.update(elapsed);
+            layer.render(elapsed);
         }
     }
 
     @Override
     public void dispose () {
-        if (viewer != null) {
-            viewer.dispose();
+        if (layer != null) {
+            layer.dispose();
         }
     }
 
     public void changeView(Class type) {
         this.handler.post(new ChangeViewEvent(type));
+    }
+
+    public void resetView() {
+        this.handler.post(new ResetViewEvent());
+        EditorCmd.popUI(this);
     }
 
     @Override

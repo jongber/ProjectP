@@ -7,24 +7,25 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
+import com.jongber.game.desktop.editor.EditorViewLayer;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
 import com.jongber.game.desktop.viewer.controller.CameraController;
 import com.jongber.game.desktop.editor.room.controller.RoomPropsController;
 import com.jongber.game.desktop.viewer.controller.RoomPropertyRenderer;
 import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
 
-public class RoomEditViewer extends GameLayer implements InputProcessor {
+public class RoomEditLayer extends EditorViewLayer implements InputProcessor {
 
     private GameLayer roomViewLayer;
     private GameLayer fpsViewLayer;
 
-    public RoomEditViewer() {
+    public RoomEditLayer() {
         this.createRoomViewer();
 
         this.fpsViewLayer = new GameLayer();
         this.fpsViewLayer.registerController(new PerfRenderer());
 
-        RoomEditorCommander.popRoomUI(this.roomViewLayer);
+        RoomEditorCommander.popRoomUI(this);
 
         Gdx.input.setInputProcessor(this);
 
@@ -102,6 +103,10 @@ public class RoomEditViewer extends GameLayer implements InputProcessor {
         this.roomViewLayer.getInput().scrolled(amount);
 
         return false;
+    }
+
+    public GameLayer getRoomLayer() {
+        return this.roomViewLayer;
     }
 
     private void loadAssets() {

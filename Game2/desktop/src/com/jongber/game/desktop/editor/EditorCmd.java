@@ -2,7 +2,7 @@ package com.jongber.game.desktop.editor;
 
 import com.badlogic.gdx.Gdx;
 import com.jongber.game.desktop.editor.map.MapEditorViewer;
-import com.jongber.game.desktop.editor.room.RoomEditViewer;
+import com.jongber.game.desktop.editor.room.RoomEditLayer;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -15,9 +15,9 @@ import javax.swing.JFrame;
 
 public class EditorCmd extends JFrame {
 
-    EditorViewer viewer;
+    EditorViewApp viewer;
 
-    static void popUI(EditorViewer viewer) {
+    static void popUI(EditorViewApp viewer) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -29,7 +29,7 @@ public class EditorCmd extends JFrame {
         }).start();
     }
 
-    public EditorCmd(EditorViewer viewer) {
+    public EditorCmd(EditorViewApp viewer) {
         this.viewer = viewer;
     }
 
@@ -59,7 +59,7 @@ public class EditorCmd extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                viewer.changeView(RoomEditViewer.class);
+                viewer.changeView(RoomEditLayer.class);
                 EditorCmd.this.setVisible(false);
                 EditorCmd.this.dispose();
             }

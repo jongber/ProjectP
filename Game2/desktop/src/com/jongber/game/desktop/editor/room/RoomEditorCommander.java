@@ -56,7 +56,7 @@ import javax.swing.table.DefaultTableModel;
 
 class RoomEditorCommander extends JFrame {
 
-    private GameLayer layer;
+    private RoomEditLayer viewer;
 
     final String basePath;
     final PropertyArea property;
@@ -65,14 +65,14 @@ class RoomEditorCommander extends JFrame {
 
     private final Timer timer;
 
-    private RoomEditorCommander(GameLayer layer) {
+    private RoomEditorCommander(RoomEditLayer viewer) {
         this.basePath = System.getProperty("user.dir") +
                 File.separator + "android" + File.separator + "assets";
 
-        this.layer = layer;
-        this.property = new PropertyArea(layer, this);
-        this.props = new PropsArea(layer, this, property.roomNameField);
-        this.saveLoadArea = new SaveLoadArea(this, layer);
+        this.viewer = viewer;
+        this.property = new PropertyArea(viewer.getRoomLayer(), this);
+        this.props = new PropsArea(viewer.getRoomLayer(), this, property.roomNameField);
+        this.saveLoadArea = new SaveLoadArea(this, viewer.getRoomLayer());
 
         this.timer = new Timer(60, new ActionListener() {
             @Override
@@ -90,18 +90,18 @@ class RoomEditorCommander extends JFrame {
         });
     }
 
-    static void popRoomUI(GameLayer layer) {
+    static void popRoomUI(RoomEditLayer viewer) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                _popRoomUI(layer);
+                _popRoomUI(viewer);
             }
         }).start();
     }
 
-    private static void _popRoomUI(GameLayer layer) {
+    private static void _popRoomUI(RoomEditLayer viewer) {
 
-        RoomEditorCommander window = new RoomEditorCommander(layer);
+        RoomEditorCommander window = new RoomEditorCommander(viewer);
         window.setTitle("Room Editor Commander");
         window.setSize(450, 500);
         window.setLayout(new GridBagLayout());
@@ -163,7 +163,7 @@ class RoomEditorCommander extends JFrame {
     }
 
     public void onClear() {
-        layer.post(new ClearAllEvent(layer));
+        this.viewer.getRoomLayer().post(new ClearAllEvent(this.viewer.getRoomLayer()));
         this.property.onClear();
         this.props.onClear();
         this.timer.stop();
@@ -201,7 +201,7 @@ class RoomEditorCommander extends JFrame {
         GridBagConstraints activeGbc = new GridBagConstraints();
 
         // 1. show grid
-        activeGbc.fill = GridBagConstraints.HORIZONTAL;
+        activeGbc.fill = GridBagConstraints.VERTICAL;
         activeGbc.gridx = 0;
         activeGbc.gridy = 0;
         activePanel.add(new JLabel("Show grid "), activeGbc);
@@ -214,10 +214,23 @@ class RoomEditorCommander extends JFrame {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 boolean checked = e.getStateChange() == ItemEvent.SELECTED;
-                layer.post(new ShowGridEvent(layer, checked));
+                viewer.getRoomLayer().post(new ShowGridEvent(viewer.getRoomLayer(), checked));
             }
         });
         activePanel.add(gridCheck, activeGbc);
+
+        activeGbc.gridx = 0;
+        activeGbc.gridy = 1;
+        JButton button = new JButton("Return Main");
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                viewer.resetApp();
+                RoomEditorCommander.this.setVisible(false);
+                RoomEditorCommander.this.dispose();
+            }
+        });
+        activePanel.add(button, activeGbc);
 
         return activePanel;
     }
