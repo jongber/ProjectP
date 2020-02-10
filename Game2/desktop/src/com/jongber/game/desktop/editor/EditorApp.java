@@ -13,7 +13,7 @@ public class EditorApp extends ApplicationAdapter implements InputProcessor {
 
         Class type;
 
-        public ChangeViewEvent(Class type) {
+        ChangeViewEvent(Class type) {
             this.type = type;
         }
 
@@ -44,8 +44,8 @@ public class EditorApp extends ApplicationAdapter implements InputProcessor {
         }
     }
 
-    EditorView layer;
-    GameEventHandler handler = new GameEventHandler();
+    private EditorView layer;
+    private GameEventHandler handler = new GameEventHandler();
 
     @Override
     public void create () {
@@ -81,11 +81,11 @@ public class EditorApp extends ApplicationAdapter implements InputProcessor {
         }
     }
 
-    public void changeView(Class type) {
+    void changeView(Class type) {
         this.handler.post(new ChangeViewEvent(type));
     }
 
-    public void resetView() {
+    void resetView() {
         this.handler.post(new ResetViewEvent());
         EditorCmd.popUI(this);
     }

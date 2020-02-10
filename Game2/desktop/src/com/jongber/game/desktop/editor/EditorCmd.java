@@ -15,9 +15,9 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-public class EditorCmd extends JFrame {
+class EditorCmd extends JFrame {
 
-    EditorApp viewer;
+    private EditorApp viewApp;
 
     static void popUI(EditorApp viewer) {
         new Thread(new Runnable() {
@@ -32,11 +32,11 @@ public class EditorCmd extends JFrame {
         }).start();
     }
 
-    public EditorCmd(EditorApp viewer) {
-        this.viewer = viewer;
+    private EditorCmd(EditorApp viewApp) {
+        this.viewApp = viewApp;
     }
 
-    void init() {
+    private void init() {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
@@ -54,7 +54,7 @@ public class EditorCmd extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                viewer.changeView(MapEditorView.class);
+                viewApp.changeView(MapEditorView.class);
                 EditorCmd.this.setVisible(false);
                 EditorCmd.this.dispose();
             }
@@ -70,7 +70,7 @@ public class EditorCmd extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                viewer.changeView(RoomEditView.class);
+                viewApp.changeView(RoomEditView.class);
                 EditorCmd.this.setVisible(false);
                 EditorCmd.this.dispose();
             }

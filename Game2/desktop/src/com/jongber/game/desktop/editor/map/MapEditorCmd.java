@@ -13,7 +13,6 @@ import com.jongber.game.desktop.editor.map.event.MapSizeEvent;
 import com.jongber.game.desktop.editor.map.event.AddRoomEvent;
 import com.jongber.game.desktop.editor.map.event.DelObjectEvent;
 import com.jongber.game.desktop.viewer.event.ClearAllEvent;
-import com.jongber.game.desktop.viewer.event.ShowGridEvent;
 import com.jongber.game.projectz.Const;
 import com.jongber.game.projectz.json.MapJson;
 import com.jongber.game.projectz.json.RoomJson;
@@ -22,8 +21,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -33,7 +30,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -50,7 +46,7 @@ import javax.swing.table.DefaultTableModel;
 
 class MapEditorCmd extends JFrame {
 
-    MapEditorView view;
+    private MapEditorView view;
     private GameLayer roomLayer;
     private GameLayer backLayer;
     String basePath;
@@ -309,7 +305,7 @@ class SaveLoadArea {
     JButton saveButton;
     JButton loadButton;
 
-    public SaveLoadArea(MapEditorCmd cmd) {
+    SaveLoadArea(MapEditorCmd cmd) {
         this.cmd = cmd;
 
         this.initSave();
@@ -397,7 +393,7 @@ class SaveLoadArea {
         cmd.onLoad(json);
     }
 
-    public void setEnable(boolean enable) {
+    void setEnable(boolean enable) {
         this.saveButton.setEnabled(enable);
     }
 }

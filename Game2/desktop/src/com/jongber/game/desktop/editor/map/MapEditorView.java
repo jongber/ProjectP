@@ -20,8 +20,8 @@ import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
 
 public class MapEditorView extends EditorView implements InputProcessor {
 
-    public GameLayer backLayer;
-    public GameLayer roomLayer;
+    GameLayer backLayer;
+    GameLayer roomLayer;
     private GameLayer fpsLayer;
 
     public MapEditorView() {

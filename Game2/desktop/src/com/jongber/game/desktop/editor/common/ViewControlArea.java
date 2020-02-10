@@ -20,12 +20,12 @@ import javax.swing.JPanel;
 
 public class ViewControlArea {
 
-    EditorView view;
-    GameLayer layer;
-    JFrame frame;
+    private EditorView view;
+    private GameLayer layer;
+    private JFrame frame;
 
-    JCheckBox gridBox;
-    JButton btReturn;
+    private JCheckBox gridBox;
+    private JButton btReturn;
 
     public ViewControlArea(JFrame frame, EditorView view, GameLayer layer) {
         this.frame = frame;
