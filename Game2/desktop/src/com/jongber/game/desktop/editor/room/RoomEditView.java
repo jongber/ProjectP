@@ -7,20 +7,20 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
-import com.jongber.game.desktop.editor.EditorViewLayer;
+import com.jongber.game.desktop.editor.EditorView;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
 import com.jongber.game.desktop.viewer.controller.CameraController;
 import com.jongber.game.desktop.editor.room.controller.RoomPropsController;
 import com.jongber.game.desktop.viewer.controller.RoomPropertyRenderer;
 import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
 
-public class RoomEditLayer extends EditorViewLayer implements InputProcessor {
+public class RoomEditView extends EditorView implements InputProcessor {
 
     private GameLayer roomViewLayer;
     private GameLayer fpsViewLayer;
 
-    public RoomEditLayer() {
-        this.createRoomViewer();
+    public RoomEditView() {
+        this.createRoomView();
 
         this.fpsViewLayer = new GameLayer();
         this.fpsViewLayer.registerController(new PerfRenderer());
@@ -115,7 +115,7 @@ public class RoomEditLayer extends EditorViewLayer implements InputProcessor {
         AssetManager.getTexture("projectz/house/wall/right_wall.png");
     }
 
-    private void createRoomViewer() {
+    private void createRoomView() {
         this.roomViewLayer = new GameLayer();
         this.roomViewLayer.registerController(new TextureRenderer());
         this.roomViewLayer.registerController(new CameraController());

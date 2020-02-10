@@ -6,10 +6,10 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
+import com.jongber.game.desktop.editor.common.ViewControlArea;
 import com.jongber.game.desktop.editor.room.event.AddPropEvent;
 import com.jongber.game.desktop.viewer.event.ClearAllEvent;
 import com.jongber.game.desktop.editor.room.event.DelPropEvent;
-import com.jongber.game.desktop.viewer.event.ShowGridEvent;
 import com.jongber.game.projectz.Const;
 import com.jongber.game.desktop.editor.room.event.ApplyRoomViewEvent;
 import com.jongber.game.projectz.json.RoomJson;
@@ -22,8 +22,6 @@ import java.awt.Insets;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -35,7 +33,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -56,16 +53,17 @@ import javax.swing.table.DefaultTableModel;
 
 class RoomEditorCommander extends JFrame {
 
-    private RoomEditLayer viewer;
+    private RoomEditView viewer;
 
     final String basePath;
     final PropertyArea property;
     final PropsArea props;
+    private ViewControlArea viewControlArea;
     private final SaveLoadArea saveLoadArea;
 
     private final Timer timer;
 
-    private RoomEditorCommander(RoomEditLayer viewer) {
+    private RoomEditorCommander(RoomEditView viewer) {
         this.basePath = System.getProperty("user.dir") +
                 File.separator + "android" + File.separator + "assets";
 
@@ -73,6 +71,7 @@ class RoomEditorCommander extends JFrame {
         this.property = new PropertyArea(viewer.getRoomLayer(), this);
         this.props = new PropsArea(viewer.getRoomLayer(), this, property.roomNameField);
         this.saveLoadArea = new SaveLoadArea(this, viewer.getRoomLayer());
+        this.viewControlArea = new ViewControlArea(this, this.viewer, this.viewer.getRoomLayer());
 
         this.timer = new Timer(60, new ActionListener() {
             @Override
@@ -90,7 +89,7 @@ class RoomEditorCommander extends JFrame {
         });
     }
 
-    static void popRoomUI(RoomEditLayer viewer) {
+    static void popRoomUI(RoomEditView viewer) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -99,7 +98,7 @@ class RoomEditorCommander extends JFrame {
         }).start();
     }
 
-    private static void _popRoomUI(RoomEditLayer viewer) {
+    private static void _popRoomUI(RoomEditView viewer) {
 
         RoomEditorCommander window = new RoomEditorCommander(viewer);
         window.setTitle("Room Editor Commander");
@@ -109,7 +108,7 @@ class RoomEditorCommander extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         ///// active panel area
-        JPanel activePanel = window.createActivePanel();
+        JPanel activePanel = window.viewControlArea.createPanel();
         ///// active panel area end
 
         gbc.gridx = 0;
@@ -192,47 +191,6 @@ class RoomEditorCommander extends JFrame {
         }
 
         this.onApplied();
-    }
-
-    private JPanel createActivePanel() {
-        JPanel activePanel = new JPanel();
-        activePanel.setLayout(new GridBagLayout());
-        activePanel.setBorder(BorderFactory.createTitledBorder("Viewer Cmd"));
-        GridBagConstraints activeGbc = new GridBagConstraints();
-
-        // 1. show grid
-        activeGbc.fill = GridBagConstraints.VERTICAL;
-        activeGbc.gridx = 0;
-        activeGbc.gridy = 0;
-        activePanel.add(new JLabel("Show grid "), activeGbc);
-
-        activeGbc.gridx = 1;
-        activeGbc.gridy = 0;
-        JCheckBox gridCheck = new JCheckBox();
-        gridCheck.setSelected(true);
-        gridCheck.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                boolean checked = e.getStateChange() == ItemEvent.SELECTED;
-                viewer.getRoomLayer().post(new ShowGridEvent(viewer.getRoomLayer(), checked));
-            }
-        });
-        activePanel.add(gridCheck, activeGbc);
-
-        activeGbc.gridx = 0;
-        activeGbc.gridy = 1;
-        JButton button = new JButton("Return Main");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                viewer.resetApp();
-                RoomEditorCommander.this.setVisible(false);
-                RoomEditorCommander.this.dispose();
-            }
-        });
-        activePanel.add(button, activeGbc);
-
-        return activePanel;
     }
 
     private JPanel createRoomPropertyPanel() {
@@ -512,14 +470,14 @@ class PropsArea {
     private JTextField roomField;
     private RoomEditorCommander cmd;
 
-    public JButton propAddButton = new JButton("Add prop");
-    public JButton propDelButton = new JButton("Del prop ");
-    public JTable propTable;
-    public DefaultTableModel propData;
+    JButton propAddButton = new JButton("Add prop");
+    JButton propDelButton = new JButton("Del prop ");
+    JTable propTable;
+    DefaultTableModel propData;
 
-    public final List<GameObject> propObjects = new ArrayList<>();
+    final List<GameObject> propObjects = new ArrayList<>();
 
-    public PropsArea(GameLayer layer, RoomEditorCommander cmd, JTextField roomField) {
+    PropsArea(GameLayer layer, RoomEditorCommander cmd, JTextField roomField) {
         this.layer = layer;
         this.roomField = roomField;
         this.cmd = cmd;
@@ -539,7 +497,7 @@ class PropsArea {
         initPropDel();
     }
 
-    public void onApplied() {
+    void onApplied() {
         this.propAddButton.setEnabled(true);
         this.propDelButton.setEnabled(true);
 
@@ -552,7 +510,7 @@ class PropsArea {
         }
     }
 
-    public void onClear() {
+    void onClear() {
         this.propAddButton.setEnabled(false);
         this.propDelButton.setEnabled(false);
 

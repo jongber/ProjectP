@@ -7,7 +7,7 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
-import com.jongber.game.desktop.editor.EditorViewLayer;
+import com.jongber.game.desktop.editor.common.ViewControlArea;
 import com.jongber.game.desktop.editor.map.event.AddTextureEvent;
 import com.jongber.game.desktop.editor.map.event.MapSizeEvent;
 import com.jongber.game.desktop.editor.map.event.AddRoomEvent;
@@ -50,7 +50,7 @@ import javax.swing.table.DefaultTableModel;
 
 class MapEditorCmd extends JFrame {
 
-    MapEditorViewer viewer;
+    MapEditorView view;
     private GameLayer roomLayer;
     private GameLayer backLayer;
     String basePath;
@@ -58,18 +58,20 @@ class MapEditorCmd extends JFrame {
     MapInfoArea infoArea;
     MapPropsArea propsArea;
     RoomArea roomArea;
-    SaveLoadArea slArea;
+    private SaveLoadArea slArea;
+    private ViewControlArea viewControlArea;
 
-    private MapEditorCmd(MapEditorViewer viewer) {
+    private MapEditorCmd(MapEditorView view) {
         super();
-        this.viewer = viewer;
-        this.backLayer = viewer.backLayer;
-        this.roomLayer = viewer.roomLayer;
+        this.view = view;
+        this.backLayer = view.backLayer;
+        this.roomLayer = view.roomLayer;
         this.basePath = System.getProperty("user.dir") +
                 File.separator + "android" + File.separator + "assets";
+        this.viewControlArea = new ViewControlArea(this, view, roomLayer);
     }
 
-    static void popMapEditorCmd(MapEditorViewer layer) {
+    static void popMapEditorCmd(MapEditorView layer) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -95,7 +97,7 @@ class MapEditorCmd extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         ///// active panel area
-        JPanel activePanel = this.createActivePanel();
+        JPanel activePanel = this.viewControlArea.createPanel();
         ///// active panel area end
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -135,47 +137,6 @@ class MapEditorCmd extends JFrame {
         this.setDetailArea(false);
 
         setVisible(true);
-    }
-
-    private JPanel createActivePanel() {
-        JPanel activePanel = new JPanel();
-        activePanel.setLayout(new GridBagLayout());
-        activePanel.setBorder(BorderFactory.createTitledBorder("Viewer Cmd"));
-        GridBagConstraints activeGbc = new GridBagConstraints();
-
-        // 1. show grid
-        activeGbc.fill = GridBagConstraints.VERTICAL;
-        activeGbc.gridx = 0;
-        activeGbc.gridy = 0;
-        activePanel.add(new JLabel("Show grid "), activeGbc);
-
-        activeGbc.gridx = 1;
-        activeGbc.gridy = 0;
-        JCheckBox gridCheck = new JCheckBox();
-        gridCheck.setSelected(true);
-        gridCheck.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                boolean checked = e.getStateChange() == ItemEvent.SELECTED;
-                roomLayer.post(new ShowGridEvent(roomLayer, checked));
-            }
-        });
-        activePanel.add(gridCheck, activeGbc);
-
-        activeGbc.gridx = 0;
-        activeGbc.gridy = 1;
-        JButton button = new JButton("Return Main");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                viewer.resetApp();
-                MapEditorCmd.this.setVisible(false);
-                MapEditorCmd.this.dispose();
-            }
-        });
-        activePanel.add(button, activeGbc);
-
-        return activePanel;
     }
 
     private JPanel createSaveLoadPanel() {

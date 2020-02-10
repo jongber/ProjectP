@@ -2,11 +2,11 @@ package com.jongber.game.desktop.editor;
 
 import com.jongber.game.core.GameLayer;
 
-public class EditorViewLayer extends GameLayer {
+public class EditorView extends GameLayer {
 
-    EditorViewApp editorApp;
+    EditorApp editorApp;
 
-    public void setEditorApp(EditorViewApp mainViewer) {
+    public void setEditorApp(EditorApp mainViewer) {
         this.editorApp = mainViewer;
     }
 

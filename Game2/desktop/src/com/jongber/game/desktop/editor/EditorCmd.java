@@ -1,8 +1,8 @@
 package com.jongber.game.desktop.editor;
 
 import com.badlogic.gdx.Gdx;
-import com.jongber.game.desktop.editor.map.MapEditorViewer;
-import com.jongber.game.desktop.editor.room.RoomEditLayer;
+import com.jongber.game.desktop.editor.map.MapEditorView;
+import com.jongber.game.desktop.editor.room.RoomEditView;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,9 +17,9 @@ import javax.swing.JFrame;
 
 public class EditorCmd extends JFrame {
 
-    EditorViewApp viewer;
+    EditorApp viewer;
 
-    static void popUI(EditorViewApp viewer) {
+    static void popUI(EditorApp viewer) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -32,7 +32,7 @@ public class EditorCmd extends JFrame {
         }).start();
     }
 
-    public EditorCmd(EditorViewApp viewer) {
+    public EditorCmd(EditorApp viewer) {
         this.viewer = viewer;
     }
 
@@ -54,7 +54,7 @@ public class EditorCmd extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                viewer.changeView(MapEditorViewer.class);
+                viewer.changeView(MapEditorView.class);
                 EditorCmd.this.setVisible(false);
                 EditorCmd.this.dispose();
             }
@@ -70,7 +70,7 @@ public class EditorCmd extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                viewer.changeView(RoomEditLayer.class);
+                viewer.changeView(RoomEditView.class);
                 EditorCmd.this.setVisible(false);
                 EditorCmd.this.dispose();
             }

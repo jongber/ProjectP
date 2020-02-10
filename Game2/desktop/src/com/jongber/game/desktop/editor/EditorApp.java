@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.event.GameEventHandler;
 
-public class EditorViewApp extends ApplicationAdapter implements InputProcessor {
+public class EditorApp extends ApplicationAdapter implements InputProcessor {
 
     class ChangeViewEvent extends GameEvent {
 
@@ -19,12 +19,12 @@ public class EditorViewApp extends ApplicationAdapter implements InputProcessor 
 
         @Override
         public void handle() {
-            if (EditorViewApp.this.layer != null)
-                EditorViewApp.this.layer.dispose();
+            if (EditorApp.this.layer != null)
+                EditorApp.this.layer.dispose();
             try {
-                EditorViewApp.this.layer = (EditorViewLayer)type.newInstance();
+                EditorApp.this.layer = (EditorView)type.newInstance();
                 layer.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-                layer.setEditorApp(EditorViewApp.this);
+                layer.setEditorApp(EditorApp.this);
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -44,7 +44,7 @@ public class EditorViewApp extends ApplicationAdapter implements InputProcessor 
         }
     }
 
-    EditorViewLayer layer;
+    EditorView layer;
     GameEventHandler handler = new GameEventHandler();
 
     @Override
