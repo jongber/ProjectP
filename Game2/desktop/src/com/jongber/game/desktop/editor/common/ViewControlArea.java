@@ -66,6 +66,8 @@ public class ViewControlArea {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 boolean checked = e.getStateChange() == ItemEvent.SELECTED;
+                if (layer == null)
+                    return;
                 layer.post(new ShowGridEvent(layer, checked));
             }
         });
