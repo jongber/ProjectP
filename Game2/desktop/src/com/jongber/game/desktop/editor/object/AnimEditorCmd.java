@@ -3,13 +3,18 @@ package com.jongber.game.desktop.editor.object;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.editor.common.ViewControlArea;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -19,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class AnimEditorCmd extends JFrame {
@@ -71,11 +77,11 @@ public class AnimEditorCmd extends JFrame {
         return this.asepriteArea.createPanel();
     }
 
-    void onAsepriteLoaded(AsepriteJson json) {
+    void onAsepriteLoaded(BufferedImage img, AsepriteJson json) {
         if (this.animationsArea != null)
             this.remove(this.animationsArea.getPanel());
 
-        this.animationsArea = new AnimationsArea(json);
+        this.animationsArea = new AnimationsArea(img, json);
         this.addAnimationPanel();
     }
 
@@ -97,8 +103,6 @@ public class AnimEditorCmd extends JFrame {
 class AsepriteArea {
     private AnimEditorCmd cmd;
     JButton btLoad;
-
-    AsepriteJson loadedJson;
 
     AsepriteArea(AnimEditorCmd cmd) {
         this.cmd = cmd;
@@ -135,8 +139,11 @@ class AsepriteArea {
                 if (i == JFileChooser.APPROVE_OPTION) {
                     File selcted = fc.getSelectedFile();
                     try {
-                        loadedJson = Utility.readJson(AsepriteJson.class, selcted);
-                        cmd.onAsepriteLoaded(loadedJson);
+                        AsepriteJson json = Utility.readJson(AsepriteJson.class, selcted);
+                        String imgPath = selcted.getParent() + File.separator + json.meta.image;
+                        BufferedImage img = ImageIO.read(new File(imgPath));
+
+                        cmd.onAsepriteLoaded(img ,json);
                     }
                     catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "Invalid AsepriteJson");
@@ -156,9 +163,11 @@ class AnimationsArea {
     JPanel panel;
 
     AsepriteJson json;
+    BufferedImage img;
 
-    AnimationsArea(AsepriteJson json) {
+    AnimationsArea(BufferedImage img, AsepriteJson json) {
         this.json = json;
+        this.img = img;
         initDataModel();
         initTable();
         initPanel();
@@ -184,20 +193,23 @@ class AnimationsArea {
     }
 
     private void initTable() {
-
         for (int row = 0; row < json.meta.frameTags.size(); ++row) {
-            String [] values = new String[model.getColumnCount()];
+            Object [] values = new Object[model.getColumnCount()];
+
             FrameTag tag = json.meta.frameTags.get(row);
             values[0] = tag.name;
 
             for (int col = tag.from + 1; col <= tag.to + 1; ++col) {
-                values[col] = "*";
+                Frame frame = json.frames.get(col - 1);
+                values[col] = new ImageIcon(subImage(frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h));
             }
 
             model.addRow(values);
         }
 
         this.table = new JTable(model);
+//        for (int i = 1; i < model.getColumnCount(); ++ i)
+//            this.table.getColumnModel().getColumn(i).setCellRenderer(new ImageRenderer((ImageIcon)values[i]));
         this.scroll = new JScrollPane(this.table);
     }
 
@@ -206,13 +218,32 @@ class AnimationsArea {
 
         panel.add(this.scroll);
     }
+
+    private Image subImage(int x, int y, int w, int h) {
+        return this.img.getSubimage(x, y, w, h);
+    }
 }
 
 class SaveLoadArea {
 
 }
 
+class ImageRenderer extends DefaultTableCellRenderer {
+    JLabel lbl = new JLabel();
 
+    ImageIcon icon;
+
+    public ImageRenderer(ImageIcon image) {
+        this.icon = image;
+    }
+
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                   boolean hasFocus, int row, int column) {
+        lbl.setText("Hello");
+        lbl.setIcon(icon);
+        return lbl;
+    }
+}
 
 
 
