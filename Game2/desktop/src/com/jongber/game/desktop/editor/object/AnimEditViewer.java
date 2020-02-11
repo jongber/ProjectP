@@ -3,11 +3,11 @@ package com.jongber.game.desktop.editor.object;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.desktop.editor.EditorView;
 
-public class ObjectEditViewer extends EditorView {
+public class AnimEditViewer extends EditorView {
 
     private GameLayer layer;
 
-    public ObjectEditViewer() {
-        ObjectEditorCmd.pop(this);
+    public AnimEditViewer() {
+        AnimEditorCmd.pop(this);
     }
 }
