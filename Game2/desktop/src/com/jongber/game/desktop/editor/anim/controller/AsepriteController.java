@@ -1,6 +1,7 @@
 package com.jongber.game.desktop.editor.anim.controller;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.controller.adapter.InputControlAdapter;
@@ -20,6 +21,10 @@ public class AsepriteController extends InputControlAdapter implements Controlle
 
     @Override
     public void render(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
-
+        for (GameObject object : objects) {
+            AsepriteComponent c = object.getComponent(AsepriteComponent.class);
+            Vector2 pos = object.transform.getWorldPos();
+            batch.draw(c.regions.get(0), pos.x, pos.y);
+        }
     }
 }
