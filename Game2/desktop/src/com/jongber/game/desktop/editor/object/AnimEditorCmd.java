@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Enumeration;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -26,6 +27,7 @@ import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 public class AnimEditorCmd extends JFrame {
 
@@ -45,6 +47,7 @@ public class AnimEditorCmd extends JFrame {
     AnimEditViewer view;
     ViewControlArea viewControlArea;
     AsepriteArea asepriteArea;
+    JPanel animRoot = new JPanel();
     AnimationsArea animationsArea;
 
     AnimEditorCmd(AnimEditViewer view) {
@@ -66,10 +69,26 @@ public class AnimEditorCmd extends JFrame {
         add(panel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.weighty = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 0.2;
         panel = this.createAsepriteArea();
         add(panel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 1;
+        //gbc.weighty = 1;
+        panel = this.initAnimPanel();
+        add(panel, gbc);
+    }
+
+    JPanel initAnimPanel() {
+        animRoot = new JPanel();
+        animRoot.setBorder(BorderFactory.createTitledBorder("Animation Area"));
+        animRoot.setEnabled(false);
+
+        return animRoot;
     }
 
     JPanel createAsepriteArea() {
@@ -78,24 +97,15 @@ public class AnimEditorCmd extends JFrame {
     }
 
     void onAsepriteLoaded(BufferedImage img, AsepriteJson json) {
-        if (this.animationsArea != null)
-            this.remove(this.animationsArea.getPanel());
+        if (this.animRoot.isEnabled()) {
+            this.animRoot.removeAll();
+        }
+        else {
+            this.animRoot.setEnabled(true);
+        }
 
         this.animationsArea = new AnimationsArea(img, json);
-        this.addAnimationPanel();
-    }
-
-    private void addAnimationPanel() {
-        JPanel panel = this.animationsArea.getPanel();
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.weighty = 1;
-        add(panel, gbc);
-
+        this.animationsArea.apply(this.animRoot);
         this.pack();
     }
 }
@@ -160,8 +170,6 @@ class AnimationsArea {
     JTable table;
     JScrollPane scroll;
 
-    JPanel panel;
-
     AsepriteJson json;
     BufferedImage img;
 
@@ -170,11 +178,13 @@ class AnimationsArea {
         this.img = img;
         initDataModel();
         initTable();
-        initPanel();
     }
 
-    JPanel getPanel() {
-        return this.panel;
+    public JPanel apply(JPanel panel) {
+
+        panel.add(scroll);
+
+        return panel;
     }
 
     private void initDataModel() {
@@ -208,15 +218,13 @@ class AnimationsArea {
         }
 
         this.table = new JTable(model);
-//        for (int i = 1; i < model.getColumnCount(); ++ i)
-//            this.table.getColumnModel().getColumn(i).setCellRenderer(new ImageRenderer((ImageIcon)values[i]));
+        Enumeration<TableColumn> e = this.table.getColumnModel().getColumns();
+        while (e.hasMoreElements()) {
+            TableColumn column = e.nextElement();
+            column.setCellRenderer(new CellRenderer());
+        }
+
         this.scroll = new JScrollPane(this.table);
-    }
-
-    private void initPanel() {
-        this.panel = new JPanel();
-
-        panel.add(this.scroll);
     }
 
     private Image subImage(int x, int y, int w, int h) {
@@ -228,19 +236,19 @@ class SaveLoadArea {
 
 }
 
-class ImageRenderer extends DefaultTableCellRenderer {
+class CellRenderer extends DefaultTableCellRenderer {
     JLabel lbl = new JLabel();
 
-    ImageIcon icon;
-
-    public ImageRenderer(ImageIcon image) {
-        this.icon = image;
-    }
-
+    @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                                                    boolean hasFocus, int row, int column) {
-        lbl.setText("Hello");
-        lbl.setIcon(icon);
+        if (value instanceof ImageIcon) {
+            lbl.setIcon((ImageIcon)value);
+        }
+        else {
+            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
+
         return lbl;
     }
 }
