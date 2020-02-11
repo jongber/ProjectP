@@ -1,13 +1,19 @@
-package com.jongber.game.desktop.editor.object;
+package com.jongber.game.desktop.editor.anim;
 
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.desktop.editor.EditorView;
 
 public class AnimEditViewer extends EditorView {
 
-    private GameLayer layer;
+    GameLayer layer;
 
     public AnimEditViewer() {
+        this.layer = new GameLayer();
+
         AnimEditorCmd.pop(this);
+    }
+
+    public GameLayer getLayer() {
+        return this.layer;
     }
 }

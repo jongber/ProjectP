@@ -1,6 +1,7 @@
-package com.jongber.game.desktop.editor.object;
+package com.jongber.game.desktop.editor.anim;
 
 import com.jongber.game.desktop.Utility;
+import com.jongber.game.desktop.editor.anim.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.editor.common.ViewControlArea;
 
 import java.awt.Component;
@@ -9,6 +10,8 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Enumeration;
@@ -96,7 +99,7 @@ public class AnimEditorCmd extends JFrame {
         return this.asepriteArea.createPanel();
     }
 
-    void onAsepriteLoaded(BufferedImage img, AsepriteJson json) {
+    void onAsepriteLoaded(String path, BufferedImage img, AsepriteJson json) {
         if (this.animRoot.isEnabled()) {
             this.animRoot.removeAll();
         }
@@ -107,6 +110,8 @@ public class AnimEditorCmd extends JFrame {
         this.animationsArea = new AnimationsArea(img, json);
         this.animationsArea.apply(this.animRoot);
         this.pack();
+
+        this.view.post(new LoadAsepriteEvent(this.view, path, json));
     }
 }
 
@@ -153,7 +158,7 @@ class AsepriteArea {
                         String imgPath = selcted.getParent() + File.separator + json.meta.image;
                         BufferedImage img = ImageIO.read(new File(imgPath));
 
-                        cmd.onAsepriteLoaded(img ,json);
+                        cmd.onAsepriteLoaded(imgPath, img ,json);
                     }
                     catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "Invalid AsepriteJson");
@@ -178,6 +183,7 @@ class AnimationsArea {
         this.img = img;
         initDataModel();
         initTable();
+        initItemClick();
     }
 
     public JPanel apply(JPanel panel) {
@@ -206,11 +212,11 @@ class AnimationsArea {
         for (int row = 0; row < json.meta.frameTags.size(); ++row) {
             Object [] values = new Object[model.getColumnCount()];
 
-            FrameTag tag = json.meta.frameTags.get(row);
+            AsepriteJson.FrameTag tag = json.meta.frameTags.get(row);
             values[0] = tag.name;
 
             for (int col = tag.from + 1; col <= tag.to + 1; ++col) {
-                Frame frame = json.frames.get(col - 1);
+                AsepriteJson.Frame frame = json.frames.get(col - 1);
                 values[col] = new ImageIcon(subImage(frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h));
             }
 
@@ -229,6 +235,15 @@ class AnimationsArea {
 
     private Image subImage(int x, int y, int w, int h) {
         return this.img.getSubimage(x, y, w, h);
+    }
+
+    private void initItemClick() {
+        this.table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+            }
+        });
     }
 }
 
