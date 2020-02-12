@@ -51,7 +51,7 @@ class EditorCmd extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        JButton button = new JButton("Map");
+        JButton button = new JButton("Map Editor");
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -67,7 +67,7 @@ class EditorCmd extends JFrame {
         gbc.weightx = 1;
         this.add(button, gbc);
 
-        button = new JButton("Room");
+        button = new JButton("Room Editor");
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -82,7 +82,7 @@ class EditorCmd extends JFrame {
         gbc.weightx = 1;
         this.add(button, gbc);
 
-        button = new JButton("Object");
+        button = new JButton("Sprite Editor");
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {

@@ -4,18 +4,15 @@ import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.editor.sprite.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.editor.common.ViewControlArea;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -35,7 +32,7 @@ public class SpriteEditorCmd extends JFrame {
             public void run() {
                 SpriteEditorCmd cmd = new SpriteEditorCmd(view);
                 cmd.init();
-                cmd.setSize(300, 200);
+                cmd.setSize(300, 350);
                 cmd.setVisible(true);
             }
         }).start();
@@ -45,8 +42,7 @@ public class SpriteEditorCmd extends JFrame {
     SpriteEditViewer view;
     ViewControlArea viewControlArea;
     AsepriteArea asepriteArea;
-    JPanel animRoot = new JPanel();
-    AnimationsArea animationsArea;
+    SpriteSheetArea sheetArea;
 
     SpriteEditorCmd(SpriteEditViewer view) {
         this.view = view;
@@ -69,24 +65,13 @@ public class SpriteEditorCmd extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1;
-        gbc.weighty = 0.2;
         panel = this.createAsepriteArea();
         add(panel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.weightx = 1;
-        //gbc.weighty = 1;
-        panel = this.initAnimPanel();
+        panel = this.createSpriteSheetArea();
         add(panel, gbc);
-    }
-
-    JPanel initAnimPanel() {
-        animRoot = new JPanel();
-        animRoot.setBorder(BorderFactory.createTitledBorder("Animation Area"));
-        animRoot.setEnabled(false);
-
-        return animRoot;
     }
 
     JPanel createAsepriteArea() {
@@ -94,19 +79,15 @@ public class SpriteEditorCmd extends JFrame {
         return this.asepriteArea.createPanel();
     }
 
-    void onAsepriteLoaded(String path, BufferedImage img, AsepriteJson json) {
-        if (this.animRoot.isEnabled()) {
-            this.animRoot.removeAll();
-        }
-        else {
-            this.animRoot.setEnabled(true);
-        }
+    JPanel createSpriteSheetArea() {
+        this.sheetArea = new SpriteSheetArea(this);
+        return this.sheetArea.panel;
+    }
 
-        this.animationsArea = new AnimationsArea(img, json);
-        this.animationsArea.apply(this.animRoot);
-        this.pack();
+    void onAsepriteLoaded(String imgPath, AsepriteJson json) {
 
-        this.view.post(new LoadAsepriteEvent(this.view, path, json));
+        this.sheetArea.onLoadAsepriteJson(json, imgPath);
+        this.view.post(new LoadAsepriteEvent(this.view, imgPath, json));
     }
 }
 
@@ -128,7 +109,7 @@ class AsepriteArea {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panel.add(new JLabel("Aseprite:"), gbc);
+        panel.add(new JLabel("Aseprite:  "), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -151,9 +132,8 @@ class AsepriteArea {
                     try {
                         AsepriteJson json = Utility.readJson(AsepriteJson.class, selcted);
                         String imgPath = selcted.getParent() + File.separator + json.meta.image;
-                        BufferedImage img = ImageIO.read(new File(imgPath));
 
-                        cmd.onAsepriteLoaded(imgPath, img ,json);
+                        cmd.onAsepriteLoaded(imgPath, json);
                     }
                     catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "Invalid AsepriteJson");
@@ -165,45 +145,99 @@ class AsepriteArea {
     }
 }
 
-class AnimationsArea {
+class SpriteSheetArea {
+    JButton addSheet;
+    JButton delSheet;
+
     DefaultTableModel model;
     JTable table;
-    JScrollPane scroll;
+    JScrollPane pane;
 
-    AsepriteJson json;
-    BufferedImage img;
+    SpriteEditorCmd cmd;
 
-    AnimationsArea(BufferedImage img, AsepriteJson json) {
-        this.json = json;
-        this.img = img;
-        initDataModel();
+    JPanel panel = new JPanel();
+
+    SpriteSheetArea(SpriteEditorCmd cmd) {
+        this.cmd = cmd;
+        initData();
         initTable();
-        initItemClick();
+        initAddButton();
+        initDelButton();
+        initPanel();
+        setEnable(false);
     }
 
-    public JPanel apply(JPanel panel) {
-
-        panel.add(scroll);
-
-        return panel;
-    }
-
-    private void initDataModel() {
+    private void initData() {
         model = new DefaultTableModel() {
-            @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
 
-        model.addColumn("Tag");
+        model.addColumn("Name");
+    }
 
+    private void initTable() {
+        table = new JTable(model);
+        pane = new JScrollPane(table);
+    }
+
+    private void initAddButton() {
+        addSheet = new JButton("Add");
+    }
+
+    private void initDelButton() {
+        this.delSheet = new JButton("Del ");
+    }
+
+    private void initPanel() {
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder("Animation list"));
+
+        panel.add(pane, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
+        buttonPanel.add(this.addSheet);
+        buttonPanel.add(this.delSheet);
+
+        panel.add(buttonPanel, BorderLayout.EAST);
+    }
+
+    void setEnable(boolean enable) {
+        this.panel.setEnabled(enable);
+        this.pane.setEnabled(enable);
+        this.addSheet.setEnabled(enable);
+        this.delSheet.setEnabled(enable);
+    }
+
+    void onLoadAsepriteJson(AsepriteJson json, String path) {
+        this.resetTable();
+        this.setEnable(true);
+
+        this.adjustColumn(json);
+        this.addRows(json);
+
+        this.cmd.pack();
+    }
+
+    private void resetTable() {
+        panel.removeAll();
+        initData();
+        initTable();
+        initAddButton();
+        initDelButton();
+        initPanel();
+    }
+
+    private void adjustColumn(AsepriteJson json) {
         for (int i = 0; i < json.frames.size(); ++i) {
             model.addColumn(i);
         }
     }
 
-    private void initTable() {
+    private void addRows(AsepriteJson json) {
         for (int row = 0; row < json.meta.frameTags.size(); ++row) {
             String [] values = new String[model.getColumnCount()];
 
@@ -217,29 +251,6 @@ class AnimationsArea {
 
             model.addRow(values);
         }
-
-        this.table = new JTable(model);
-
-        this.scroll = new JScrollPane(this.table);
-    }
-
-    private Image subImage(int x, int y, int w, int h) {
-        return this.img.getSubimage(x, y, w, h);
-    }
-
-    private void initItemClick() {
-        this.table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                super.mouseClicked(mouseEvent);
-//                int row = jTable1.rowAtPoint(evt.getPoint());
-//                int col = jTable1.columnAtPoint(evt.getPoint());
-//                if (row >= 0 && col >= 0) {
-//            ......
-//
-//                }
-            }
-        });
     }
 }
 
