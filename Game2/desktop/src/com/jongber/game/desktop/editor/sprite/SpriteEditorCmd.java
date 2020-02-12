@@ -184,10 +184,26 @@ class SpriteSheetArea {
 
     private void initAddButton() {
         addSheet = new JButton("Add");
+        addSheet.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String name = JOptionPane.showInputDialog("Enter Animation Name");
+                addRow(name);
+            }
+        });
     }
 
     private void initDelButton() {
         this.delSheet = new JButton("Del ");
+        this.delSheet.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int[] selected = table.getSelectedRows();
+                for (int i = selected.length - 1; i >= 0; --i) {
+                    model.removeRow(selected[i]);
+                }
+            }
+        });
     }
 
     private void initPanel() {
@@ -251,6 +267,10 @@ class SpriteSheetArea {
 
             model.addRow(values);
         }
+    }
+
+    private void addRow(String name) {
+        this.model.addRow(new String[] {name});
     }
 }
 
