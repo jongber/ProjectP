@@ -3,6 +3,7 @@ package com.jongber.game.desktop.editor.sprite;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.jongber.game.core.GameLayer;
+import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.desktop.editor.EditorView;
 import com.jongber.game.desktop.editor.sprite.controller.AsepriteController;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
@@ -34,6 +35,11 @@ public class SpriteEditViewer extends EditorView {
     @Override
     public void resize (int width, int height) {
         this.layer.resize(width, height);
+    }
+
+    public void dispose() {
+        AssetManager.dispose();
+        this.layer.dispose();
     }
 
     public GameLayer getLayer() {

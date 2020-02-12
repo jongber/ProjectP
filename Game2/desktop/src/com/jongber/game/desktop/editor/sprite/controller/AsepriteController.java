@@ -23,8 +23,12 @@ public class AsepriteController extends InputControlAdapter implements Controlle
     public void render(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
         for (GameObject object : objects) {
             AsepriteComponent c = object.getComponent(AsepriteComponent.class);
+            //c.currentAnimation.getNext(elapsed);
             Vector2 pos = object.transform.getWorldPos();
-            batch.draw(c.regions.get(0), pos.x, pos.y);
+            if (c.currentAnimation != null)
+                batch.draw(c.currentAnimation.getNext(elapsed), pos.x, pos.y);
+            else
+                batch.draw(c.totalImages.get(0), pos.x, pos.y);
         }
     }
 }

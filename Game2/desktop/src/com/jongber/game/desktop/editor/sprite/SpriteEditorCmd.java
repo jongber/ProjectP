@@ -63,7 +63,7 @@ public class SpriteEditorCmd extends JFrame {
                 Gdx.app.exit();
             }
         });
-        
+
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
