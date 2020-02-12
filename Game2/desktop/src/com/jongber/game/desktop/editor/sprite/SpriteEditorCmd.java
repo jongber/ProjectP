@@ -1,5 +1,6 @@
 package com.jongber.game.desktop.editor.sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.editor.sprite.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.editor.common.ViewControlArea;
@@ -9,6 +10,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 import javax.swing.BorderFactory;
@@ -21,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
@@ -52,7 +56,14 @@ public class SpriteEditorCmd extends JFrame {
     }
 
     void init() {
-
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                super.windowClosing(windowEvent);
+                Gdx.app.exit();
+            }
+        });
+        
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -179,6 +190,8 @@ class SpriteSheetArea {
 
     private void initTable() {
         table = new JTable(model);
+        table.setRowSelectionAllowed(true);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         pane = new JScrollPane(table);
     }
 
