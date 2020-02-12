@@ -7,14 +7,14 @@ import com.jongber.game.desktop.editor.anim.controller.AsepriteController;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
 import com.jongber.game.desktop.viewer.controller.CameraController;
 
-public class AnimEditViewer extends EditorView {
+public class SpriteEditViewer extends EditorView {
 
     GameLayer layer;
 
-    public AnimEditViewer() {
+    public SpriteEditViewer() {
         initLayer();
 
-        AnimEditorCmd.pop(this);
+        SpriteEditorCmd.pop(this);
     }
 
     public void render(float elapsed) {
@@ -36,5 +36,7 @@ public class AnimEditViewer extends EditorView {
         this.layer.registerController(new AsepriteController());
         this.layer.registerController(new CameraController());
         this.layer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
+        Gdx.input.setInputProcessor(layer.getInput());
     }
 }

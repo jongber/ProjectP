@@ -2,7 +2,7 @@ package com.jongber.game.desktop.editor;
 
 import com.badlogic.gdx.Gdx;
 import com.jongber.game.desktop.editor.map.MapEditorView;
-import com.jongber.game.desktop.editor.anim.AnimEditViewer;
+import com.jongber.game.desktop.editor.anim.SpriteEditViewer;
 import com.jongber.game.desktop.editor.room.RoomEditView;
 
 import java.awt.GridBagConstraints;
@@ -86,7 +86,7 @@ class EditorCmd extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                viewApp.changeView(AnimEditViewer.class);
+                viewApp.changeView(SpriteEditViewer.class);
                 EditorCmd.this.dispose();
             }
         });

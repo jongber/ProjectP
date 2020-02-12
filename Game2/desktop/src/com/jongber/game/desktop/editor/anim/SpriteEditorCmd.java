@@ -4,7 +4,6 @@ import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.editor.anim.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.editor.common.ViewControlArea;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -14,11 +13,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Enumeration;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -28,17 +25,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 
-public class AnimEditorCmd extends JFrame {
+public class SpriteEditorCmd extends JFrame {
 
-    public static void pop(AnimEditViewer view) {
+    public static void pop(SpriteEditViewer view) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                AnimEditorCmd cmd = new AnimEditorCmd(view);
+                SpriteEditorCmd cmd = new SpriteEditorCmd(view);
                 cmd.init();
                 cmd.setSize(300, 200);
                 cmd.setVisible(true);
@@ -47,15 +42,15 @@ public class AnimEditorCmd extends JFrame {
     }
 
     String basePath;
-    AnimEditViewer view;
+    SpriteEditViewer view;
     ViewControlArea viewControlArea;
     AsepriteArea asepriteArea;
     JPanel animRoot = new JPanel();
     AnimationsArea animationsArea;
 
-    AnimEditorCmd(AnimEditViewer view) {
+    SpriteEditorCmd(SpriteEditViewer view) {
         this.view = view;
-        this.viewControlArea = new ViewControlArea(this, view, null);
+        this.viewControlArea = new ViewControlArea(this, view, view.getLayer());
         this.basePath = System.getProperty("user.dir") +
                 File.separator + "android" + File.separator + "assets";
     }
@@ -116,10 +111,10 @@ public class AnimEditorCmd extends JFrame {
 }
 
 class AsepriteArea {
-    private AnimEditorCmd cmd;
+    private SpriteEditorCmd cmd;
     JButton btLoad;
 
-    AsepriteArea(AnimEditorCmd cmd) {
+    AsepriteArea(SpriteEditorCmd cmd) {
         this.cmd = cmd;
         initLoadButton();
     }
@@ -210,25 +205,20 @@ class AnimationsArea {
 
     private void initTable() {
         for (int row = 0; row < json.meta.frameTags.size(); ++row) {
-            Object [] values = new Object[model.getColumnCount()];
+            String [] values = new String[model.getColumnCount()];
 
             AsepriteJson.FrameTag tag = json.meta.frameTags.get(row);
             values[0] = tag.name;
 
             for (int col = tag.from + 1; col <= tag.to + 1; ++col) {
                 AsepriteJson.Frame frame = json.frames.get(col - 1);
-                values[col] = new ImageIcon(subImage(frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h));
+                values[col] = "*";
             }
 
             model.addRow(values);
         }
 
         this.table = new JTable(model);
-        Enumeration<TableColumn> e = this.table.getColumnModel().getColumns();
-        while (e.hasMoreElements()) {
-            TableColumn column = e.nextElement();
-            column.setCellRenderer(new CellRenderer());
-        }
 
         this.scroll = new JScrollPane(this.table);
     }
@@ -242,6 +232,12 @@ class AnimationsArea {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
+//                int row = jTable1.rowAtPoint(evt.getPoint());
+//                int col = jTable1.columnAtPoint(evt.getPoint());
+//                if (row >= 0 && col >= 0) {
+//            ......
+//
+//                }
             }
         });
     }
@@ -250,25 +246,6 @@ class AnimationsArea {
 class SaveLoadArea {
 
 }
-
-class CellRenderer extends DefaultTableCellRenderer {
-    JLabel lbl = new JLabel();
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                   boolean hasFocus, int row, int column) {
-        if (value instanceof ImageIcon) {
-            lbl.setIcon((ImageIcon)value);
-        }
-        else {
-            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        }
-
-        return lbl;
-    }
-}
-
-
 
 
 

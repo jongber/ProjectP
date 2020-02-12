@@ -4,17 +4,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.event.GameEvent;
-import com.jongber.game.desktop.editor.anim.AnimEditViewer;
+import com.jongber.game.desktop.editor.anim.SpriteEditViewer;
 import com.jongber.game.desktop.editor.anim.AsepriteJson;
 import com.jongber.game.desktop.editor.anim.component.AsepriteComponent;
 
 public class LoadAsepriteEvent extends GameEvent {
 
-    AnimEditViewer viewer;
+    SpriteEditViewer viewer;
     String path;
     AsepriteJson json;
 
-    public LoadAsepriteEvent(AnimEditViewer viewer, String path, AsepriteJson json) {
+    public LoadAsepriteEvent(SpriteEditViewer viewer, String path, AsepriteJson json) {
         this.viewer = viewer;
         this.path = path;
         this.json = json;
