@@ -1,9 +1,9 @@
-package com.jongber.game.desktop.editor.anim.component;
+package com.jongber.game.desktop.editor.sprite.component;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jongber.game.core.component.Component;
-import com.jongber.game.desktop.editor.anim.AsepriteJson;
+import com.jongber.game.desktop.editor.sprite.AsepriteJson;
 
 import java.util.ArrayList;
 import java.util.List;

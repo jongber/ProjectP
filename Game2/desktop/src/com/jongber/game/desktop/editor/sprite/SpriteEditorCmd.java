@@ -1,7 +1,7 @@
-package com.jongber.game.desktop.editor.anim;
+package com.jongber.game.desktop.editor.sprite;
 
 import com.jongber.game.desktop.Utility;
-import com.jongber.game.desktop.editor.anim.event.LoadAsepriteEvent;
+import com.jongber.game.desktop.editor.sprite.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.editor.common.ViewControlArea;
 
 import java.awt.GridBagConstraints;

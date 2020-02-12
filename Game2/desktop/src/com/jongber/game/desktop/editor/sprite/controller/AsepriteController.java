@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.editor.anim.controller;
+package com.jongber.game.desktop.editor.sprite.controller;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -6,7 +6,7 @@ import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.controller.adapter.InputControlAdapter;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import com.jongber.game.desktop.editor.anim.component.AsepriteComponent;
+import com.jongber.game.desktop.editor.sprite.component.AsepriteComponent;
 
 import java.util.List;
 

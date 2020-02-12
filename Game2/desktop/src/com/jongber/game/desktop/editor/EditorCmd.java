@@ -2,7 +2,7 @@ package com.jongber.game.desktop.editor;
 
 import com.badlogic.gdx.Gdx;
 import com.jongber.game.desktop.editor.map.MapEditorView;
-import com.jongber.game.desktop.editor.anim.SpriteEditViewer;
+import com.jongber.game.desktop.editor.sprite.SpriteEditViewer;
 import com.jongber.game.desktop.editor.room.RoomEditView;
 
 import java.awt.GridBagConstraints;

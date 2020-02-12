@@ -1,9 +1,9 @@
-package com.jongber.game.desktop.editor.anim;
+package com.jongber.game.desktop.editor.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.desktop.editor.EditorView;
-import com.jongber.game.desktop.editor.anim.controller.AsepriteController;
+import com.jongber.game.desktop.editor.sprite.controller.AsepriteController;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
 import com.jongber.game.desktop.viewer.controller.CameraController;
 

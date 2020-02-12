@@ -319,11 +319,11 @@ class SaveLoadArea {
             public void actionPerformed(ActionEvent actionEvent) {
 
                 String jsonPath = cmd.basePath
-                        + File.separator + cmd.infoArea.nameText.getText() + ".json";
+                        + File.separator + cmd.infoArea.nameText.getText() + ".map";
 
                 JFileChooser fc = new JFileChooser(cmd.basePath);
                 fc.setSelectedFile(new File(jsonPath));
-                fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+                fc.setFileFilter(new FileNameExtensionFilter("Map data file", "map"));
 
                 int i = fc.showSaveDialog(null);
                 if (i == JFileChooser.APPROVE_OPTION) {
@@ -373,7 +373,7 @@ class SaveLoadArea {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JFileChooser fc = new JFileChooser(cmd.basePath);
-                fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+                fc.setFileFilter(new FileNameExtensionFilter("Map data file", "map"));
                 int i = fc.showOpenDialog(null);
                 if (i == JFileChooser.APPROVE_OPTION) {
                     try {
@@ -650,7 +650,7 @@ class RoomArea {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JFileChooser fc = new JFileChooser(basePath);
-                fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+                fc.setFileFilter(new FileNameExtensionFilter("Room data file", "room"));
 
                 int i = fc.showOpenDialog(null);
                 if (i == JFileChooser.APPROVE_OPTION) {

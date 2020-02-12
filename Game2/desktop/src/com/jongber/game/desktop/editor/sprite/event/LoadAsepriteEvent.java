@@ -1,12 +1,12 @@
-package com.jongber.game.desktop.editor.anim.event;
+package com.jongber.game.desktop.editor.sprite.event;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.event.GameEvent;
-import com.jongber.game.desktop.editor.anim.SpriteEditViewer;
-import com.jongber.game.desktop.editor.anim.AsepriteJson;
-import com.jongber.game.desktop.editor.anim.component.AsepriteComponent;
+import com.jongber.game.desktop.editor.sprite.SpriteEditViewer;
+import com.jongber.game.desktop.editor.sprite.AsepriteJson;
+import com.jongber.game.desktop.editor.sprite.component.AsepriteComponent;
 
 public class LoadAsepriteEvent extends GameEvent {
 

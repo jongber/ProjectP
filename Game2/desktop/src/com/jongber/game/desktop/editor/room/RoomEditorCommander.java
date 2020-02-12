@@ -617,11 +617,11 @@ class SaveLoadArea {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    File baseFile = new File(jsonPath + cmd.property.roomNameField.getText() + ".json");
+                    File baseFile = new File(jsonPath + cmd.property.roomNameField.getText() + ".room");
 
                     JFileChooser fc = new JFileChooser(baseFile);
                     fc.setSelectedFile(baseFile);
-                    fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+                    fc.setFileFilter(new FileNameExtensionFilter("Room data file", "room"));
 
                     int i = fc.showSaveDialog(null);
                     if (i == JFileChooser.APPROVE_OPTION) {
@@ -667,7 +667,7 @@ class SaveLoadArea {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JFileChooser fc = new JFileChooser(jsonPath);
-                fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+                fc.setFileFilter(new FileNameExtensionFilter("Room data file", "room"));
                 int i = fc.showOpenDialog(null);
                 if (i == JFileChooser.APPROVE_OPTION) {
                     File selected = fc.getSelectedFile();

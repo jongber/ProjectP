@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.editor.anim;
+package com.jongber.game.desktop.editor.sprite;
 
 import java.util.ArrayList;
 import java.util.List;
