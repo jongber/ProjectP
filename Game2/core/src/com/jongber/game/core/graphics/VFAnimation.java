@@ -62,6 +62,10 @@ public class VFAnimation {
         return this.asset.getTextureRegion(curIndex);
     }
 
+    public TextureRegion getCurrent() {
+        return this.asset.getTextureRegion(curIndex);
+    }
+
     public PlayMode getMode() {
         return this.mode;
     }

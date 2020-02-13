@@ -66,7 +66,7 @@ public class AsepriteController extends InputControlAdapter implements Controlle
                 if (data != null) {
                     pivot = data.pivot;
                 }
-                TextureRegion region = c.currentAnimation.getNext(elapsed);
+                TextureRegion region = c.currentAnimation.getCurrent();
                 shapeRenderer.rect(pos.x + pivot.x, pos.y + pivot.y, region.getRegionWidth(), region.getRegionHeight());
             }
         }
