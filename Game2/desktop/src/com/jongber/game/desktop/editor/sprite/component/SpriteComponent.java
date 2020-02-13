@@ -26,7 +26,6 @@ public class SpriteComponent extends Component {
     }
 
     Texture texture;
-    AsepriteJson json;
 
     public List<Integer> totalDurations;
     public List<TextureRegion> totalImages = new ArrayList<>();
@@ -35,7 +34,6 @@ public class SpriteComponent extends Component {
     public VFAnimation currentAnimation;
 
     public SpriteComponent(AsepriteJson json, Texture texture) {
-        this.json = json;
         this.texture = texture;
 
         this.totalDurations = new ArrayList<>();
