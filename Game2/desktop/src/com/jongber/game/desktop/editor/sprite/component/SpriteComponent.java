@@ -23,6 +23,11 @@ public class SpriteComponent extends Component {
         public AnimData(AnimationAsset asset) {
             this.asset = asset;
         }
+
+        public AnimData(AnimationAsset asset, Vector2 pivot) {
+            this.asset = asset;
+            this.pivot = pivot;
+        }
     }
 
     Texture texture;

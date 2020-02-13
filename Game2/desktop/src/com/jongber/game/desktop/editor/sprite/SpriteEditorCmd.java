@@ -1,9 +1,12 @@
 package com.jongber.game.desktop.editor.sprite;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
+import com.jongber.game.core.asset.AnimationAsset;
+import com.jongber.game.core.graphics.VFAnimation;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.editor.sprite.component.SpriteComponent;
 import com.jongber.game.desktop.editor.sprite.event.AddSpriteEvent;
@@ -23,6 +26,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -340,33 +346,85 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
     void onDoubleClicked(int row, int col) {
 
         String name = (String)model.getValueAt(row, 0);
-        String pivotStr = (String)model.getValueAt(row, model.getColumnCount() - 1);
 
         if (col == table.getColumnCount() - 1) {    // the last column..
-            int result = JOptionPane.showConfirmDialog(null,
-                    this.pivopPanel,
-                    "Enter Pivot " + pivotStr,
-                    JOptionPane.OK_CANCEL_OPTION);
-            if (result == JOptionPane.OK_OPTION) {
-                try {
-                    float x = Float.parseFloat(pivotX.getText());
-                    float y = Float.parseFloat(pivotY.getText());
+            String pivotStr = (String)model.getValueAt(row, model.getColumnCount() - 1);
+            this.adjustPivot(name, pivotStr);
+        }
+        else if (col != 0) {
+            this.adjustFrame(name, row, col);
+        }
+    }
 
-                    this.layer.post(new CallbackEvent(new CallbackEvent.Callback() {
-                        @Override
-                        public void invoke() {
-                            synchronized (SpriteSheetArea.this) {
+    private void adjustFrame(String name, int row, int col) {
+        this.layer.post(new CallbackEvent(new CallbackEvent.Callback() {
+            @Override
+            public void invoke() {
+                synchronized (this) {
+                    List<Integer> frames = new ArrayList<>();
 
-                                SpriteComponent c = created.getComponent(SpriteComponent.class);
-                                SpriteComponent.AnimData data = c.assetMap.get(name);
-                                data.pivot = new Vector2(x, y);
+                    for (int i = 1; i < model.getColumnCount() - 1; ++ i) {
+                        String value = (String)model.getValueAt(row, i);
+                        if (col == i) {
+                            if (value == null || value.equals("")) {
+                                value = "*";
                             }
+                            else if (value.equals("*")) {
+                                value = "";
+                            }
+
+                            model.setValueAt(value, row, i);
                         }
-                    }));
+
+                        if (value != null && value.equals("*")) {
+                            frames.add(i - 1);
+                        }
+                    }
+
+                    SpriteComponent c = created.getComponent(SpriteComponent.class);
+
+                    List<Integer> durations = new ArrayList<>();
+                    List<TextureRegion> regions = new ArrayList<>();
+
+                    for (int i = 0; i < frames.size(); ++i) {
+                        regions.add(c.totalImages.get(frames.get(i)));
+                        durations.add(c.totalDurations.get(frames.get(i)));
+                    }
+
+                    AnimationAsset asset = new AnimationAsset(name, regions, durations);
+                    SpriteComponent.AnimData old = c.assetMap.remove(name);
+                    c.assetMap.put(name, new SpriteComponent.AnimData(asset, old.pivot));
+                    c.currentAnimation = new VFAnimation(asset, VFAnimation.PlayMode.LOOP);
                 }
-                catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null, "Invalid Pivot value, must float plz");
-                }
+            }
+        }));
+    }
+
+    private void adjustPivot(String name, String pivotStr) {
+
+        int result = JOptionPane.showConfirmDialog(null,
+                this.pivopPanel,
+                "Enter Pivot " + pivotStr,
+                JOptionPane.OK_CANCEL_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                float x = Float.parseFloat(pivotX.getText());
+                float y = Float.parseFloat(pivotY.getText());
+
+                this.layer.post(new CallbackEvent(new CallbackEvent.Callback() {
+                    @Override
+                    public void invoke() {
+                        synchronized (SpriteSheetArea.this) {
+                            SpriteComponent c = created.getComponent(SpriteComponent.class);
+                            SpriteComponent.AnimData data = c.assetMap.get(name);
+                            data.pivot = new Vector2(x, y);
+                        }
+                    }
+                }));
+            }
+            catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid Pivot value, must float plz");
             }
         }
     }
