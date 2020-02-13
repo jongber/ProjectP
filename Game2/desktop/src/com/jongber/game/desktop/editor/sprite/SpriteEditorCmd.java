@@ -1,7 +1,10 @@
 package com.jongber.game.desktop.editor.sprite;
 
 import com.badlogic.gdx.Gdx;
+import com.jongber.game.core.GameLayer;
+import com.jongber.game.core.GameObject;
 import com.jongber.game.desktop.Utility;
+import com.jongber.game.desktop.editor.sprite.event.AddSpriteEvent;
 import com.jongber.game.desktop.editor.sprite.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.editor.common.ViewControlArea;
 
@@ -98,7 +101,7 @@ public class SpriteEditorCmd extends JFrame {
     void onAsepriteLoaded(String imgPath, AsepriteJson json) {
 
         this.sheetArea.onLoadAsepriteJson(json, imgPath);
-        this.view.post(new LoadAsepriteEvent(this.view, imgPath, json));
+        this.view.post(new LoadAsepriteEvent(this.view, imgPath, json, this.sheetArea));
     }
 }
 
@@ -156,7 +159,7 @@ class AsepriteArea {
     }
 }
 
-class SpriteSheetArea {
+class SpriteSheetArea implements LoadAsepriteEvent.Callback {
     JButton addSheet;
     JButton delSheet;
 
@@ -166,10 +169,14 @@ class SpriteSheetArea {
 
     SpriteEditorCmd cmd;
 
+    GameObject created;
+    GameLayer layer;
+
     JPanel panel = new JPanel();
 
     SpriteSheetArea(SpriteEditorCmd cmd) {
         this.cmd = cmd;
+        this.layer = cmd.view.getLayer();
         initData();
         initTable();
         initAddButton();
@@ -201,7 +208,7 @@ class SpriteSheetArea {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String name = JOptionPane.showInputDialog("Enter Animation Name");
-                addRow(name);
+                addNewSprite(name);
             }
         });
     }
@@ -282,8 +289,14 @@ class SpriteSheetArea {
         }
     }
 
-    private void addRow(String name) {
+    private void addNewSprite(String name) {
         this.model.addRow(new String[] {name});
+        this.layer.post(new AddSpriteEvent(this.created, name));
+    }
+
+    @Override
+    public void callback(GameObject created) {
+        this.created = created;
     }
 }
 

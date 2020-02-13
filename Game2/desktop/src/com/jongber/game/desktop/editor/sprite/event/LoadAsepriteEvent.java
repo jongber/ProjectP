@@ -10,14 +10,23 @@ import com.jongber.game.desktop.editor.sprite.component.AsepriteComponent;
 
 public class LoadAsepriteEvent extends GameEvent {
 
+    public interface Callback {
+        void callback(GameObject created);
+    }
+
     SpriteEditViewer viewer;
     String path;
     AsepriteJson json;
+    Callback callback;
 
-    public LoadAsepriteEvent(SpriteEditViewer viewer, String path, AsepriteJson json) {
+    public LoadAsepriteEvent(SpriteEditViewer viewer,
+                             String path,
+                             AsepriteJson json,
+                             Callback callback) {
         this.viewer = viewer;
         this.path = path;
         this.json = json;
+        this.callback = callback;
     }
 
     @Override
@@ -29,5 +38,7 @@ public class LoadAsepriteEvent extends GameEvent {
         o.addComponent(c);
 
         this.viewer.getLayer().addObject(o);
+
+        this.callback.callback(o);
     }
 }

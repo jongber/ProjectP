@@ -8,6 +8,7 @@ import com.jongber.game.core.component.Component;
 import com.jongber.game.core.graphics.VFAnimation;
 import com.jongber.game.desktop.editor.sprite.AsepriteJson;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ public class AsepriteComponent extends Component {
     Texture texture;
     AsepriteJson json;
 
+    public List<Integer> totalDurations;
     public List<TextureRegion> totalImages = new ArrayList<>();
     public Map<String, AnimData> assetMap = new HashMap<>();
 
@@ -36,7 +38,7 @@ public class AsepriteComponent extends Component {
         this.json = json;
         this.texture = texture;
 
-        List<Integer> totalDurations = new ArrayList<>();
+        this.totalDurations = new ArrayList<>();
         for (AsepriteJson.Frame f : json.frames) {
             TextureRegion region = new TextureRegion(texture);
             region.setRegion(f.frame.x, f.frame.y, f.frame.w, f.frame.h);
