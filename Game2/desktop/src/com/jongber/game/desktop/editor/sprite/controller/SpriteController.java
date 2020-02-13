@@ -10,11 +10,11 @@ import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.controller.adapter.InputControlAdapter;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import com.jongber.game.desktop.editor.sprite.component.AsepriteComponent;
+import com.jongber.game.desktop.editor.sprite.component.SpriteComponent;
 
 import java.util.List;
 
-public class AsepriteController extends InputControlAdapter implements Controller.Renderer, Controller.PostRenderer {
+public class SpriteController extends InputControlAdapter implements Controller.Renderer, Controller.PostRenderer {
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private GameObject selected;
@@ -23,7 +23,7 @@ public class AsepriteController extends InputControlAdapter implements Controlle
 
     @Override
     public void build(List<GameObject> graph) {
-        this.objects = this.buildSimple(graph, AsepriteComponent.class);
+        this.objects = this.buildSimple(graph, SpriteComponent.class);
         if (this.objects.size() != 0) {
             this.selected = this.objects.get(0);
         }
@@ -32,10 +32,10 @@ public class AsepriteController extends InputControlAdapter implements Controlle
     @Override
     public void render(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
         for (GameObject object : objects) {
-            AsepriteComponent c = object.getComponent(AsepriteComponent.class);
+            SpriteComponent c = object.getComponent(SpriteComponent.class);
             Vector2 pos = object.transform.getWorldPos();
-            if (c.currentAnimation != null) {
-                AsepriteComponent.AnimData data = c.assetMap.get(c.currentAnimation.getName());
+            if (c.currentAnimation != null && c.currentAnimation.canPlay()) {
+                SpriteComponent.AnimData data = c.assetMap.get(c.currentAnimation.getName());
                 Vector2 pivot = new Vector2();
                 if (data != null) {
                     pivot = data.pivot;
@@ -58,11 +58,11 @@ public class AsepriteController extends InputControlAdapter implements Controlle
         shapeRenderer.setColor(Color.RED);
 
         for (GameObject object : this.objects) {
-            AsepriteComponent c = object.getComponent(AsepriteComponent.class);
+            SpriteComponent c = object.getComponent(SpriteComponent.class);
             Vector2 pos = object.transform.getWorldPos();
 
-            if (c.currentAnimation != null) {
-                AsepriteComponent.AnimData data = c.assetMap.get(c.currentAnimation.getName());
+            if (c.currentAnimation != null && c.currentAnimation.canPlay()) {
+                SpriteComponent.AnimData data = c.assetMap.get(c.currentAnimation.getName());
                 Vector2 pivot = new Vector2();
                 if (data != null) {
                     pivot = data.pivot;
@@ -106,12 +106,11 @@ public class AsepriteController extends InputControlAdapter implements Controlle
 
         this.pressed.set(worldX, worldY);
 
-        AsepriteComponent c = this.selected.getComponent(AsepriteComponent.class);
+        SpriteComponent c = this.selected.getComponent(SpriteComponent.class);
         String name = c.currentAnimation.getName();
-        AsepriteComponent.AnimData a = c.assetMap.get(name);
-        a.pivot.add(drag);
-
-//        this.selected.transform.local.translate(drag);
+        SpriteComponent.AnimData a = c.assetMap.get(name);
+        if (c.currentAnimation.canPlay())
+            a.pivot.add(drag);
 
         return false;
     }

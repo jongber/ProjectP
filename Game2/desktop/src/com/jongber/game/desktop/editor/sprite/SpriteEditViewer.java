@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.desktop.editor.EditorView;
-import com.jongber.game.desktop.editor.sprite.controller.AsepriteController;
+import com.jongber.game.desktop.editor.sprite.controller.SpriteController;
 import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
 import com.jongber.game.desktop.viewer.controller.CameraController;
 
@@ -48,7 +48,7 @@ public class SpriteEditViewer extends EditorView {
 
     void initLayer() {
         this.layer = new GameLayer();
-        this.layer.registerController(new AsepriteController());
+        this.layer.registerController(new SpriteController());
         this.layer.registerController(new CameraController());
         this.layer.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 

@@ -1,10 +1,9 @@
 package com.jongber.game.desktop.editor.sprite.event;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AnimationAsset;
 import com.jongber.game.core.event.GameEvent;
-import com.jongber.game.desktop.editor.sprite.component.AsepriteComponent;
+import com.jongber.game.desktop.editor.sprite.component.SpriteComponent;
 
 import java.util.ArrayList;
 
@@ -21,9 +20,9 @@ public class AddSpriteEvent extends GameEvent {
     @Override
     public void handle() {
         AnimationAsset asset = new AnimationAsset(this.name, new ArrayList<>(), new ArrayList<>());
-        AsepriteComponent.AnimData data = new AsepriteComponent.AnimData(asset);
+        SpriteComponent.AnimData data = new SpriteComponent.AnimData(asset);
 
-        AsepriteComponent c = this.object.getComponent(AsepriteComponent.class);
+        SpriteComponent c = this.object.getComponent(SpriteComponent.class);
         c.assetMap.put(name, data);
     }
 }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AnimationAsset;
 import com.jongber.game.core.event.GameEvent;
-import com.jongber.game.desktop.editor.sprite.component.AsepriteComponent;
+import com.jongber.game.desktop.editor.sprite.component.SpriteComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class AdjustSpriteFrameEvent extends GameEvent {
 
     @Override
     public void handle() {
-        AsepriteComponent c = this.created.getComponent(AsepriteComponent.class);
+        SpriteComponent c = this.created.getComponent(SpriteComponent.class);
 
         List<Integer> durations = new ArrayList<>();
         List<TextureRegion> regions = new ArrayList<>();
@@ -35,6 +35,6 @@ public class AdjustSpriteFrameEvent extends GameEvent {
 
         AnimationAsset asset = new AnimationAsset(name, regions, durations);
         c.assetMap.remove(name);
-        c.assetMap.put(name, new AsepriteComponent.AnimData(asset));
+        c.assetMap.put(name, new SpriteComponent.AnimData(asset));
     }
 }

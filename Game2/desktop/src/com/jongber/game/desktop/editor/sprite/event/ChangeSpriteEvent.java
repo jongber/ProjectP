@@ -3,7 +3,7 @@ package com.jongber.game.desktop.editor.sprite.event;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.graphics.VFAnimation;
-import com.jongber.game.desktop.editor.sprite.component.AsepriteComponent;
+import com.jongber.game.desktop.editor.sprite.component.SpriteComponent;
 
 public class ChangeSpriteEvent extends GameEvent {
 
@@ -17,8 +17,8 @@ public class ChangeSpriteEvent extends GameEvent {
 
     @Override
     public void handle() {
-        AsepriteComponent c = this.object.getComponent(AsepriteComponent.class);
-        AsepriteComponent.AnimData asset = c.assetMap.get(name);
+        SpriteComponent c = this.object.getComponent(SpriteComponent.class);
+        SpriteComponent.AnimData asset = c.assetMap.get(name);
         c.currentAnimation = new VFAnimation(asset.asset, VFAnimation.PlayMode.LOOP);
     }
 }

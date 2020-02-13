@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AsepriteComponent extends Component {
+public class SpriteComponent extends Component {
 
     public static class AnimData {
         public AnimationAsset asset;
@@ -34,7 +34,7 @@ public class AsepriteComponent extends Component {
 
     public VFAnimation currentAnimation;
 
-    public AsepriteComponent(AsepriteJson json, Texture texture) {
+    public SpriteComponent(AsepriteJson json, Texture texture) {
         this.json = json;
         this.texture = texture;
 

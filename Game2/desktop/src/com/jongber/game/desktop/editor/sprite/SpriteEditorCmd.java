@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.desktop.Utility;
+import com.jongber.game.desktop.editor.sprite.component.SpriteComponent;
 import com.jongber.game.desktop.editor.sprite.event.AddSpriteEvent;
 import com.jongber.game.desktop.editor.sprite.event.ChangeSpriteEvent;
 import com.jongber.game.desktop.editor.sprite.event.LoadAsepriteEvent;
@@ -31,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
@@ -174,8 +176,12 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
 
     GameObject created;
     GameLayer layer;
+    AsepriteJson json;
+    String imgPath;
 
     JPanel panel = new JPanel();
+
+    Timer timer;
 
     SpriteSheetArea(SpriteEditorCmd cmd) {
         this.cmd = cmd;
@@ -185,6 +191,7 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
         initAddButton();
         initDelButton();
         initPanel();
+        initTimer();
         setEnable(false);
     }
 
@@ -260,11 +267,39 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
         panel.add(buttonPanel, BorderLayout.EAST);
     }
 
+    private void initTimer() {
+        if (this.timer == null) {
+            this.timer = new Timer(60, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    synchronized (this) {
+                        if (created == null) return;
+
+                        SpriteComponent c = created.getComponent(SpriteComponent.class);
+
+                        int lastCol = model.getColumnCount() - 1;
+                        int rowCnt = model.getRowCount();
+                        for (int i = 0; i < rowCnt; ++i) {
+                            String name = (String)model.getValueAt(i, 0);
+                            SpriteComponent.AnimData data = c.assetMap.get(name);
+                            if (data != null)
+                                model.setValueAt(data.pivot.toString(), i, lastCol);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
     void setEnable(boolean enable) {
         this.panel.setEnabled(enable);
         this.pane.setEnabled(enable);
         this.addSheet.setEnabled(enable);
         this.delSheet.setEnabled(enable);
+        if (this.timer != null) {
+            if (enable) this.timer.start();
+            else this.timer.stop();
+        }
     }
 
     void onLoadAsepriteJson(AsepriteJson json, String path) {
@@ -275,6 +310,9 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
         this.addRows(json);
 
         this.cmd.pack();
+
+        this.json = json;
+        this.imgPath = path;
     }
 
     private void resetTable() {
@@ -290,6 +328,8 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
         for (int i = 0; i < json.frames.size(); ++i) {
             model.addColumn(i);
         }
+
+        model.addColumn("Pivot");
     }
 
     private void addRows(AsepriteJson json) {
@@ -300,7 +340,6 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
             values[0] = tag.name;
 
             for (int col = tag.from + 1; col <= tag.to + 1; ++col) {
-                AsepriteJson.Frame frame = json.frames.get(col - 1);
                 values[col] = "*";
             }
 
@@ -309,13 +348,27 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
     }
 
     private void addNewSprite(String name) {
-        this.model.addRow(new String[] {name});
-        this.layer.post(new AddSpriteEvent(this.created, name));
+        synchronized (this.timer) {
+
+            if (this.created != null) {
+                SpriteComponent c = created.getComponent(SpriteComponent.class);
+
+                if (name == null || name.length() == 0 || c.assetMap.containsKey(name)) {
+                    JOptionPane.showMessageDialog(null, "Invalid Animation Name!!");
+                    return;
+                }
+            }
+
+            this.model.addRow(new String[] {name});
+            this.layer.post(new AddSpriteEvent(this.created, name));
+        }
     }
 
     @Override
     public void callback(GameObject created) {
-        this.created = created;
+        synchronized (this) {
+            this.created = created;
+        }
     }
 }
 

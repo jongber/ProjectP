@@ -6,7 +6,7 @@ import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.desktop.editor.sprite.SpriteEditViewer;
 import com.jongber.game.desktop.editor.sprite.AsepriteJson;
-import com.jongber.game.desktop.editor.sprite.component.AsepriteComponent;
+import com.jongber.game.desktop.editor.sprite.component.SpriteComponent;
 
 public class LoadAsepriteEvent extends GameEvent {
 
@@ -33,7 +33,7 @@ public class LoadAsepriteEvent extends GameEvent {
     public void handle() {
         Texture t = AssetManager.getTexture(this.path);
 
-        AsepriteComponent c = new AsepriteComponent(this.json, t);
+        SpriteComponent c = new SpriteComponent(this.json, t);
         GameObject o = new GameObject();
         o.addComponent(c);
 
