@@ -17,11 +17,16 @@ import java.util.List;
 public class AsepriteController extends InputControlAdapter implements Controller.Renderer, Controller.PostRenderer {
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private GameObject selected;
     private List<GameObject> objects;
+    private Vector2 pressed = new Vector2();
 
     @Override
     public void build(List<GameObject> graph) {
         this.objects = this.buildSimple(graph, AsepriteComponent.class);
+        if (this.objects.size() != 0) {
+            this.selected = this.objects.get(0);
+        }
     }
 
     @Override
@@ -36,11 +41,7 @@ public class AsepriteController extends InputControlAdapter implements Controlle
                     pivot = data.pivot;
                 }
                 TextureRegion region = c.currentAnimation.getNext(elapsed);
-                batch.draw(region,
-                        pos.x, pos.y,
-                        pivot.x, pivot.y,
-                        region.getRegionWidth(), region.getRegionHeight(),
-                        1.0f, 1.0f, 0);
+                batch.draw(region, pos.x + pivot.x, pos.y + pivot.y);
             }
             else
                 batch.draw(c.totalImages.get(0), pos.x, pos.y);
@@ -74,6 +75,55 @@ public class AsepriteController extends InputControlAdapter implements Controlle
         shapeRenderer.end();
 
         batch.begin();
+    }
+
+    @Override
+    public boolean touchDown(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button) {
+        if (button != 0) {
+            return false;
+        }
+
+        this.pressed.set(worldX, worldY);
+
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(OrthoCameraWrapper camera, float worldX, float worldY, int pointer) {
+        if (this.selected == null) {
+            return false;
+        }
+
+        Vector2 drag = new Vector2(worldX, worldY).sub(this.pressed);
+        float len = drag.len();
+        drag.nor();
+        drag.scl(len * 0.8f);
+
+        this.pressed.set(worldX, worldY);
+
+        AsepriteComponent c = this.selected.getComponent(AsepriteComponent.class);
+        String name = c.currentAnimation.getName();
+        AsepriteComponent.AnimData a = c.assetMap.get(name);
+        a.pivot.add(drag);
+
+//        this.selected.transform.local.translate(drag);
+
+        return false;
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
     }
 }
 
