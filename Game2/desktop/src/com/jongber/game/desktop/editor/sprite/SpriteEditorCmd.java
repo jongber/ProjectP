@@ -1,14 +1,17 @@
 package com.jongber.game.desktop.editor.sprite;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.editor.sprite.component.SpriteComponent;
 import com.jongber.game.desktop.editor.sprite.event.AddSpriteEvent;
+import com.jongber.game.desktop.viewer.event.CallbackEvent;
 import com.jongber.game.desktop.editor.sprite.event.ChangeSpriteEvent;
 import com.jongber.game.desktop.editor.sprite.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.editor.common.ViewControlArea;
+import com.jongber.game.desktop.viewer.event.ClearAllEvent;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -31,6 +34,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -106,6 +110,7 @@ public class SpriteEditorCmd extends JFrame {
     void onAsepriteLoaded(String imgPath, AsepriteJson json) {
 
         this.sheetArea.onLoadAsepriteJson(json, imgPath);
+        this.view.post(new ClearAllEvent(this.view.getLayer()));
         this.view.post(new LoadAsepriteEvent(this.view, imgPath, json, this.sheetArea));
     }
 }
@@ -180,8 +185,11 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
     String imgPath;
 
     JPanel panel = new JPanel();
-
     Timer timer;
+
+    JPanel pivopPanel = new JPanel();
+    JTextField pivotX = new JTextField(4);
+    JTextField pivotY = new JTextField(4);
 
     SpriteSheetArea(SpriteEditorCmd cmd) {
         this.cmd = cmd;
@@ -192,6 +200,7 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
         initDelButton();
         initPanel();
         initTimer();
+        initPivotPanel();
         setEnable(false);
     }
 
@@ -217,12 +226,13 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
                 if (e.getClickCount() == 1) {
                     int row = table.getSelectedRow();
                     if (row >= 0) {
-                        String name = (String)model.getValueAt(row, 0);
-                        layer.post(new ChangeSpriteEvent(created, name));
+                        SpriteSheetArea.this.onRowClicked(row);
                     }
                 }
                 else if (e.getClickCount() == 2) {
-
+                    int row = table.getSelectedRow();
+                    int col = table.getSelectedColumn();
+                    SpriteSheetArea.this.onDoubleClicked(row, col);
                 }
             }
         });
@@ -291,6 +301,13 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
         }
     }
 
+    private void initPivotPanel() {
+        pivopPanel.add(new JLabel("pivotX :"));
+        pivopPanel.add(this.pivotX);
+        pivopPanel.add(new JLabel("pivotY :"));
+        pivopPanel.add(this.pivotY);
+    }
+
     void setEnable(boolean enable) {
         this.panel.setEnabled(enable);
         this.pane.setEnabled(enable);
@@ -313,6 +330,45 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
 
         this.json = json;
         this.imgPath = path;
+    }
+
+    void onRowClicked(int row) {
+        String name = (String)model.getValueAt(row, 0);
+        layer.post(new ChangeSpriteEvent(created, name));
+    }
+
+    void onDoubleClicked(int row, int col) {
+
+        String name = (String)model.getValueAt(row, 0);
+        String pivotStr = (String)model.getValueAt(row, model.getColumnCount() - 1);
+
+        if (col == table.getColumnCount() - 1) {    // the last column..
+            int result = JOptionPane.showConfirmDialog(null,
+                    this.pivopPanel,
+                    "Enter Pivot " + pivotStr,
+                    JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION) {
+                try {
+                    float x = Float.parseFloat(pivotX.getText());
+                    float y = Float.parseFloat(pivotY.getText());
+
+                    this.layer.post(new CallbackEvent(new CallbackEvent.Callback() {
+                        @Override
+                        public void invoke() {
+                            synchronized (SpriteSheetArea.this) {
+
+                                SpriteComponent c = created.getComponent(SpriteComponent.class);
+                                SpriteComponent.AnimData data = c.assetMap.get(name);
+                                data.pivot = new Vector2(x, y);
+                            }
+                        }
+                    }));
+                }
+                catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid Pivot value, must float plz");
+                }
+            }
+        }
     }
 
     private void resetTable() {
