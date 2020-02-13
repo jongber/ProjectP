@@ -5,6 +5,7 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.editor.sprite.event.AddSpriteEvent;
+import com.jongber.game.desktop.editor.sprite.event.ChangeSpriteEvent;
 import com.jongber.game.desktop.editor.sprite.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.editor.common.ViewControlArea;
 
@@ -13,6 +14,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -200,6 +203,22 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
         table.setRowSelectionAllowed(true);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         pane = new JScrollPane(table);
+
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    int row = table.getSelectedRow();
+                    if (row >= 0) {
+                        String name = (String)model.getValueAt(row, 0);
+                        layer.post(new ChangeSpriteEvent(created, name));
+                    }
+                }
+                else if (e.getClickCount() == 2) {
+
+                }
+            }
+        });
     }
 
     private void initAddButton() {
