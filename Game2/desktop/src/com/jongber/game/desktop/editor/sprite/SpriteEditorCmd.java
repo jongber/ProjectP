@@ -478,12 +478,15 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback, LoadSpriteJsonEvent
     }
 
     private void resetTable() {
-        panel.removeAll();
-        initData();
-        initTable();
-        initAddButton();
-        initDelButton();
-        initPanel();
+        synchronized (this) {
+            panel.removeAll();
+            this.timer.stop();
+            initData();
+            initTable();
+            initAddButton();
+            initDelButton();
+            initPanel();
+        }
     }
 
     private void adjustColumn(AsepriteJson json) {
@@ -585,7 +588,7 @@ class SaveLoadArea {
                 JFileChooser fc = new JFileChooser(cmd.basePath);
                 fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 fc.setAcceptAllFileFilterUsed(false);
-                int result = fc.showOpenDialog(null);
+                int result = fc.showSaveDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File saveDir = fc.getSelectedFile();
                     if (saveDir.getPath().contains(cmd.basePath) == false) {
@@ -618,7 +621,7 @@ class SaveLoadArea {
                     SpriteJson json = Utility.readJson(SpriteJson.class, selected);
 
                     File imgFile = new File(cmd.basePath + File.separator + json.image);
-                    if (imgFile.exists() == false || imgFile.canRead() == false) {
+                    if (imgFile.exists() == false || imgFile.canWrite() == false) {
                         JOptionPane.showMessageDialog(null, "Image file cannot access!!");
                         return;
                     }
