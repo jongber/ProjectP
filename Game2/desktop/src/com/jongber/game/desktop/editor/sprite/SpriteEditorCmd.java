@@ -50,6 +50,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.Timer;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
@@ -248,13 +250,23 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         pane = new JScrollPane(table);
 
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent listSelectionEvent) {
+                int row = table.getSelectedRow();
+                if (row >= 0) {
+                    SpriteSheetArea.this.onRowSelected(row);
+                }
+            }
+        });
+
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1) {
                     int row = table.getSelectedRow();
                     if (row >= 0) {
-                        SpriteSheetArea.this.onRowClicked(row);
+                        SpriteSheetArea.this.onRowSelected(row);
                     }
                 }
                 else if (e.getClickCount() == 2) {
@@ -360,7 +372,7 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
         this.imgPath = path;
     }
 
-    void onRowClicked(int row) {
+    void onRowSelected(int row) {
         String name = (String)model.getValueAt(row, 0);
         layer.post(new ChangeSpriteEvent(created, name));
     }
