@@ -146,6 +146,10 @@ public class SpriteEditorCmd extends JFrame {
     }
 
     void onSpriteJsonLoaded(SpriteJson json) {
+
+        //// gdx의 asset folder에 파일이 생성된거 인지를 못함..
+        json.image = basePath + File.separator + json.image;
+
         this.sheetArea.onLoadSpriteJson(json);
         this.view.post(new ClearAllEvent(this.view.getLayer()));
         this.view.post(new LoadSpriteJsonEvent(this.view, json, this.sheetArea));
@@ -730,9 +734,11 @@ class SaveLoadArea {
 
                 File copiedFile = new File(this.cmd.basePath + File.separator + json.image);
                 if (!copiedFile.exists()) {
-                    Path org = Paths.get(this.imgPath);
-                    Path copied = Paths.get(copiedFile.getPath());
-                    Files.copy(org, copied, StandardCopyOption.REPLACE_EXISTING);
+                    File org = new File(this.imgPath);
+                    Utility.copy(org, copiedFile);
+//                    Path org = Paths.get(this.imgPath);
+//                    Path copied = Paths.get(copiedFile.getPath());
+//                    Files.copy(org, copied, StandardCopyOption.REPLACE_EXISTING);
                 }
             }
         }
@@ -742,9 +748,6 @@ class SaveLoadArea {
 
     }
 }
-
-
-
 
 
 
