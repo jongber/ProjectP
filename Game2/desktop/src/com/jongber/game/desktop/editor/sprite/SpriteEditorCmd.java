@@ -88,6 +88,7 @@ public class SpriteEditorCmd extends JFrame {
     }
 
     void init() {
+        setTitle("Sprite Editor");
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
@@ -604,6 +605,7 @@ class SaveLoadArea {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JFileChooser fc = new JFileChooser(cmd.basePath);
+                fc.setDialogTitle("Select directory to save all Sprites");
                 fc.setFileFilter(new FileNameExtensionFilter("Sprite file", "sprite"));
 
                 int result = fc.showOpenDialog(null);
