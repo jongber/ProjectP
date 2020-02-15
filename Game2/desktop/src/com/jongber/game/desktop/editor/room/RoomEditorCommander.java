@@ -8,7 +8,7 @@ import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.editor.common.ViewControlArea;
 import com.jongber.game.desktop.editor.room.event.AddPropEvent;
-import com.jongber.game.desktop.viewer.event.ClearAllEvent;
+import com.jongber.game.desktop.common.event.ClearAllEvent;
 import com.jongber.game.desktop.editor.room.event.DelPropEvent;
 import com.jongber.game.projectz.Const;
 import com.jongber.game.desktop.editor.room.event.ApplyRoomViewEvent;

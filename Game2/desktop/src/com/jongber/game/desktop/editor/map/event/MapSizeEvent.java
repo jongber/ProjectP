@@ -5,7 +5,7 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.desktop.editor.map.component.GroundProperty;
-import com.jongber.game.desktop.viewer.component.BorderComponent;
+import com.jongber.game.desktop.common.component.BorderComponent;
 
 public class MapSizeEvent extends GameEvent {
 

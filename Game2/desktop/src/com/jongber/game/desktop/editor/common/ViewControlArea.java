@@ -2,7 +2,7 @@ package com.jongber.game.desktop.editor.common;
 
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.desktop.editor.EditorView;
-import com.jongber.game.desktop.viewer.event.ShowGridEvent;
+import com.jongber.game.desktop.common.event.ShowGridEvent;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

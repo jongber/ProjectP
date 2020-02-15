@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.viewer.controller;
+package com.jongber.game.desktop.common.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,7 +8,7 @@ import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import com.jongber.game.desktop.viewer.component.RoomProperty;
+import com.jongber.game.desktop.common.component.RoomProperty;
 import com.jongber.game.projectz.Const;
 
 import java.util.ArrayList;

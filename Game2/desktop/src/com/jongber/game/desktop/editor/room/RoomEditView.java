@@ -8,11 +8,11 @@ import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.editor.EditorView;
-import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
-import com.jongber.game.desktop.viewer.controller.CameraController;
+import com.jongber.game.desktop.common.controller.BlockGridRenderer;
+import com.jongber.game.desktop.common.controller.CameraController;
 import com.jongber.game.desktop.editor.room.controller.RoomPropsController;
-import com.jongber.game.desktop.viewer.controller.RoomPropertyRenderer;
-import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
+import com.jongber.game.desktop.common.controller.RoomPropertyRenderer;
+import com.jongber.game.desktop.common.controller.RoomPropsRenderer;
 
 public class RoomEditView extends EditorView implements InputProcessor {
 

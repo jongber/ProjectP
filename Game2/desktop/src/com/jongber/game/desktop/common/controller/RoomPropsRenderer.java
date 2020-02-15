@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.viewer.controller;
+package com.jongber.game.desktop.common.controller;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import com.jongber.game.desktop.viewer.component.PropProperty;
-import com.jongber.game.desktop.viewer.component.RoomProperty;
+import com.jongber.game.desktop.common.component.PropProperty;
+import com.jongber.game.desktop.common.component.RoomProperty;
 
 import java.util.List;
 

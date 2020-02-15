@@ -9,7 +9,7 @@ import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.controller.adapter.InputControlAdapter;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import com.jongber.game.desktop.viewer.component.PropProperty;
+import com.jongber.game.desktop.common.component.PropProperty;
 
 import java.util.List;
 

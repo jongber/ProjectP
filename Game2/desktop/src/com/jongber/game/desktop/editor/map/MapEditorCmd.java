@@ -12,7 +12,7 @@ import com.jongber.game.desktop.editor.map.event.AddTextureEvent;
 import com.jongber.game.desktop.editor.map.event.MapSizeEvent;
 import com.jongber.game.desktop.editor.map.event.AddRoomEvent;
 import com.jongber.game.desktop.editor.map.event.DelObjectEvent;
-import com.jongber.game.desktop.viewer.event.ClearAllEvent;
+import com.jongber.game.desktop.common.event.ClearAllEvent;
 import com.jongber.game.projectz.Const;
 import com.jongber.game.projectz.json.MapJson;
 import com.jongber.game.projectz.json.RoomJson;

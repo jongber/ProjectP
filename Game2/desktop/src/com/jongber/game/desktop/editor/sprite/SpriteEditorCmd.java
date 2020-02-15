@@ -13,11 +13,11 @@ import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.editor.sprite.component.SpriteComponent;
 import com.jongber.game.desktop.editor.sprite.event.AddSpriteEvent;
 import com.jongber.game.desktop.editor.sprite.event.LoadSpriteJsonEvent;
-import com.jongber.game.desktop.viewer.event.CallbackEvent;
+import com.jongber.game.desktop.common.event.CallbackEvent;
 import com.jongber.game.desktop.editor.sprite.event.ChangeSpriteEvent;
 import com.jongber.game.desktop.editor.sprite.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.editor.common.ViewControlArea;
-import com.jongber.game.desktop.viewer.event.ClearAllEvent;
+import com.jongber.game.desktop.common.event.ClearAllEvent;
 import com.jongber.game.projectz.json.SpriteJson;
 
 import java.awt.BorderLayout;

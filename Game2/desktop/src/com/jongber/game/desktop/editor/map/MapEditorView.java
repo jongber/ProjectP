@@ -10,12 +10,12 @@ import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.editor.EditorView;
 import com.jongber.game.desktop.editor.map.controller.RoomController;
 import com.jongber.game.desktop.editor.map.controller.TextureMover;
-import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
-import com.jongber.game.desktop.viewer.controller.BorderPostRenderer;
-import com.jongber.game.desktop.viewer.controller.CameraController;
-import com.jongber.game.desktop.viewer.controller.GroundPostRenderer;
-import com.jongber.game.desktop.viewer.controller.RoomPropertyRenderer;
-import com.jongber.game.desktop.viewer.controller.RoomPropsRenderer;
+import com.jongber.game.desktop.common.controller.BlockGridRenderer;
+import com.jongber.game.desktop.common.controller.BorderPostRenderer;
+import com.jongber.game.desktop.common.controller.CameraController;
+import com.jongber.game.desktop.common.controller.GroundPostRenderer;
+import com.jongber.game.desktop.common.controller.RoomPropertyRenderer;
+import com.jongber.game.desktop.common.controller.RoomPropsRenderer;
 
 
 public class MapEditorView extends EditorView implements InputProcessor {

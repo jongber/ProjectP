@@ -6,8 +6,8 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.desktop.editor.EditorView;
 import com.jongber.game.desktop.editor.sprite.controller.SpriteController;
-import com.jongber.game.desktop.viewer.controller.BlockGridRenderer;
-import com.jongber.game.desktop.viewer.controller.CameraController;
+import com.jongber.game.desktop.common.controller.BlockGridRenderer;
+import com.jongber.game.desktop.common.controller.CameraController;
 
 public class SpriteEditViewer extends EditorView {
 
