@@ -12,21 +12,19 @@ import com.jongber.game.core.controller.adapter.InputControlAdapter;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
 import com.jongber.game.desktop.editor.sprite.component.SpriteComponent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpriteController extends InputControlAdapter implements Controller.Renderer, Controller.PostRenderer {
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private GameObject selected;
-    private List<GameObject> objects;
+    private List<GameObject> objects = new ArrayList<>();
     private Vector2 pressed = new Vector2();
 
     @Override
     public void build(List<GameObject> graph) {
         this.objects = this.buildSimple(graph, SpriteComponent.class);
-        if (this.objects.size() != 0) {
-            this.selected = this.objects.get(0);
-        }
     }
 
     @Override
@@ -79,17 +77,22 @@ public class SpriteController extends InputControlAdapter implements Controller.
 
     @Override
     public boolean touchDown(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button) {
-        if (button != 0) {
+        if (button != 0 || this.objects == null || this.objects.size() == 0) {
             return false;
         }
 
         this.pressed.set(worldX, worldY);
+        if (this.objects.size() != 0) {
+            this.selected = this.objects.get(0);
+        }
+
 
         return false;
     }
 
     @Override
     public boolean touchUp(OrthoCameraWrapper camera, float worldX, float worldY, int pointer, int button) {
+        this.selected = null;
         return false;
     }
 

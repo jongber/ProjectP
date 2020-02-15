@@ -29,10 +29,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -71,11 +74,14 @@ public class SpriteEditorCmd extends JFrame {
     SpriteSheetArea sheetArea;
     SaveLoadArea saveLoadArea;
 
+    File baseFile;
+
     SpriteEditorCmd(SpriteEditViewer view) {
         this.view = view;
         this.viewControlArea = new ViewControlArea(this, view, view.getLayer());
         this.basePath = System.getProperty("user.dir") +
                 File.separator + "android" + File.separator + "assets";
+        this.baseFile = new File(this.basePath);
     }
 
     void init() {
@@ -133,7 +139,7 @@ public class SpriteEditorCmd extends JFrame {
         this.sheetArea.onLoadAsepriteJson(json, imgPath);
         this.view.post(new ClearAllEvent(this.view.getLayer()));
         this.view.post(new LoadAsepriteEvent(this.view, imgPath, json, this.sheetArea));
-        this.saveLoadArea.onAsepriteLoaded(json);
+        this.saveLoadArea.onAsepriteLoaded(json, imgPath);
     }
 }
 
@@ -510,7 +516,8 @@ class SaveLoadArea {
     SpriteSheetArea sheet;
     GameLayer layer;
 
-    AsepriteJson json;
+    AsepriteJson asepriteJson;
+    String imgPath;
 
     SaveLoadArea(SpriteEditorCmd cmd, GameLayer layer) {
         this.cmd = cmd;
@@ -534,6 +541,11 @@ class SaveLoadArea {
                 int result = fc.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File saveDir = fc.getSelectedFile();
+                    if (saveDir.getPath().contains(cmd.basePath) == false) {
+                        JOptionPane.showMessageDialog(null, "Invalid path, use only under android/asset");
+                        return;
+                    }
+
                     clickSave(saveDir);
                 }
             }
@@ -551,14 +563,16 @@ class SaveLoadArea {
     }
 
     void clickSave(File saveDir){
-        String path = saveDir.getPath() + File.separator;
         this.layer.post(new CallbackEvent(new CallbackEvent.Callback() {
             @Override
             public void invoke() {
                 synchronized (sheet) {
+                    List<SpriteJson> jsons = new ArrayList<>();
+
                     SpriteComponent c = sheet.created.getComponent(SpriteComponent.class);
                     int rows = sheet.model.getRowCount();
                     int cols = sheet.model.getColumnCount();
+
                     for (int row = 0; row < rows; ++row) {
                         SpriteJson json = new SpriteJson();
                         json.name = (String)sheet.model.getValueAt(row, 0);
@@ -574,10 +588,14 @@ class SaveLoadArea {
                         }
 
                         json.pivot = c.assetMap.get(json.name).pivot;
-                        json.image = SaveLoadArea.this.json.meta.image;
 
-                        Utility.writeJson(json, new File(path + json.name + ".sprite"));
+                        String assetPath = cmd.baseFile.toURI().relativize(saveDir.toURI()).getPath();
+                        json.image = assetPath + asepriteJson.meta.image;
+
+                        jsons.add(json);
                     }
+
+                    SaveLoadArea.this.validateAndWrite(saveDir, jsons);
                 }
             }
         }));
@@ -596,9 +614,53 @@ class SaveLoadArea {
         return panel;
     }
 
-    void onAsepriteLoaded(AsepriteJson json) {
+    void onAsepriteLoaded(AsepriteJson json, String imgPath) {
         this.btSave.setEnabled(true);
-        this.json = json;
+        this.asepriteJson = json;
+        this.imgPath = imgPath;
+    }
+
+    private void validateAndWrite(File saveDir, List<SpriteJson> jsons) {
+
+        boolean overwrite = false;
+        // validate
+        for (SpriteJson json : jsons) {
+            File file = new File(saveDir.getPath() + File.separator + json.name + ".sprite");
+            if (file.exists()) {
+                overwrite = true;
+            }
+
+            File imgFile = new File(cmd.basePath + File.separator + json.image);
+            if (imgFile.exists()) {
+                overwrite = true;
+            }
+        }
+
+        if (overwrite) {
+            int r = JOptionPane.showConfirmDialog(null, "Exist file, overwrite?", "Caution", JOptionPane.YES_NO_OPTION);
+            if (r != 0) {
+                return;
+            }
+        }
+
+        // save
+        try {
+            for (SpriteJson json : jsons) {
+                File file = new File(saveDir.getPath() + File.separator + json.name + ".sprite");
+                Utility.writeJson(json, file);
+
+                File copiedFile = new File(this.cmd.basePath + File.separator + json.image);
+                if (!copiedFile.exists()) {
+                    Path org = Paths.get(this.imgPath);
+                    Path copied = Paths.get(copiedFile.getPath());
+                    Files.copy(org, copied, StandardCopyOption.REPLACE_EXISTING);
+                }
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
 
