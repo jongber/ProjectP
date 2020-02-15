@@ -2,11 +2,13 @@ package com.jongber.game.desktop.editor.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AnimationAsset;
 import com.jongber.game.core.graphics.VFAnimation;
+import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.editor.sprite.component.SpriteComponent;
 import com.jongber.game.desktop.editor.sprite.event.AddSpriteEvent;
@@ -15,6 +17,7 @@ import com.jongber.game.desktop.editor.sprite.event.ChangeSpriteEvent;
 import com.jongber.game.desktop.editor.sprite.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.editor.common.ViewControlArea;
 import com.jongber.game.desktop.viewer.event.ClearAllEvent;
+import com.jongber.game.projectz.json.SpriteJson;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -28,7 +31,8 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -65,6 +69,7 @@ public class SpriteEditorCmd extends JFrame {
     ViewControlArea viewControlArea;
     AsepriteArea asepriteArea;
     SpriteSheetArea sheetArea;
+    SaveLoadArea saveLoadArea;
 
     SpriteEditorCmd(SpriteEditViewer view) {
         this.view = view;
@@ -101,6 +106,11 @@ public class SpriteEditorCmd extends JFrame {
         gbc.gridy = 2;
         panel = this.createSpriteSheetArea();
         add(panel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        panel = this.createSaveLoadArea();
+        add(panel, gbc);
     }
 
     JPanel createAsepriteArea() {
@@ -113,11 +123,17 @@ public class SpriteEditorCmd extends JFrame {
         return this.sheetArea.panel;
     }
 
+    JPanel createSaveLoadArea() {
+        this.saveLoadArea = new SaveLoadArea(this, this.view.getLayer());
+        return this.saveLoadArea.createPanel();
+    }
+
     void onAsepriteLoaded(String imgPath, AsepriteJson json) {
 
         this.sheetArea.onLoadAsepriteJson(json, imgPath);
         this.view.post(new ClearAllEvent(this.view.getLayer()));
         this.view.post(new LoadAsepriteEvent(this.view, imgPath, json, this.sheetArea));
+        this.saveLoadArea.onAsepriteLoaded(json);
     }
 }
 
@@ -487,8 +503,122 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
 }
 
 class SaveLoadArea {
+    JButton btSave;
+    JButton btLoad;
 
+    SpriteEditorCmd cmd;
+    SpriteSheetArea sheet;
+    GameLayer layer;
+
+    AsepriteJson json;
+
+    SaveLoadArea(SpriteEditorCmd cmd, GameLayer layer) {
+        this.cmd = cmd;
+        this.sheet = cmd.sheetArea;
+        this.layer = layer;
+
+        initSave();
+        initLoad();
+    }
+
+    private void initSave() {
+        btSave = new JButton("Save");
+        btSave.setEnabled(false);
+
+        btSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JFileChooser fc = new JFileChooser(cmd.basePath);
+                fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fc.setAcceptAllFileFilterUsed(false);
+                int result = fc.showOpenDialog(null);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File saveDir = fc.getSelectedFile();
+                    clickSave(saveDir);
+                }
+            }
+        });
+    }
+
+    private void initLoad() {
+        btLoad = new JButton("Load");
+        btLoad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                clickLoad();
+            }
+        });
+    }
+
+    void clickSave(File saveDir){
+        String path = saveDir.getPath() + File.separator;
+        this.layer.post(new CallbackEvent(new CallbackEvent.Callback() {
+            @Override
+            public void invoke() {
+                synchronized (sheet) {
+                    SpriteComponent c = sheet.created.getComponent(SpriteComponent.class);
+                    int rows = sheet.model.getRowCount();
+                    int cols = sheet.model.getColumnCount();
+                    for (int row = 0; row < rows; ++row) {
+                        SpriteJson json = new SpriteJson();
+                        json.name = (String)sheet.model.getValueAt(row, 0);
+
+                        for (int col = 1; col < cols - 1; ++col) {
+                            if ("*".equals(sheet.model.getValueAt(row, col))) {
+                                TextureRegion region = c.totalImages.get(col - 1);
+                                int duration = c.totalDurations.get(col - 1);
+
+                                Rectangle rect = new Rectangle(region.getRegionX(), region.getRegionY(), region.getRegionWidth(), region.getRegionHeight());
+                                json.frames.add(new Tuple2<>(rect, duration));
+                            }
+                        }
+
+                        json.pivot = c.assetMap.get(json.name).pivot;
+                        json.image = SaveLoadArea.this.json.meta.image;
+
+                        Utility.writeJson(json, new File(path + json.name + ".sprite"));
+                    }
+                }
+            }
+        }));
+    }
+
+    void clickLoad() {
+
+    }
+
+    JPanel createPanel() {
+        JPanel panel = new JPanel();
+
+        panel.add(this.btSave);
+        panel.add(this.btLoad);
+
+        return panel;
+    }
+
+    void onAsepriteLoaded(AsepriteJson json) {
+        this.btSave.setEnabled(true);
+        this.json = json;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
