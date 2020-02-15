@@ -8,7 +8,7 @@ public class CallbackEvent extends GameEvent {
         void invoke();
     }
 
-    private Callback callback;
+    protected Callback callback;
 
     public CallbackEvent(Callback callback) {
         this.callback = callback;

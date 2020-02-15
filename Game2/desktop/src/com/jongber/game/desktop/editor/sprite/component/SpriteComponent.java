@@ -2,11 +2,14 @@ package com.jongber.game.desktop.editor.sprite.component;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.asset.AnimationAsset;
 import com.jongber.game.core.component.Component;
 import com.jongber.game.core.graphics.VFAnimation;
+import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.editor.sprite.AsepriteJson;
+import com.jongber.game.projectz.json.SpriteJson;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -32,16 +35,31 @@ public class SpriteComponent extends Component {
 
     Texture texture;
 
-    public List<Integer> totalDurations;
+    public List<Integer> totalDurations = new ArrayList<>();
     public List<TextureRegion> totalImages = new ArrayList<>();
     public Map<String, AnimData> assetMap = new HashMap<>();
 
     public VFAnimation currentAnimation;
 
+    public SpriteComponent(SpriteJson json, Texture t) {
+        this.texture = t;
+        for (Tuple2<Rectangle, Integer> item : json.frames) {
+            Rectangle r = item.getItem1();
+            TextureRegion region = new TextureRegion(t);
+            region.setRegion((int)r.x, (int)r.y, (int)r.width, (int)r.height);
+            totalImages.add(region);
+            totalDurations.add(item.getItem2());
+        }
+
+        AnimationAsset asset = new AnimationAsset(json.name, this.totalImages, this.totalDurations);
+        this.assetMap.put(asset.getName(), new AnimData(asset, json.pivot));
+
+        this.currentAnimation = new VFAnimation(asset, VFAnimation.PlayMode.LOOP);
+    }
+
     public SpriteComponent(AsepriteJson json, Texture texture) {
         this.texture = texture;
 
-        this.totalDurations = new ArrayList<>();
         for (AsepriteJson.Frame f : json.frames) {
             TextureRegion region = new TextureRegion(texture);
             region.setRegion(f.frame.x, f.frame.y, f.frame.w, f.frame.h);

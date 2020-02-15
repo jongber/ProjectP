@@ -12,6 +12,7 @@ import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.editor.sprite.component.SpriteComponent;
 import com.jongber.game.desktop.editor.sprite.event.AddSpriteEvent;
+import com.jongber.game.desktop.editor.sprite.event.LoadSpriteJsonEvent;
 import com.jongber.game.desktop.viewer.event.CallbackEvent;
 import com.jongber.game.desktop.editor.sprite.event.ChangeSpriteEvent;
 import com.jongber.game.desktop.editor.sprite.event.LoadAsepriteEvent;
@@ -137,11 +138,17 @@ public class SpriteEditorCmd extends JFrame {
     }
 
     void onAsepriteLoaded(String imgPath, AsepriteJson json) {
-
-        this.sheetArea.onLoadAsepriteJson(json, imgPath);
+        this.sheetArea.onLoadAsepriteJson(json);
         this.view.post(new ClearAllEvent(this.view.getLayer()));
         this.view.post(new LoadAsepriteEvent(this.view, imgPath, json, this.sheetArea));
-        this.saveLoadArea.onAsepriteLoaded(json, imgPath);
+        this.saveLoadArea.onAsepriteLoaded(imgPath);
+    }
+
+    void onSpriteJsonLoaded(SpriteJson json) {
+        this.sheetArea.onLoadSpriteJson(json);
+        this.view.post(new ClearAllEvent(this.view.getLayer()));
+        this.view.post(new LoadSpriteJsonEvent(this.view, json, this.sheetArea));
+        this.saveLoadArea.onSpriteJsonLoaded(json);
     }
 }
 
@@ -199,7 +206,8 @@ class AsepriteArea {
     }
 }
 
-class SpriteSheetArea implements LoadAsepriteEvent.Callback {
+class SpriteSheetArea implements LoadAsepriteEvent.Callback, LoadSpriteJsonEvent.Callback {
+
     JButton addSheet;
     JButton delSheet;
 
@@ -211,8 +219,6 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
 
     GameObject created;
     GameLayer layer;
-    AsepriteJson json;
-    String imgPath;
 
     JPanel panel = new JPanel();
     Timer timer;
@@ -359,7 +365,7 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
         }
     }
 
-    void onLoadAsepriteJson(AsepriteJson json, String path) {
+    void onLoadAsepriteJson(AsepriteJson json) {
         this.resetTable();
         this.setEnable(true);
 
@@ -367,9 +373,16 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
         this.addRows(json);
 
         this.cmd.pack();
+    }
 
-        this.json = json;
-        this.imgPath = path;
+    void onLoadSpriteJson(SpriteJson json) {
+        this.resetTable();
+        this.setEnable(true);
+
+        this.adjustColumn(json);
+        this.addRows(json);
+
+        this.cmd.pack();
     }
 
     void onRowSelected(int row) {
@@ -480,6 +493,14 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
         model.addColumn("Pivot");
     }
 
+    private void adjustColumn(SpriteJson json) {
+        for (int i = 0; i < json.frames.size(); ++i) {
+            model.addColumn(i);
+        }
+
+        model.addColumn("Pivot");
+    }
+
     private void addRows(AsepriteJson json) {
         for (int row = 0; row < json.meta.frameTags.size(); ++row) {
             String [] values = new String[model.getColumnCount()];
@@ -493,6 +514,20 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback {
 
             model.addRow(values);
         }
+    }
+
+    private void addRows(SpriteJson json) {
+        String[] values = new String[model.getColumnCount()];
+
+        values[0] = json.name;
+
+        for (int i = 1; i < model.getColumnCount() - 1; ++i) {
+            values[i] = "*";
+        }
+
+        values[model.getColumnCount() - 1] = json.pivot.toString();
+
+        model.addRow(values);
     }
 
     private void addNewSprite(String name) {
@@ -528,7 +563,6 @@ class SaveLoadArea {
     SpriteSheetArea sheet;
     GameLayer layer;
 
-    AsepriteJson asepriteJson;
     String imgPath;
 
     SaveLoadArea(SpriteEditorCmd cmd, GameLayer layer) {
@@ -558,7 +592,7 @@ class SaveLoadArea {
                         return;
                     }
 
-                    clickSave(saveDir);
+                    processSave(saveDir);
                 }
             }
         });
@@ -569,12 +603,35 @@ class SaveLoadArea {
         btLoad.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                clickLoad();
+                JFileChooser fc = new JFileChooser(cmd.basePath);
+                fc.setFileFilter(new FileNameExtensionFilter("Sprite file", "sprite"));
+
+                int result = fc.showOpenDialog(null);
+                if (result != JFileChooser.APPROVE_OPTION)
+                    return;
+
+                try
+                {
+                    File selected = fc.getSelectedFile();
+                    SpriteJson json = Utility.readJson(SpriteJson.class, selected);
+
+                    File imgFile = new File(cmd.basePath + File.separator + json.image);
+                    if (imgFile.exists() == false || imgFile.canRead() == false) {
+                        JOptionPane.showMessageDialog(null, "Image file cannot access!!");
+                        return;
+                    }
+
+                    processLoad(json);
+                }
+                catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Invalid sprite json file!!");
+                    e.printStackTrace();
+                }
             }
         });
     }
 
-    void clickSave(File saveDir){
+    void processSave(File saveDir){
         this.layer.post(new CallbackEvent(new CallbackEvent.Callback() {
             @Override
             public void invoke() {
@@ -601,8 +658,9 @@ class SaveLoadArea {
 
                         json.pivot = c.assetMap.get(json.name).pivot;
 
+                        File imgFile = new File(imgPath);
                         String assetPath = cmd.baseFile.toURI().relativize(saveDir.toURI()).getPath();
-                        json.image = assetPath + asepriteJson.meta.image;
+                        json.image = assetPath + imgFile.getName();
 
                         jsons.add(json);
                     }
@@ -613,8 +671,8 @@ class SaveLoadArea {
         }));
     }
 
-    void clickLoad() {
-
+    void processLoad(SpriteJson json) {
+        cmd.onSpriteJsonLoaded(json);
     }
 
     JPanel createPanel() {
@@ -626,10 +684,14 @@ class SaveLoadArea {
         return panel;
     }
 
-    void onAsepriteLoaded(AsepriteJson json, String imgPath) {
+    void onAsepriteLoaded(String imgPath) {
         this.btSave.setEnabled(true);
-        this.asepriteJson = json;
         this.imgPath = imgPath;
+    }
+
+    void onSpriteJsonLoaded(SpriteJson json) {
+        this.btSave.setEnabled(true);
+        this.imgPath = cmd.basePath + File.separator + json.image;
     }
 
     private void validateAndWrite(File saveDir, List<SpriteJson> jsons) {
