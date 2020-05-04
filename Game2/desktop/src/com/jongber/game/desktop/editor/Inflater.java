@@ -66,7 +66,7 @@ public class Inflater {
                 Gdx.app.exit();
             }
         });
-        
+
         cmd.setVisible(true);
     }
 
