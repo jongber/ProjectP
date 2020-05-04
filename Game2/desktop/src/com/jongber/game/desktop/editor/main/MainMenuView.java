@@ -5,14 +5,21 @@ import com.badlogic.gdx.graphics.GL20;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
+import com.jongber.game.desktop.editor.EditorCmd;
+import com.jongber.game.desktop.editor.EditorView;
 
-public class MainMenuView extends GameLayer {
+public class MainMenuView extends EditorView {
 
     private GameLayer fpsLayer;
 
     public MainMenuView() {
         this.fpsLayer = new GameLayer();
         this.fpsLayer.registerController(new PerfRenderer());
+    }
+
+    @Override
+    public void create(EditorCmd cmd) {
+
     }
 
     @Override

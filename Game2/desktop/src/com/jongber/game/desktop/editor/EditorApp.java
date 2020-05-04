@@ -11,11 +11,12 @@ public class EditorApp extends ApplicationAdapter {
 
     private GameEventHandler handler = new GameEventHandler();
     private GameLayer layer;
+    private EditorCmd cmd;
 
     @Override
     public void create () {
-        EditorInflator.init(this);
-        EditorInflator.returnToMain();
+        Inflater.init(this);
+        Inflater.returnToMain();
     }
 
     @Override
@@ -42,13 +43,7 @@ public class EditorApp extends ApplicationAdapter {
     @Override
     public void dispose () {
         this.disposeLayer();
-    }
-
-    public void disposeLayer() {
-        if (this.layer != null) {
-            this.layer.dispose();
-            this.layer = null;
-        }
+        this.disposeCmd();
     }
 
     public void post(GameEvent e) {
@@ -57,5 +52,21 @@ public class EditorApp extends ApplicationAdapter {
 
     public void setLayer(GameLayer layer) {
         this.layer = layer;
+    }
+
+    public void setCmd(EditorCmd cmd) {this.cmd = cmd;}
+
+    private void disposeLayer() {
+        if (this.layer != null) {
+            this.layer.dispose();
+            this.layer = null;
+        }
+    }
+
+    private void disposeCmd() {
+        if (this.cmd != null) {
+            this.cmd.dispose();
+            this.cmd = null;
+        }
     }
 }
