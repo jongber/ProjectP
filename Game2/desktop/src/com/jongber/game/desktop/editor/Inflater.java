@@ -1,7 +1,7 @@
 package com.jongber.game.desktop.editor;
 
 import com.badlogic.gdx.Gdx;
-import com.jongber.game.desktop.common.event.CallbackEvent;
+import com.jongber.game.desktop.common.CallbackEvent;
 import com.jongber.game.desktop.editor.main.MainMenuCmd;
 import com.jongber.game.desktop.editor.main.MainMenuView;
 
