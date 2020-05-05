@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AnimationAsset;
 import com.jongber.game.core.event.GameEvent;
-import com.jongber.game.desktop.common.component.SpriteComponent;
+import com.jongber.game.desktop.old.common.component.SpriteComponent;
 
 import java.util.ArrayList;
 import java.util.List;
