@@ -11,7 +11,7 @@ import com.jongber.game.core.graphics.VFAnimation;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.common.json.AsepriteJson;
-import com.jongber.game.desktop.old.editor.sprite.component.SpriteComponent;
+import com.jongber.game.desktop.common.component.SpriteComponent;
 import com.jongber.game.desktop.old.editor.sprite.event.AddSpriteEvent;
 import com.jongber.game.desktop.old.editor.sprite.event.LoadSpriteJsonEvent;
 import com.jongber.game.desktop.common.CallbackEvent;
@@ -19,7 +19,7 @@ import com.jongber.game.desktop.old.editor.sprite.event.ChangeSpriteEvent;
 import com.jongber.game.desktop.old.editor.sprite.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.old.editor.common.ViewControlArea;
 import com.jongber.game.desktop.old.common.event.ClearAllEvent;
-import com.jongber.game.old.json.SpriteJson;
+import com.jongber.game.desktop.common.json.SpriteJson;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;

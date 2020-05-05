@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.old.editor.sprite.component;
+package com.jongber.game.desktop.common.component;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,7 +9,7 @@ import com.jongber.game.core.component.Component;
 import com.jongber.game.core.graphics.VFAnimation;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.common.json.AsepriteJson;
-import com.jongber.game.old.json.SpriteJson;
+import com.jongber.game.desktop.common.json.SpriteJson;
 
 import java.util.ArrayList;
 import java.util.HashMap;

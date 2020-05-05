@@ -6,7 +6,7 @@ import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.desktop.old.editor.sprite.SpriteEditViewer;
 import com.jongber.game.desktop.common.json.AsepriteJson;
-import com.jongber.game.desktop.old.editor.sprite.component.SpriteComponent;
+import com.jongber.game.desktop.common.component.SpriteComponent;
 
 public class LoadAsepriteEvent extends GameEvent {
 

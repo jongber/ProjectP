@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.old.editor.sprite.controller;
+package com.jongber.game.desktop.common.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -10,7 +10,7 @@ import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.controller.adapter.InputControlAdapter;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import com.jongber.game.desktop.old.editor.sprite.component.SpriteComponent;
+import com.jongber.game.desktop.common.component.SpriteComponent;
 
 import java.util.ArrayList;
 import java.util.List;

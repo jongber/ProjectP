@@ -5,8 +5,8 @@ import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.desktop.old.editor.sprite.SpriteEditViewer;
-import com.jongber.game.desktop.old.editor.sprite.component.SpriteComponent;
-import com.jongber.game.old.json.SpriteJson;
+import com.jongber.game.desktop.common.component.SpriteComponent;
+import com.jongber.game.desktop.common.json.SpriteJson;
 
 public class LoadSpriteJsonEvent extends GameEvent {
 

@@ -2,6 +2,8 @@ package com.jongber.game.desktop.editor;
 
 import com.badlogic.gdx.Gdx;
 import com.jongber.game.desktop.common.CallbackEvent;
+import com.jongber.game.desktop.editor.character.CharacterCmd;
+import com.jongber.game.desktop.editor.character.CharacterView;
 import com.jongber.game.desktop.editor.main.MainMenuCmd;
 import com.jongber.game.desktop.editor.main.MainMenuView;
 
@@ -16,6 +18,7 @@ public class Inflater {
 
     static {
         inflateMap.put(MainMenuCmd.class, MainMenuView.class);
+        inflateMap.put(CharacterCmd.class, CharacterView.class);
     }
 
     public static void init(EditorApp app) {
@@ -23,10 +26,10 @@ public class Inflater {
     }
 
     public static void returnToMain() {
-        Inflater.inflateEditor(MainMenuCmd.class);
+        Inflater.inflate(MainMenuCmd.class);
     }
 
-    public static void inflateEditor(Class cmdClass) {
+    public static void inflate(Class cmdClass) {
         if (inflateMap.containsKey(cmdClass)) {
             Class viewClass = inflateMap.get(cmdClass);
 
