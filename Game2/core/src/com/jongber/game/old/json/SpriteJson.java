@@ -1,4 +1,4 @@
-package com.jongber.game.projectz.json;
+package com.jongber.game.old.json;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;

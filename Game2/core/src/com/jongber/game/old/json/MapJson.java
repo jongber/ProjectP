@@ -1,4 +1,4 @@
-package com.jongber.game.projectz.json;
+package com.jongber.game.old.json;
 
 import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.util.Tuple2;

@@ -10,9 +10,9 @@ import com.jongber.game.desktop.old.editor.common.ViewControlArea;
 import com.jongber.game.desktop.old.editor.room.event.AddPropEvent;
 import com.jongber.game.desktop.old.common.event.ClearAllEvent;
 import com.jongber.game.desktop.old.editor.room.event.DelPropEvent;
-import com.jongber.game.projectz.Const;
+import com.jongber.game.old.Const;
 import com.jongber.game.desktop.old.editor.room.event.ApplyRoomViewEvent;
-import com.jongber.game.projectz.json.RoomJson;
+import com.jongber.game.old.json.RoomJson;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;

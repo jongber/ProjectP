@@ -10,7 +10,7 @@ import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.old.common.component.PropProperty;
 import com.jongber.game.desktop.old.common.component.RoomProperty;
-import com.jongber.game.projectz.json.RoomJson;
+import com.jongber.game.old.json.RoomJson;
 
 public class AddRoomEvent extends GameEvent {
 
