@@ -15,4 +15,21 @@ public class Tuple2<T1, T2> {
     public T1 getItem1() { return this.item1; }
 
     public T2 getItem2() { return this.item2; }
+
+    @Override
+    public int hashCode() {
+        return item1.hashCode() + item2.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+
+        if (this == o) return true;
+
+        if (this.hashCode() == o.hashCode())
+            return true;
+
+        return false;
+    }
 }
