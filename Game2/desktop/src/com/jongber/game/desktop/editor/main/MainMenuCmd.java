@@ -1,14 +1,14 @@
 package com.jongber.game.desktop.editor.main;
 
-import com.jongber.game.core.GameLayer;
 import com.jongber.game.desktop.editor.EditorCmd;
+import com.jongber.game.desktop.editor.EditorView;
 
 public class MainMenuCmd extends EditorCmd {
 
     MainMenuView layer;
 
     @Override
-    public void create(GameLayer layer) {
+    public void create(EditorView layer) {
         this.layer = (MainMenuView)layer;
     }
 }

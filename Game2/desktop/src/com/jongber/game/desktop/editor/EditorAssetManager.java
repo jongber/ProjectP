@@ -5,30 +5,32 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jongber.game.core.asset.AnimationAsset;
 import com.jongber.game.core.asset.AssetManager;
-import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.common.json.AsepriteJson;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class EditorAssetManager {
 
-    private final static HashMap<Tuple2<File, String>, AnimationAsset> map = new HashMap<>();
-
-    public static void loadAseprite(File jsonFile) {
+    public static List<AnimationAsset> loadAseprite(File jsonFile) {
         AsepriteJson json = Utility.readJson(AsepriteJson.class, jsonFile);
         if (json == null) {
-            Gdx.app.error("ERROR", "invalid json file!");
-            return;
+            Gdx.app.error("ERROR", "invalid aseprite json file!");
+            return new ArrayList<>();
         }
 
         //// parse animation asset..
+        String imgPath = jsonFile.getPath() + File.separator + json.meta.image;
+        Texture t = AssetManager.getTexture(imgPath);
+
+        return parseAnimAssets(json, t);
     }
 
-    private static List<AnimationAsset> parseAnimAssets(AsepriteJson json, Texture texture) {
+    private static List<AnimationAsset> parseAnimAssets(@NotNull AsepriteJson json, Texture texture) {
         List<AnimationAsset> assets = new ArrayList<>();
         List<TextureRegion> regions = new ArrayList<>();
         List<Integer> durations = new ArrayList<>();
