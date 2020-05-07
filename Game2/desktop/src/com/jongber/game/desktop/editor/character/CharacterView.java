@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
-import com.jongber.game.desktop.common.controller.SpriteController;
+import com.jongber.game.desktop.old.common.controller.SpriteController;
 import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.EditorView;
 

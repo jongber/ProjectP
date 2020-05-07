@@ -8,8 +8,6 @@ import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.common.json.AsepriteJson;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +28,7 @@ public class EditorAssetManager {
         return parseAnimAssets(json, t);
     }
 
-    private static List<AnimationAsset> parseAnimAssets(@NotNull AsepriteJson json, Texture texture) {
+    private static List<AnimationAsset> parseAnimAssets(AsepriteJson json, Texture texture) {
         List<AnimationAsset> assets = new ArrayList<>();
         List<TextureRegion> regions = new ArrayList<>();
         List<Integer> durations = new ArrayList<>();

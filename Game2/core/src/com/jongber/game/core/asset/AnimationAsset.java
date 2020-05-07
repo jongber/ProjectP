@@ -2,6 +2,7 @@ package com.jongber.game.core.asset;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ public class AnimationAsset {
     private final String name;
     private final TextureRegion[] regions;
     private final int[] frameDuration;
+    private Vector2 pivot = new Vector2();
 
     public AnimationAsset(String name, List<TextureRegion> regions, List<Integer> durations) {
         this(name, (TextureRegion[]) regions.toArray(), durations);
@@ -25,6 +27,18 @@ public class AnimationAsset {
         }
 
         this.log();
+    }
+
+    public void setPivot(Vector2 pivot) {
+        this.pivot = pivot;
+    }
+
+    public void setPivot(float x, float y) {
+        this.pivot.set(x, y);
+    }
+
+    public Vector2 getPivot() {
+        return this.pivot;
     }
 
     public String getName() {

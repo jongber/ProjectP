@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.desktop.old.editor.EditorView;
-import com.jongber.game.desktop.common.controller.SpriteController;
+import com.jongber.game.desktop.old.common.controller.SpriteController;
 import com.jongber.game.desktop.old.common.controller.BlockGridRenderer;
 import com.jongber.game.desktop.common.controller.CameraController;
 

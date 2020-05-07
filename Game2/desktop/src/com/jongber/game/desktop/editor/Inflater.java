@@ -29,7 +29,7 @@ public class Inflater {
         Inflater.inflate(MainMenuCmd.class);
     }
 
-    public static void inflate(Class cmdClass) {
+    public static void inflate(Class<? extends EditorCmd> cmdClass) {
         if (inflateMap.containsKey(cmdClass)) {
             Class viewClass = inflateMap.get(cmdClass);
 
