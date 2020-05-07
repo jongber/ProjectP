@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class Inflater {
 
     private static EditorApp app;
-    private static HashMap<Class, Class> inflateMap = new HashMap<>();
+    private static HashMap<Class<? extends EditorCmd>, Class<? extends EditorView>> inflateMap = new HashMap<>();
 
     static {
         inflateMap.put(MainMenuCmd.class, MainMenuView.class);
@@ -31,14 +31,14 @@ public class Inflater {
 
     public static void inflate(Class<? extends EditorCmd> cmdClass) {
         if (inflateMap.containsKey(cmdClass)) {
-            Class viewClass = inflateMap.get(cmdClass);
+            Class<? extends EditorView> viewClass = inflateMap.get(cmdClass);
 
             app.post(new CallbackEvent(new CallbackEvent.Callback() {
                 @Override
                 public void invoke() {
                     try {
-                        EditorView view = (EditorView) viewClass.newInstance();
-                        EditorCmd cmd = (EditorCmd) cmdClass.newInstance();
+                        EditorView view = viewClass.newInstance();
+                        EditorCmd cmd = cmdClass.newInstance();
 
                         Inflater.initComponent(cmd, view);
 
