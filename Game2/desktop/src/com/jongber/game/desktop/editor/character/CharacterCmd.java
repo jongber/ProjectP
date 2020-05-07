@@ -2,10 +2,7 @@ package com.jongber.game.desktop.editor.character;
 
 import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.EditorView;
-import com.jongber.game.desktop.editor.character.panels.SaveLoadArea;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.jongber.game.desktop.common.panels.SaveLoadArea;
 
 public class CharacterCmd extends EditorCmd {
 

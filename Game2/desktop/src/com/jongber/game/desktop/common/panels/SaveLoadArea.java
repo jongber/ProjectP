@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.editor.character.panels;
+package com.jongber.game.desktop.common.panels;
 
 import com.jongber.game.desktop.editor.EditorCmd;
 
