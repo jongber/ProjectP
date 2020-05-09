@@ -8,7 +8,7 @@ import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.PerfRenderer;
 import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.old.editor.EditorView;
-import com.jongber.game.desktop.old.common.controller.BlockGridRenderer;
+import com.jongber.game.desktop.common.controller.BlockGridRenderer;
 import com.jongber.game.desktop.common.controller.CameraController;
 import com.jongber.game.desktop.old.editor.room.controller.RoomPropsController;
 import com.jongber.game.desktop.old.common.controller.RoomPropertyRenderer;

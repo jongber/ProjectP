@@ -10,7 +10,7 @@ import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.old.editor.EditorView;
 import com.jongber.game.desktop.old.editor.map.controller.RoomController;
 import com.jongber.game.desktop.old.editor.map.controller.TextureMover;
-import com.jongber.game.desktop.old.common.controller.BlockGridRenderer;
+import com.jongber.game.desktop.common.controller.BlockGridRenderer;
 import com.jongber.game.desktop.old.common.controller.BorderPostRenderer;
 import com.jongber.game.desktop.common.controller.CameraController;
 import com.jongber.game.desktop.old.common.controller.GroundPostRenderer;

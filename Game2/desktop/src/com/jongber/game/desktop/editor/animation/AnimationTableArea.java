@@ -6,7 +6,6 @@ import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.common.CallbackEvent;
 import com.jongber.game.desktop.editor.EditorAssetManager;
 import com.jongber.game.desktop.editor.EditorCmd;
-import com.jongber.game.desktop.editor.EditorView;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,6 +13,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.nio.channels.SelectableChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +46,13 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
     public AnimationTableArea(AnimationView view) {
         this.view = view;
 
-        this.tableModel = new DefaultTableModel();
+        this.tableModel = new DefaultTableModel() {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        this.tableModel.addColumn("path");
         this.tableModel.addColumn("name");
         this.tableModel.addColumn("pivot");
 
@@ -64,19 +70,12 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
     ActionListener importListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            JFileChooser fc = new JFileChooser(EditorCmd.BasePath);
-            fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
-            if (fc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+            File selected = loadAseprite();
+            if (selected == null) {
                 return;
             }
 
-            File selected = fc.getSelectedFile();
-            if (!selected.getPath().contains(EditorCmd.BasePath)) {
-                JOptionPane.showMessageDialog(null, "Invalid path, use only under android/asset");
-                return;
-            }
-
-            onImportAseprite(selected);
+            importAseprite(selected);
         }
     };
 
@@ -102,6 +101,14 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
                     Tuple2<String, AnimationAsset> asset = assets.get(row);
                     view.post(new AnimationSelectEvent(view, asset.getItem2(), VFAnimation.PlayMode.LOOP));
                 }
+
+                int[] selected = table.getSelectedRows();
+                if (selected.length > 0) {
+                    deleteRow.setEnabled(true);
+                }
+                else {
+                    deleteRow.setEnabled(false);
+                }
             }
         }
     };
@@ -113,14 +120,14 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         panel.setBorder(BorderFactory.createTitledBorder("Animation Area"));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5,5,5,5);
 
         gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(this.importAseprite);
+        panel.add(this.importAseprite, gbc);
 
         gbc.gridx = 1; gbc.gridy = 0;
-        panel.add(this.deleteRow);
+        panel.add(this.deleteRow, gbc);
 
         JScrollPane pane = new JScrollPane(this.table);
         gbc.gridx = 0; gbc.gridy = 1;
@@ -130,7 +137,23 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         return panel;
     }
 
-    private void onImportAseprite(File asepriteFile) {
+    private File loadAseprite() {
+        JFileChooser fc = new JFileChooser(EditorCmd.BasePath);
+        fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+        if (fc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+            return null;
+        }
+
+        File selected = fc.getSelectedFile();
+        if (!selected.getPath().contains(EditorCmd.BasePath)) {
+            JOptionPane.showMessageDialog(null, "Invalid path, use only under android/asset");
+            return null;
+        }
+
+        return selected;
+    }
+
+    private void importAseprite(File asepriteFile) {
         this.view.post(new CallbackEvent(new CallbackEvent.Callback() {
             @Override
             public void invoke() {
@@ -146,7 +169,8 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         synchronized (this) {
             assets.add(new Tuple2<>(asset.getName(), asset));
 
-            tableModel.addRow(new String[] {asset.getName(), asset.getPivot().toString()});
+            String[] split = asset.getName().split(" ");
+            tableModel.addRow(new String[] {split[0], split[1], asset.getPivot().toString()});
         }
     }
 }

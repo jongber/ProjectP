@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.old.common.controller;
+package com.jongber.game.desktop.common.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -35,7 +35,7 @@ public class BlockGridRenderer extends Controller implements Controller.PostRend
         Gdx.gl.glLineWidth(1f);
         renderer.setProjectionMatrix(camera.getCamera().combined);
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(Color.LIGHT_GRAY);
+        renderer.setColor(Color.DARK_GRAY);
         for (int i = -this.gridX; i < this.gridX; i += BlockSize) {
             renderer.line(i, -this.gridY, i, this.gridY);
         }
@@ -45,7 +45,7 @@ public class BlockGridRenderer extends Controller implements Controller.PostRend
         }
 
 
-        renderer.setColor(Color.WHITE);
+        renderer.setColor(Color.LIGHT_GRAY);
         renderer.line(0, -this.gridY,0, this.gridY);
         renderer.line(-this.gridX, 0, this.gridX, 0);
 
