@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.old.common.json;
+package com.jongber.game.desktop.common.json;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;

@@ -19,7 +19,7 @@ import com.jongber.game.desktop.old.editor.sprite.event.ChangeSpriteEvent;
 import com.jongber.game.desktop.old.editor.sprite.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.old.editor.common.ViewControlArea;
 import com.jongber.game.desktop.old.common.event.ClearAllEvent;
-import com.jongber.game.desktop.old.common.json.SpriteJson;
+import com.jongber.game.desktop.common.json.SpriteJson;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
