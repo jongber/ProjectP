@@ -24,6 +24,8 @@ public class AnimationView extends EditorView {
         this.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         Gdx.input.setInputProcessor(this.getInput());
+
+        getCameraWrapper().setZoom(0.5f);
     }
 
     public GameObject getAnimationTarget() {

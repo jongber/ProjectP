@@ -84,9 +84,9 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         public void actionPerformed(ActionEvent actionEvent) {
             synchronized (this) {
                 int[] selected = AnimationTableArea.this.table.getSelectedRows();
-                for (int i = selected.length - 1; i >= 0; ++i) {
-                    AnimationTableArea.this.assets.remove(i);
-                    AnimationTableArea.this.tableModel.removeRow(i);
+                for (int i = selected.length - 1; i >= 0; --i) {
+                    AnimationTableArea.this.assets.remove(selected[i]);
+                    AnimationTableArea.this.tableModel.removeRow(selected[i]);
                 }
             }
         }
@@ -97,9 +97,10 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         public void valueChanged(ListSelectionEvent listSelectionEvent) {
             synchronized (this) {
                 int row = table.getSelectedRow();
-                if (row > 0 && row < assets.size()) {
+                if (row >= 0 && row < assets.size()) {
                     Tuple2<String, AnimationAsset> asset = assets.get(row);
                     view.post(new AnimationSelectEvent(view, asset.getItem2(), VFAnimation.PlayMode.LOOP));
+                    System.out.println("selected " + row);
                 }
 
                 int[] selected = table.getSelectedRows();

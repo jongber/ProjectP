@@ -35,7 +35,7 @@ public class EditorAssetManager {
             Texture t = AssetManager.getTexture(jsonFile.getParent() + File.separator + json.meta.image);
 
             for (int i = tag.from; i <= tag.to; ++i) {
-                AsepriteJson.xywh size = json.frames.get(i).spriteSourceSize;
+                AsepriteJson.xywh size = json.frames.get(i).frame;
 
                 regions.add(new TextureRegion(t, size.x, size.y, size.w, size.h));
                 durations.add(json.frames.get(i).duration);
