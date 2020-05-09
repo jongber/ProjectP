@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.desktop.common.component.SpriteComponent;
 import com.jongber.game.desktop.common.controller.CameraController;
-import com.jongber.game.desktop.common.controller.SpriteRenderer;
+import com.jongber.game.desktop.common.controller.SpritePivotController;
 import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.EditorView;
 import com.jongber.game.desktop.common.controller.BlockGridRenderer;
@@ -19,7 +19,7 @@ public class AnimationView extends EditorView {
 
         this.addObject(this.object);
 
-        this.registerController(new SpriteRenderer());
+        this.registerController(new SpritePivotController());
         this.registerController(new CameraController());
         this.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 

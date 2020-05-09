@@ -15,7 +15,7 @@ import com.jongber.game.desktop.common.component.SpriteComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpriteRenderer extends InputControlAdapter implements Controller.Renderer, Controller.PostRenderer {
+public class SpritePivotController extends InputControlAdapter implements Controller.Renderer, Controller.PostRenderer {
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private GameObject selected;
