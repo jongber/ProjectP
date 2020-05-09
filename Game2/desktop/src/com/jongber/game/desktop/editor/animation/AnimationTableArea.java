@@ -1,13 +1,9 @@
-package com.jongber.game.desktop.editor.aimation;
+package com.jongber.game.desktop.editor.animation;
 
-import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.asset.AnimationAsset;
+import com.jongber.game.core.graphics.VFAnimation;
 import com.jongber.game.core.util.Tuple2;
-import com.jongber.game.core.util.Tuple3;
-import com.jongber.game.core.util.Tuple4;
-import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.common.CallbackEvent;
-import com.jongber.game.desktop.common.json.AsepriteJson;
 import com.jongber.game.desktop.editor.EditorAssetManager;
 import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.EditorView;
@@ -18,7 +14,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,33 +24,41 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 public class AnimationTableArea implements EditorCmd.AreaImpl {
 
-    EditorView view;
+    AnimationView view;
 
     JPanel panel;
 
-    JTable animTable;
-    DefaultTableModel animData;
+    JTable table;
+    DefaultTableModel tableModel;
 
     JButton importAseprite;
+    JButton deleteRow;
 
-    List<Tuple2<String/*anime name*/, AnimationAsset>> items = new ArrayList<>();
+    List<Tuple2<String/*anime name*/, AnimationAsset>> assets = new ArrayList<>();
 
-    public AnimationTableArea(EditorView view) {
+    public AnimationTableArea(AnimationView view) {
         this.view = view;
 
-        this.animData = new DefaultTableModel();
-        this.animData.addColumn("name");
-        this.animData.addColumn("pivot");
+        this.tableModel = new DefaultTableModel();
+        this.tableModel.addColumn("name");
+        this.tableModel.addColumn("pivot");
 
-        this.animTable = new JTable(animData);
+        this.table = new JTable(tableModel);
+        this.table.getSelectionModel().addListSelectionListener(this.rowSelectionListener);
 
         this.importAseprite = new JButton("import");
         this.importAseprite.addActionListener(importListener);
+
+        this.deleteRow = new JButton("delete");
+        this.deleteRow.addActionListener(this.deleteListener);
+        this.deleteRow.setEnabled(false);
     }
 
     ActionListener importListener = new ActionListener() {
@@ -77,6 +80,32 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         }
     };
 
+    ActionListener deleteListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            synchronized (this) {
+                int[] selected = AnimationTableArea.this.table.getSelectedRows();
+                for (int i = selected.length - 1; i >= 0; ++i) {
+                    AnimationTableArea.this.assets.remove(i);
+                    AnimationTableArea.this.tableModel.removeRow(i);
+                }
+            }
+        }
+    };
+
+    ListSelectionListener rowSelectionListener = new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent listSelectionEvent) {
+            synchronized (this) {
+                int row = table.getSelectedRow();
+                if (row > 0 && row < assets.size()) {
+                    Tuple2<String, AnimationAsset> asset = assets.get(row);
+                    view.post(new AnimationSelectEvent(view, asset.getItem2(), VFAnimation.PlayMode.LOOP));
+                }
+            }
+        }
+    };
+
     @Override
     public JPanel createPanel() {
         panel = new JPanel();
@@ -90,7 +119,10 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         gbc.gridx = 0; gbc.gridy = 0;
         panel.add(this.importAseprite);
 
-        JScrollPane pane = new JScrollPane(this.animTable);
+        gbc.gridx = 1; gbc.gridy = 0;
+        panel.add(this.deleteRow);
+
+        JScrollPane pane = new JScrollPane(this.table);
         gbc.gridx = 0; gbc.gridy = 1;
         //gbc.weightx = 1;
         panel.add(pane, gbc);
@@ -112,9 +144,9 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
 
     private void addItem(AnimationAsset asset) {
         synchronized (this) {
-            items.add(new Tuple2<>(asset.getName(), asset));
+            assets.add(new Tuple2<>(asset.getName(), asset));
 
-            animData.addRow(new String[] {asset.getName(), asset.getPivot().toString()});
+            tableModel.addRow(new String[] {asset.getName(), asset.getPivot().toString()});
         }
     }
 }

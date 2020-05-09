@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.editor.aimation;
+package com.jongber.game.desktop.editor.animation;
 
 import com.jongber.game.desktop.common.panels.SaveLoadArea;
 import com.jongber.game.desktop.editor.EditorCmd;
@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 
 public class AnimationCmd extends EditorCmd {
 
-    EditorView view;
+    AnimationView view;
     AnimationTableArea tablePanel;
 
     GridBagConstraints gbc;
@@ -26,7 +26,7 @@ public class AnimationCmd extends EditorCmd {
 
     @Override
     public void create(EditorView layer) {
-        this.view = layer;
+        this.view = (AnimationView)layer;
 
         createLayout();
     }

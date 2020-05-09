@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.editor.main;
+package com.jongber.game.desktop.editor.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
