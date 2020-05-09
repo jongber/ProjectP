@@ -16,6 +16,7 @@ public class VFAnimation {
     private int elapsed = 0;
     private int curIndex = 0;
     private int playbackCount = 0;
+    private boolean pause = false;
 
     public VFAnimation() {
     }
@@ -43,7 +44,22 @@ public class VFAnimation {
         return true;
     }
 
+    public boolean isPause() {
+        return this.pause;
+    }
+
+    public void pause() {
+        this.pause = true;
+    }
+
+    public void resume() {
+        this.pause = false;
+    }
+
     public TextureRegion getNext(float elapsed) {
+        if (this.pause)
+            return this.getCurrent();
+
         this.elapsed += elapsed * 1000.0f;
 
         int curDuration = this.asset.getFrameDuration(this.curIndex);
