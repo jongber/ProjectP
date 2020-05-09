@@ -1,5 +1,6 @@
 package com.jongber.game.core;
 
+import com.badlogic.gdx.math.Vector2;
 import com.jongber.game.core.component.Component;
 import com.jongber.game.core.component.TransformComponent;
 import com.jongber.game.core.util.PackedArray;
@@ -66,5 +67,13 @@ public class GameObject {
 
     public GameObject getChild(int index) {
         return this.children.get(index);
+    }
+
+    public Vector2 worldPos() {
+        return this.transform.getWorldPos();
+    }
+
+    public Vector2 localPos() {
+        return this.transform.getLocalPos();
     }
 }

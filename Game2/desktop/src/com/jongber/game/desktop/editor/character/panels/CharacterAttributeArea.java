@@ -5,6 +5,7 @@ import com.jongber.game.desktop.editor.EditorCmd;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -49,6 +50,7 @@ public class CharacterAttributeArea implements EditorCmd.AreaImpl {
 
         this.gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5,5,5,5);
 
         this.attach(this.className.getItem1(), this.className.getItem2(), 0);
         this.attach(this.maxHP.getItem1(), this.maxHP.getItem2(), 1);
