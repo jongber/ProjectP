@@ -14,7 +14,21 @@ public class AnimationAsset {
     private Vector2 pivot = new Vector2();
 
     public AnimationAsset(String name, List<TextureRegion> regions, List<Integer> durations) {
-        this(name, (TextureRegion[]) regions.toArray(), durations);
+        //this(name, (TextureRegion[]) regions.toArray(), durations);
+
+        this.regions = new TextureRegion[regions.size()];
+        this.frameDuration = new int[durations.size()];
+        this.name = name;
+
+        for (int i = 0; i < this.regions.length; ++i) {
+            this.regions[i] = regions.get(i);
+        }
+
+        for (int i = 0; i < this.frameDuration.length; ++i) {
+            this.frameDuration[i] = durations.get(i);
+        }
+
+        this.log();
     }
 
     public AnimationAsset(String name, TextureRegion[] regions, List<Integer> durations) {

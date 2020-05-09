@@ -21,27 +21,29 @@ public class EditorAssetManager {
             return new ArrayList<>();
         }
 
-        //// parse animation asset..
-        String imgPath = jsonFile.getPath() + File.separator + json.meta.image;
-        Texture t = AssetManager.getTexture(imgPath);
-
-        return parseAnimAssets(json, t);
+        return parseAnimAssets(jsonFile, json);
     }
 
-    private static List<AnimationAsset> parseAnimAssets(AsepriteJson json, Texture texture) {
+    private static List<AnimationAsset> parseAnimAssets(File jsonFile, AsepriteJson json) {
         List<AnimationAsset> assets = new ArrayList<>();
         List<TextureRegion> regions = new ArrayList<>();
         List<Integer> durations = new ArrayList<>();
+        File base = new File(EditorCmd.BasePath);
 
         for (AsepriteJson.FrameTag tag : json.meta.frameTags) {
+
+            Texture t = AssetManager.getTexture(jsonFile.getParent() + File.separator + json.meta.image);
+
             for (int i = tag.from; i <= tag.to; ++i) {
                 AsepriteJson.xywh size = json.frames.get(i).spriteSourceSize;
 
-                regions.add(new TextureRegion(texture, size.x, size.y, size.w, size.h));
+                regions.add(new TextureRegion(t, size.x, size.y, size.w, size.h));
                 durations.add(json.frames.get(i).duration);
             }
 
-            assets.add(new AnimationAsset(tag.name, regions, durations));
+            String path = base.toURI().relativize(jsonFile.toURI()).getPath();
+
+            assets.add(new AnimationAsset(String.format("%s %s",path, tag.name), regions, durations));
 
             regions.clear();
             durations.clear();

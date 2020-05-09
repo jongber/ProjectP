@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.event.GameEventHandler;
+import com.jongber.game.desktop.editor.aimation.AnimationCmd;
 import com.jongber.game.desktop.editor.character.CharacterCmd;
 
 public class EditorApp extends ApplicationAdapter {
@@ -18,7 +19,7 @@ public class EditorApp extends ApplicationAdapter {
     public void create () {
         Inflater.init(this);
         //Inflater.returnToMain();
-        Inflater.inflate(CharacterCmd.class);
+        Inflater.inflate(AnimationCmd.class);
     }
 
     @Override
