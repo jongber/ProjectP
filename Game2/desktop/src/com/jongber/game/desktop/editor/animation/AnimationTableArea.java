@@ -1,6 +1,10 @@
 package com.jongber.game.desktop.editor.animation;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.jongber.game.core.asset.AnimationAsset;
+import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.graphics.VFAnimation;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
@@ -176,7 +180,41 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
     }
 
     public void onLoad(File file) {
+        synchronized (this) {
+            for (int i = assets.size() - 1; i >= 0; --i) {
+                assets.remove(i);
+                tableModel.removeRow(i);
+            }
+        }
 
+        this.view.post(new CallbackEvent(new CallbackEvent.Callback() {
+            @Override
+            public void invoke() {
+                JsonList<AnimationJson> jsons = new JsonList<>();
+                jsons = Utility.readJson(jsons.getClass(), file);
+                List<Tuple2<AnimationAsset, String>> assets = new ArrayList<>();
+
+                for (AnimationJson json : jsons.list) {
+                    Texture t = AssetManager.getTexture(json.image);
+                    List<TextureRegion> regions = new ArrayList<>();
+                    List<Integer> durations = new ArrayList<>();
+
+                    for (Tuple2<Rectangle, Integer> frame : json.frames) {
+                        Rectangle r = frame.getItem1();
+                        regions.add(new TextureRegion(t, (int)r.x, (int)r.y, (int)r.width, (int)r.height));
+
+                        durations.add(frame.getItem2());
+                    }
+
+                    AnimationAsset asset = new AnimationAsset(json.name, regions, durations);
+                    assets.add(new Tuple2<>(asset, json.image));
+                }
+
+                for (Tuple2<AnimationAsset, String> asset : assets) {
+                    addItem(asset.getItem1(), asset.getItem2());
+                }
+            }
+        }));
     }
 
     private File loadAseprite() {
