@@ -12,6 +12,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.nio.channels.SelectableChannel;
 import java.util.ArrayList;
@@ -60,7 +62,7 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
 
         this.table = new JTable(tableModel);
         this.table.getSelectionModel().addListSelectionListener(this.rowSelectionListener);
-        this.table.getModel().addTableModelListener(tableModelListener);
+        this.table.addPropertyChangeListener(tableListener);
 
         this.importAseprite = new JButton("import");
         this.importAseprite.addActionListener(importListener);
@@ -102,6 +104,8 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         @Override
         public void valueChanged(ListSelectionEvent listSelectionEvent) {
             synchronized (AnimationTableArea.this) {
+                if (listSelectionEvent.getValueIsAdjusting()) return;
+
                 int row = table.getSelectedRow();
                 if (row >= 0 && row < assets.size()) {
                     AnimationAsset asset = assets.get(row);
@@ -120,16 +124,11 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         }
     };
 
-    TableModelListener tableModelListener = new TableModelListener() {
+    PropertyChangeListener tableListener = new PropertyChangeListener() {
         @Override
-        public void tableChanged(TableModelEvent e) {
-            if (e.getType() == TableModelEvent.UPDATE) {
-                int row = e.getFirstRow();
-                int col = e.getColumn();
-                TableModel model = (TableModel)e.getSource();
-                String columnName = model.getColumnName(col);
-                //String data = (String)model.getValueAt(row, col);
-                //System.out.println("type[" + e.getType() + "] row[" + row +"] col[" + col + "]" + columnName + " " + data);
+        public void propertyChange(PropertyChangeEvent e) {
+            if (e.getPropertyName() == "tableCellEditor") {
+                cellChanged();
             }
         }
     };
@@ -219,5 +218,18 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
             table.setValueAt(Float.toString(asset.getPivot().x), row, 2);
             table.setValueAt(Float.toString(asset.getPivot().y), row, 3);
         }
+    }
+
+    private void cellChanged() {
+//        int row = table.getSelectedRow();
+//        int col = table.getSelectedColumn();
+//        if (table.getColumnName(col).startsWith("pivot") == false) {
+//            System.out.println("??");
+//            panel.requestFocus();
+//        }
+//        System.out.println("row " + row  + "col" + col);
+//        String val = (String)table.getValueAt(row, col);
+//        System.out.println(val);
+
     }
 }
