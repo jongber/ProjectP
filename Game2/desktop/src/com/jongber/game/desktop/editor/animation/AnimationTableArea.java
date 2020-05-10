@@ -23,6 +23,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -52,6 +54,7 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
     Timer timer;
 
     List<Tuple2<AnimationAsset, String/*img path*/>> assets = new ArrayList<>();
+    HashSet<String> flags = new HashSet<>();
 
     public AnimationTableArea(AnimationView view) {
         this.view = view;
@@ -96,8 +99,10 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
             synchronized (AnimationTableArea.this) {
                 int[] selected = AnimationTableArea.this.table.getSelectedRows();
                 for (int i = selected.length - 1; i >= 0; --i) {
-                    AnimationTableArea.this.assets.remove(selected[i]);
+                    Tuple2<AnimationAsset, String> removed = AnimationTableArea.this.assets.remove(selected[i]);
                     AnimationTableArea.this.tableModel.removeRow(selected[i]);
+
+                    flags.remove(removed.getItem1().getName());
                 }
             }
         }
@@ -182,9 +187,11 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
     public void onLoad(File file) {
         synchronized (this) {
             for (int i = assets.size() - 1; i >= 0; --i) {
-                assets.remove(i);
                 tableModel.removeRow(i);
             }
+
+            assets.clear();
+            flags.clear();
         }
 
         this.view.post(new CallbackEvent(new CallbackEvent.Callback() {
@@ -230,7 +237,10 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
                 try {
                     List<Tuple2<AnimationAsset, String>> assets = EditorAssetManager.loadAseprite(asepriteFile);
                     for (Tuple2<AnimationAsset, String> asset : assets) {
-                        addItem(asset.getItem1(), asset.getItem2());
+                        if (addItem(asset.getItem1(), asset.getItem2()) == false) {
+                            JOptionPane.showMessageDialog(null, "Duplicated animation found");
+                            return;
+                        }
                     }
                 }
                 catch (Exception e) {
@@ -241,16 +251,25 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         }));
     }
 
-    private void addItem(AnimationAsset asset, String imgPath) {
+    private boolean addItem(AnimationAsset asset, String imgPath) {
         synchronized (this) {
-            assets.add(new Tuple2<>(asset, imgPath));
+            if (this.flags.contains(asset.getName())) {
+                return false;
+            }
+            else {
+                assets.add(new Tuple2<>(asset, imgPath));
 
-            String[] split = asset.getName().split(" ");
-            tableModel.addRow(new String[] {
-                    split[0],
-                    split[1],
-                    Float.toString(asset.getPivot().x),
-                    Float.toString(asset.getPivot().y)});
+                String[] split = asset.getName().split(" ");
+                tableModel.addRow(new String[] {
+                        split[0],
+                        split[1],
+                        Float.toString(asset.getPivot().x),
+                        Float.toString(asset.getPivot().y)});
+
+                this.flags.add(asset.getName());
+
+                return true;
+            }
         }
     }
 
