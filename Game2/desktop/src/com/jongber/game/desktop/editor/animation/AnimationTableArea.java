@@ -24,10 +24,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.Timer;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public class AnimationTableArea implements EditorCmd.AreaImpl {
 
@@ -40,24 +44,23 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
 
     JButton importAseprite;
     JButton deleteRow;
+    Timer timer;
 
-    List<Tuple2<String/*anime name*/, AnimationAsset>> assets = new ArrayList<>();
+    List<AnimationAsset> assets = new ArrayList<>();
 
     public AnimationTableArea(AnimationView view) {
         this.view = view;
 
-        this.tableModel = new DefaultTableModel() {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        this.tableModel = new DefaultTableModel();
 
         this.tableModel.addColumn("path");
         this.tableModel.addColumn("name");
-        this.tableModel.addColumn("pivot");
+        this.tableModel.addColumn("pivot.x");
+        this.tableModel.addColumn("pivot.y");
 
         this.table = new JTable(tableModel);
         this.table.getSelectionModel().addListSelectionListener(this.rowSelectionListener);
+        this.table.getModel().addTableModelListener(tableModelListener);
 
         this.importAseprite = new JButton("import");
         this.importAseprite.addActionListener(importListener);
@@ -65,6 +68,9 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         this.deleteRow = new JButton("delete");
         this.deleteRow.addActionListener(this.deleteListener);
         this.deleteRow.setEnabled(false);
+
+        this.timer = new Timer(60, this.timerListener);
+        this.timer.start();
     }
 
     ActionListener importListener = new ActionListener() {
@@ -82,7 +88,7 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
     ActionListener deleteListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            synchronized (this) {
+            synchronized (AnimationTableArea.this) {
                 int[] selected = AnimationTableArea.this.table.getSelectedRows();
                 for (int i = selected.length - 1; i >= 0; --i) {
                     AnimationTableArea.this.assets.remove(selected[i]);
@@ -95,11 +101,11 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
     ListSelectionListener rowSelectionListener = new ListSelectionListener() {
         @Override
         public void valueChanged(ListSelectionEvent listSelectionEvent) {
-            synchronized (this) {
+            synchronized (AnimationTableArea.this) {
                 int row = table.getSelectedRow();
                 if (row >= 0 && row < assets.size()) {
-                    Tuple2<String, AnimationAsset> asset = assets.get(row);
-                    view.post(new AnimationSelectEvent(view, asset.getItem2(), VFAnimation.PlayMode.LOOP));
+                    AnimationAsset asset = assets.get(row);
+                    view.post(new AnimationSelectEvent(view, asset, VFAnimation.PlayMode.LOOP));
                     System.out.println("selected " + row);
                 }
 
@@ -109,6 +115,32 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
                 }
                 else {
                     deleteRow.setEnabled(false);
+                }
+            }
+        }
+    };
+
+    TableModelListener tableModelListener = new TableModelListener() {
+        @Override
+        public void tableChanged(TableModelEvent e) {
+            if (e.getType() == TableModelEvent.UPDATE) {
+                int row = e.getFirstRow();
+                int col = e.getColumn();
+                TableModel model = (TableModel)e.getSource();
+                String columnName = model.getColumnName(col);
+                //String data = (String)model.getValueAt(row, col);
+                //System.out.println("type[" + e.getType() + "] row[" + row +"] col[" + col + "]" + columnName + " " + data);
+            }
+        }
+    };
+
+    ActionListener timerListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            synchronized (AnimationTableArea.this) {
+                int row = table.getSelectedRow();
+                if (row >= 0 && row < assets.size()) {
+                    updateItem(row, assets.get(row));
                 }
             }
         }
@@ -168,10 +200,24 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
 
     private void addItem(AnimationAsset asset) {
         synchronized (this) {
-            assets.add(new Tuple2<>(asset.getName(), asset));
+            assets.add(asset);
 
             String[] split = asset.getName().split(" ");
-            tableModel.addRow(new String[] {split[0], split[1], asset.getPivot().toString()});
+            tableModel.addRow(new String[] {
+                    split[0],
+                    split[1],
+                    Float.toString(asset.getPivot().x),
+                    Float.toString(asset.getPivot().y)});
+        }
+    }
+
+    private void updateItem(int row, AnimationAsset asset) {
+        synchronized (this) {
+            String[] split = asset.getName().split(" ");
+            table.setValueAt(split[0], row, 0);
+            table.setValueAt(split[1], row, 1);
+            table.setValueAt(Float.toString(asset.getPivot().x), row, 2);
+            table.setValueAt(Float.toString(asset.getPivot().y), row, 3);
         }
     }
 }
