@@ -41,6 +41,28 @@ public class EditorAssetManager {
         return jsons;
     }
 
+    public static List<Tuple2<AnimationAsset, String>> loadAnimations(JsonList<AnimationJson> jsons) {
+        List<Tuple2<AnimationAsset, String>> assets = new ArrayList<>();
+
+        for (AnimationJson json : jsons.list) {
+            Texture t = AssetManager.getTexture(json.image);
+            List<TextureRegion> regions = new ArrayList<>();
+            List<Integer> durations = new ArrayList<>();
+
+            for (Tuple2<Rectangle, Integer> frame : json.frames) {
+                Rectangle r = frame.getItem1();
+                regions.add(new TextureRegion(t, (int)r.x, (int)r.y, (int)r.width, (int)r.height));
+
+                durations.add(frame.getItem2());
+            }
+
+            AnimationAsset asset = new AnimationAsset(json.name, regions, durations);
+            assets.add(new Tuple2<>(asset, json.image));
+        }
+
+        return assets;
+    }
+
     public static List<Tuple2<AnimationAsset, String>> loadAseprite(File jsonFile) {
         AsepriteJson json = Utility.readJson(AsepriteJson.class, jsonFile);
         if (json == null) {

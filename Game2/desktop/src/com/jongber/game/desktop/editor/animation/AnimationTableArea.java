@@ -193,23 +193,7 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
                 try {
                     JsonList<AnimationJson> jsons = new JsonList<>();
                     jsons = Utility.readJson(jsons.getClass(), file);
-                    List<Tuple2<AnimationAsset, String>> assets = new ArrayList<>();
-
-                    for (AnimationJson json : jsons.list) {
-                        Texture t = AssetManager.getTexture(json.image);
-                        List<TextureRegion> regions = new ArrayList<>();
-                        List<Integer> durations = new ArrayList<>();
-
-                        for (Tuple2<Rectangle, Integer> frame : json.frames) {
-                            Rectangle r = frame.getItem1();
-                            regions.add(new TextureRegion(t, (int)r.x, (int)r.y, (int)r.width, (int)r.height));
-
-                            durations.add(frame.getItem2());
-                        }
-
-                        AnimationAsset asset = new AnimationAsset(json.name, regions, durations);
-                        assets.add(new Tuple2<>(asset, json.image));
-                    }
+                    List<Tuple2<AnimationAsset, String>> assets = EditorAssetManager.loadAnimations(jsons);
 
                     for (Tuple2<AnimationAsset, String> asset : assets) {
                         addItem(asset.getItem1(), asset.getItem2());
