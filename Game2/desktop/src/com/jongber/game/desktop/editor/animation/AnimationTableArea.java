@@ -2,7 +2,6 @@ package com.jongber.game.desktop.editor.animation;
 
 import com.jongber.game.core.asset.AnimationAsset;
 import com.jongber.game.core.graphics.VFAnimation;
-import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.common.CallbackEvent;
 import com.jongber.game.desktop.editor.EditorAssetManager;
 import com.jongber.game.desktop.editor.EditorCmd;
@@ -15,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.nio.channels.SelectableChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +27,8 @@ import javax.swing.JTable;
 import javax.swing.Timer;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 public class AnimationTableArea implements EditorCmd.AreaImpl {
 
@@ -128,7 +123,7 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         @Override
         public void propertyChange(PropertyChangeEvent e) {
             if (e.getPropertyName() == "tableCellEditor") {
-                cellChanged();
+                cellTouched();
             }
         }
     };
@@ -220,16 +215,35 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         }
     }
 
-    private void cellChanged() {
-//        int row = table.getSelectedRow();
-//        int col = table.getSelectedColumn();
-//        if (table.getColumnName(col).startsWith("pivot") == false) {
-//            System.out.println("??");
-//            panel.requestFocus();
-//        }
-//        System.out.println("row " + row  + "col" + col);
-//        String val = (String)table.getValueAt(row, col);
-//        System.out.println(val);
+    private void cellTouched() {
+        int row = table.getSelectedRow();
+        int col = table.getSelectedColumn();
 
+        if (row < 0 || row >= assets.size()) {
+            return;
+        }
+
+        AnimationAsset asset = assets.get(row);
+
+        //// only pivot change
+        if (table.getColumnName(col).startsWith("pivot") == false) {
+            String value =(String)table.getValueAt(row, col);
+            String[] split = asset.getName().split(" ");
+            if (split[0].equals(value) || split[1].equals(value) == false) {
+                JOptionPane.showMessageDialog(null, "pivot only editable");
+            }
+
+            return;
+        }
+
+        try {
+            float x = Float.parseFloat((String)table.getValueAt(row, 2));
+            float y = Float.parseFloat((String)table.getValueAt(row, 3));
+            asset.setPivot(x, y);
+        }
+        catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "invalid float format!");
+            e.printStackTrace();
+        }
     }
 }
