@@ -3,7 +3,10 @@ package com.jongber.game.desktop.editor.animation;
 import com.jongber.game.core.asset.AnimationAsset;
 import com.jongber.game.core.graphics.VFAnimation;
 import com.jongber.game.core.util.Tuple2;
+import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.common.CallbackEvent;
+import com.jongber.game.desktop.common.json.AnimationJson;
+import com.jongber.game.desktop.common.json.JsonList;
 import com.jongber.game.desktop.editor.EditorAssetManager;
 import com.jongber.game.desktop.editor.EditorCmd;
 
@@ -163,6 +166,17 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         panel.add(pane, gbc);
 
         return panel;
+    }
+
+    public void onSave(File file) {
+        synchronized (this) {
+            JsonList<AnimationJson> list = EditorAssetManager.toJson(this.assets);
+            Utility.writeJson(list, file);
+        }
+    }
+
+    public void onLoad(File file) {
+
     }
 
     private File loadAseprite() {

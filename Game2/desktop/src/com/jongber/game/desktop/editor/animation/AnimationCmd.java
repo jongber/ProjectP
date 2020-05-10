@@ -9,11 +9,15 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class AnimationCmd extends EditorCmd {
 
     AnimationView view;
-    AnimationTableArea tablePanel;
+    AnimationTableArea tableArea;
 
     GridBagConstraints gbc;
 
@@ -36,8 +40,8 @@ public class AnimationCmd extends EditorCmd {
         this.add(new SaveLoadArea(this, saveListener, loadListener).createPanel(), gbc);
 
         gbc.gridx = 0; gbc.gridy = 1;
-        this.tablePanel = new AnimationTableArea(this.view);
-        this.add(this.tablePanel.createPanel(), gbc);
+        this.tableArea = new AnimationTableArea(this.view);
+        this.add(this.tableArea.createPanel(), gbc);
 
         this.pack();
     }
@@ -45,14 +49,24 @@ public class AnimationCmd extends EditorCmd {
     ActionListener saveListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-
+            JFileChooser fc = new JFileChooser(EditorCmd.BasePath);
+            fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+            if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                AnimationCmd.this.tableArea.onSave(file);
+            }
         }
     };
 
     ActionListener loadListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-
+            JFileChooser fc = new JFileChooser(EditorCmd.BasePath);
+            fc.setFileFilter(new FileNameExtensionFilter("json", "json"));
+            if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                AnimationCmd.this.tableArea.onLoad(file);
+            }
         }
     };
 }

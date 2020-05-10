@@ -34,6 +34,8 @@ public class EditorAssetManager {
 
                 json.frames.add(new Tuple2<>(new Rectangle(r.getRegionX(), r.getRegionY(), r.getRegionWidth(), r.getRegionHeight()), d));
             }
+
+            jsons.list.add(json);
         }
 
         return jsons;
@@ -67,9 +69,10 @@ public class EditorAssetManager {
             }
 
             String path = base.toURI().relativize(jsonFile.toURI()).getPath();
-
             AnimationAsset asset = new AnimationAsset(String.format("%s %s",path, tag.name), regions, durations);
-            String imgPath = path + File.separator + json.meta.image;
+
+            path = base.toURI().relativize(jsonFile.getParentFile().toURI()).getPath();
+            String imgPath = path + json.meta.image;
             assets.add(new Tuple2<>(asset, imgPath));
 
             regions.clear();
