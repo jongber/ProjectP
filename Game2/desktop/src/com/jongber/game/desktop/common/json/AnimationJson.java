@@ -7,7 +7,7 @@ import com.jongber.game.core.util.Tuple2;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpriteJson {
+public class AnimationJson {
     public String name;
     public String image;
     public List<Tuple2<Rectangle, Integer>> frames = new ArrayList<>();

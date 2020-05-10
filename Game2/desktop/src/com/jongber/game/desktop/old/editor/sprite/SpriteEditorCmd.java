@@ -19,7 +19,7 @@ import com.jongber.game.desktop.old.editor.sprite.event.ChangeSpriteEvent;
 import com.jongber.game.desktop.old.editor.sprite.event.LoadAsepriteEvent;
 import com.jongber.game.desktop.old.editor.common.ViewControlArea;
 import com.jongber.game.desktop.old.common.event.ClearAllEvent;
-import com.jongber.game.desktop.common.json.SpriteJson;
+import com.jongber.game.desktop.common.json.AnimationJson;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -142,7 +142,7 @@ public class SpriteEditorCmd extends JFrame {
         this.saveLoadArea.onAsepriteLoaded(imgPath);
     }
 
-    void onSpriteJsonLoaded(SpriteJson json) {
+    void onSpriteJsonLoaded(AnimationJson json) {
 
         //// gdx의 asset folder에 파일이 생성된거 인지를 못함..
         json.image = basePath + File.separator + json.image;
@@ -377,7 +377,7 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback, LoadSpriteJsonEvent
         this.cmd.pack();
     }
 
-    void onLoadSpriteJson(SpriteJson json) {
+    void onLoadSpriteJson(AnimationJson json) {
         this.resetTable();
         this.setEnable(true);
 
@@ -498,7 +498,7 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback, LoadSpriteJsonEvent
         model.addColumn("Pivot");
     }
 
-    private void adjustColumn(SpriteJson json) {
+    private void adjustColumn(AnimationJson json) {
         for (int i = 0; i < json.frames.size(); ++i) {
             model.addColumn(i);
         }
@@ -521,7 +521,7 @@ class SpriteSheetArea implements LoadAsepriteEvent.Callback, LoadSpriteJsonEvent
         }
     }
 
-    private void addRows(SpriteJson json) {
+    private void addRows(AnimationJson json) {
         String[] values = new String[model.getColumnCount()];
 
         values[0] = json.name;
@@ -619,7 +619,7 @@ class SaveLoadArea {
                 try
                 {
                     File selected = fc.getSelectedFile();
-                    SpriteJson json = Utility.readJson(SpriteJson.class, selected);
+                    AnimationJson json = Utility.readJson(AnimationJson.class, selected);
 
                     File imgFile = new File(cmd.basePath + File.separator + json.image);
                     if (imgFile.exists() == false || imgFile.canWrite() == false) {
@@ -642,14 +642,14 @@ class SaveLoadArea {
             @Override
             public void invoke() {
                 synchronized (sheet) {
-                    List<SpriteJson> jsons = new ArrayList<>();
+                    List<AnimationJson> jsons = new ArrayList<>();
 
                     SpriteComponent c = sheet.created.getComponent(SpriteComponent.class);
                     int rows = sheet.model.getRowCount();
                     int cols = sheet.model.getColumnCount();
 
                     for (int row = 0; row < rows; ++row) {
-                        SpriteJson json = new SpriteJson();
+                        AnimationJson json = new AnimationJson();
                         json.name = (String)sheet.model.getValueAt(row, 0);
 
                         for (int col = 1; col < cols - 1; ++col) {
@@ -677,7 +677,7 @@ class SaveLoadArea {
         }));
     }
 
-    void processLoad(SpriteJson json) {
+    void processLoad(AnimationJson json) {
         cmd.onSpriteJsonLoaded(json);
     }
 
@@ -695,16 +695,16 @@ class SaveLoadArea {
         this.imgPath = imgPath;
     }
 
-    void onSpriteJsonLoaded(SpriteJson json) {
+    void onSpriteJsonLoaded(AnimationJson json) {
         this.btSave.setEnabled(true);
         this.imgPath = cmd.basePath + File.separator + json.image;
     }
 
-    private void validateAndWrite(File saveDir, List<SpriteJson> jsons) {
+    private void validateAndWrite(File saveDir, List<AnimationJson> jsons) {
 
         boolean overwrite = false;
         // validate
-        for (SpriteJson json : jsons) {
+        for (AnimationJson json : jsons) {
             File file = new File(saveDir.getPath() + File.separator + json.name + ".sprite");
             if (file.exists()) {
                 overwrite = true;
@@ -725,7 +725,7 @@ class SaveLoadArea {
 
         // save
         try {
-            for (SpriteJson json : jsons) {
+            for (AnimationJson json : jsons) {
                 File file = new File(saveDir.getPath() + File.separator + json.name + ".sprite");
                 Utility.writeJson(json, file);
 

@@ -2,6 +2,7 @@ package com.jongber.game.desktop.editor.animation;
 
 import com.jongber.game.core.asset.AnimationAsset;
 import com.jongber.game.core.graphics.VFAnimation;
+import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.common.CallbackEvent;
 import com.jongber.game.desktop.editor.EditorAssetManager;
 import com.jongber.game.desktop.editor.EditorCmd;
@@ -43,7 +44,7 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
     JButton deleteRow;
     Timer timer;
 
-    List<AnimationAsset> assets = new ArrayList<>();
+    List<Tuple2<AnimationAsset, String/*img path*/>> assets = new ArrayList<>();
 
     public AnimationTableArea(AnimationView view) {
         this.view = view;
@@ -103,7 +104,7 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
 
                 int row = table.getSelectedRow();
                 if (row >= 0 && row < assets.size()) {
-                    AnimationAsset asset = assets.get(row);
+                    AnimationAsset asset = assets.get(row).getItem1();
                     view.post(new AnimationSelectEvent(view, asset, VFAnimation.PlayMode.LOOP));
                     System.out.println("selected " + row);
                 }
@@ -134,7 +135,7 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
             synchronized (AnimationTableArea.this) {
                 int row = table.getSelectedRow();
                 if (row >= 0 && row < assets.size()) {
-                    updateItem(row, assets.get(row));
+                    updateItem(row, assets.get(row).getItem1());
                 }
             }
         }
@@ -184,17 +185,17 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
         this.view.post(new CallbackEvent(new CallbackEvent.Callback() {
             @Override
             public void invoke() {
-                List<AnimationAsset> assets = EditorAssetManager.loadAseprite(asepriteFile);
-                for (AnimationAsset asset : assets) {
-                    addItem(asset);
+                List<Tuple2<AnimationAsset, String>> assets = EditorAssetManager.loadAseprite(asepriteFile);
+                for (Tuple2<AnimationAsset, String> asset : assets) {
+                    addItem(asset.getItem1(), asset.getItem2());
                 }
             }
         }));
     }
 
-    private void addItem(AnimationAsset asset) {
+    private void addItem(AnimationAsset asset, String imgPath) {
         synchronized (this) {
-            assets.add(asset);
+            assets.add(new Tuple2<>(asset, imgPath));
 
             String[] split = asset.getName().split(" ");
             tableModel.addRow(new String[] {
@@ -223,7 +224,7 @@ public class AnimationTableArea implements EditorCmd.AreaImpl {
             return;
         }
 
-        AnimationAsset asset = assets.get(row);
+        AnimationAsset asset = assets.get(row).getItem1();
 
         //// only pivot change
         if (table.getColumnName(col).startsWith("pivot") == false) {

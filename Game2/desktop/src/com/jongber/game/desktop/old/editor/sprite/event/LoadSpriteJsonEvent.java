@@ -6,7 +6,7 @@ import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.desktop.old.editor.sprite.SpriteEditViewer;
 import com.jongber.game.desktop.old.common.component.SpriteComponent;
-import com.jongber.game.desktop.common.json.SpriteJson;
+import com.jongber.game.desktop.common.json.AnimationJson;
 
 public class LoadSpriteJsonEvent extends GameEvent {
 
@@ -15,10 +15,10 @@ public class LoadSpriteJsonEvent extends GameEvent {
     }
 
     SpriteEditViewer viewer;
-    SpriteJson json;
+    AnimationJson json;
     Callback callback;
 
-    public LoadSpriteJsonEvent(SpriteEditViewer viewer, SpriteJson json, Callback callback) {
+    public LoadSpriteJsonEvent(SpriteEditViewer viewer, AnimationJson json, Callback callback) {
         this.viewer = viewer;
         this.json = json;
         this.callback = callback;

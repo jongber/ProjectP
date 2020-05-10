@@ -9,7 +9,7 @@ import com.jongber.game.core.component.Component;
 import com.jongber.game.core.graphics.VFAnimation;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.common.json.AsepriteJson;
-import com.jongber.game.desktop.common.json.SpriteJson;
+import com.jongber.game.desktop.common.json.AnimationJson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class SpriteComponent extends Component {
 
     public VFAnimation currentAnimation;
 
-    public SpriteComponent(SpriteJson json, Texture t) {
+    public SpriteComponent(AnimationJson json, Texture t) {
         this.texture = t;
         for (Tuple2<Rectangle, Integer> item : json.frames) {
             Rectangle r = item.getItem1();
