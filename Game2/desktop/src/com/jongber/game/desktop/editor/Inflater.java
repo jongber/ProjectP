@@ -8,6 +8,8 @@ import com.jongber.game.desktop.editor.character.CharacterCmd;
 import com.jongber.game.desktop.editor.character.CharacterView;
 import com.jongber.game.desktop.editor.mainmenu.MainMenuCmd;
 import com.jongber.game.desktop.editor.mainmenu.MainMenuView;
+import com.jongber.game.desktop.editor.sequence.SequenceCmd;
+import com.jongber.game.desktop.editor.sequence.SequenceView;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -22,6 +24,7 @@ public class Inflater {
         inflateMap.put(MainMenuCmd.class, MainMenuView.class);
         inflateMap.put(CharacterCmd.class, CharacterView.class);
         inflateMap.put(AnimationCmd.class, AnimationView.class);
+        inflateMap.put(SequenceCmd.class, SequenceView.class);
     }
 
     public static void init(EditorApp app) {
