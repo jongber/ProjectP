@@ -9,6 +9,8 @@ import com.jongber.game.core.controller.Transformation;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.event.GameEventHandler;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
+import com.jongber.game.core.sequence.SequencePlan;
+import com.jongber.game.core.sequence.SequencePlayer;
 import com.jongber.game.core.util.PackedArray;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class GameLayer {
     private GameLayerInput layerInput;
 
     private GameEventHandler eventHandler = new GameEventHandler();
+    private SequencePlayer sequencePlayer = new SequencePlayer();
 
     public GameLayer() {
         this.cameraWrapper = new OrthoCameraWrapper(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -128,6 +131,12 @@ public class GameLayer {
         for (Controller.Updater updater : this.updaters) {
             updater.update(elapsed);
         }
+
+        this.sequencePlayer.update(elapsed);
+    }
+
+    public void setSequencePlan(SequencePlan plan) {
+        this.sequencePlayer.setPlan(plan);
     }
 
     public void addObject(GameObject object) {
