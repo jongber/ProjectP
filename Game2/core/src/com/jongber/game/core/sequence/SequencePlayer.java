@@ -1,16 +1,18 @@
-package com.jongber.game.desktop.editor.sequence;
+package com.jongber.game.core.sequence;
 
+import com.jongber.game.core.GameObject;
+import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.util.PackedArray;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SequencePlayer {
+public class SequencePlayer extends Controller implements Controller.Updater {
 
     private float elapsed = 0.0f;
     PackedArray<GameSequence> curSeq = new PackedArray<>();
     List<GameSequence> endSeqs = new ArrayList<>();
-    SequencePlan seqPlan;
+    SequencePlan seqPlan = new SequencePlan();
 
     public void setPlan(SequencePlan plan) {
         this.seqPlan = plan;
@@ -22,7 +24,12 @@ public class SequencePlayer {
         return seqPlan == null || (this.curSeq.size() == 0 && seqPlan.ended());
     }
 
+    @Override
     public void update(float elapsed) {
+        if (ended()) {
+            return;
+        }
+
         this.elapsed += elapsed;
 
         this.selectSequence();
@@ -31,10 +38,6 @@ public class SequencePlayer {
     }
 
     private void selectSequence() {
-        if (ended()) {
-            return;
-        }
-
         GameSequence seq = this.seqPlan.getNext(this.elapsed);
         while (seq != null) {
             this.curSeq.add(seq);
@@ -58,5 +61,13 @@ public class SequencePlayer {
         }
 
         this.endSeqs.clear();
+    }
+
+    @Override
+    public void build(List<GameObject> graph) {
+    }
+
+    @Override
+    public void dispose() {
     }
 }
