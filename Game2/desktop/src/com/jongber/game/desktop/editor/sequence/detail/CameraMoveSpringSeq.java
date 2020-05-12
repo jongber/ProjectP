@@ -5,7 +5,7 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
 import com.jongber.game.core.sequence.GameSequence;
 
-public class CameraMoveSpringSeq implements GameSequence {
+public class CameraMoveSpringSeq extends GameSequence {
 
     private final Vector3 to;
     private final Float duration;
@@ -92,5 +92,9 @@ public class CameraMoveSpringSeq implements GameSequence {
 
     private float calcK() {
         return (float)((Math.PI * Math.PI) / (this.duration * this.duration));
+    }
+
+    @Override
+    public void dispose() {
     }
 }

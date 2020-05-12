@@ -1,16 +1,15 @@
 package com.jongber.game.core.sequence;
 
 import com.jongber.game.core.GameLayer;
+import com.jongber.game.core.controller.Controller;
 
-public interface GameSequence {
+public abstract class GameSequence extends Controller implements Controller.Updater {
 
-    void create(GameLayer layer);
+    public abstract void create(GameLayer layer);
 
-    void start();
+    public abstract void start();
 
-    void update(float elapsed);
+    public abstract void end();
 
-    void end();
-
-    boolean isEnded();
+    public abstract boolean isEnded();
 }

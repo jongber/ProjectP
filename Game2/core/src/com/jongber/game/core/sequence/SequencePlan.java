@@ -34,12 +34,16 @@ public class SequencePlan {
         }
     }
 
+    public void removeLinkSeq(GameSequence seq) {
+        linkedPlans.remove(seq);
+    }
+
     public void addTimeSeq(float time, GameSequence seq) {
         timePlans.add(new Tuple2<>(time, seq));
     }
 
     public boolean ended() {
-        return this.timePlans.isEmpty();
+        return this.timePlans.isEmpty() && this.linkedPlans.size() == 0;
     }
 
     public GameSequence getNext(float time) {
