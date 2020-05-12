@@ -7,21 +7,27 @@ import com.jongber.game.desktop.common.controller.BlockGridRenderer;
 import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.EditorView;
 import com.jongber.game.desktop.editor.sequence.detail.CameraMoveSpringSeq;
+import com.jongber.game.desktop.editor.sequence.detail.FadeInSeq;
 
 public class SequenceView extends EditorView {
 
     public SequenceView() {
         this.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
-        CameraMoveSpringSeq seq1 = new CameraMoveSpringSeq(new Vector3(2000.0f, 0.0f, 0.3f), 3.0f);
-        seq1.create(this);
         SequencePlan plan = new SequencePlan();
-        plan.addTimeSeq(1.0f, seq1);
+//        CameraMoveSpringSeq seq1 = new CameraMoveSpringSeq(new Vector3(2000.0f, 0.0f, 0.3f), 3.0f);
+//        seq1.create(this);
+//        SequencePlan plan = new SequencePlan();
+//        plan.addTimeSeq(1.0f, seq1);
+//
+//        CameraMoveSpringSeq seq2 = new CameraMoveSpringSeq(new Vector3(0.0f, 0.0f, 1.0f), 1.0f);
+//        seq2.create(this);
+//        plan.addLinkSeq(seq1, seq2);
+//        //plan.addTimeSeq(4.0f, seq);
 
-        CameraMoveSpringSeq seq2 = new CameraMoveSpringSeq(new Vector3(0.0f, 0.0f, 1.0f), 1.0f);
-        seq2.create(this);
-        plan.addLinkSeq(seq1, seq2);
-        //plan.addTimeSeq(4.0f, seq);
+        FadeInSeq f = new FadeInSeq(10.0f);
+        f.create(this);
+        plan.addTimeSeq(1.5f, f);
 
         this.setSequencePlan(plan);
     }
