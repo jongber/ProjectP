@@ -43,6 +43,11 @@ public class CameraMoveSeq implements GameSequence {
     }
 
     @Override
+    public void ready() {
+
+    }
+
+    @Override
     public void update(float elapsed) {
         this.elapsed += elapsed;
 

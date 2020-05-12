@@ -20,6 +20,8 @@ public class CameraMoveSpringSeq implements GameSequence {
     private float elapsed;
     private Vector3 dir;
 
+    private GameLayer layer;
+
     public CameraMoveSpringSeq(Vector3 to, float duration) {
         this.to = to;
         this.duration = duration;
@@ -29,6 +31,11 @@ public class CameraMoveSpringSeq implements GameSequence {
 
     @Override
     public void create(GameLayer layer) {
+        this.layer = layer;
+    }
+
+    @Override
+    public void ready() {
         this.c = layer.getCameraWrapper();
         this.pos = c.getPosition(new Vector3());
         this.pos.z = c.getZoom();

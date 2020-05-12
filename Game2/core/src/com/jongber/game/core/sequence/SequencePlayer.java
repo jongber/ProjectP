@@ -9,14 +9,14 @@ import java.util.List;
 
 public class SequencePlayer extends Controller implements Controller.Updater, Controller.InputProcessor {
 
-    private float elapsed = 0.0f;
+    private float totElapsed = 0.0f;
     private PackedArray<GameSequence> curSeq = new PackedArray<>();
     private List<GameSequence> endSeqs = new ArrayList<>();
     private SequencePlan seqPlan = new SequencePlan();
 
     public void setPlan(SequencePlan plan) {
         this.seqPlan = plan;
-        this.elapsed = 0;
+        this.totElapsed = 0;
         this.curSeq.clearAll();
     }
 
@@ -30,22 +30,23 @@ public class SequencePlayer extends Controller implements Controller.Updater, Co
             return;
         }
 
-        this.elapsed += elapsed;
+        this.totElapsed += elapsed;
 
         this.selectSequence();
-        this.updateSequence();
+        this.updateSequence(elapsed);
         this.processEnded();
     }
 
     private void selectSequence() {
-        GameSequence seq = this.seqPlan.getNext(this.elapsed);
+        GameSequence seq = this.seqPlan.getNext(this.totElapsed);
         while (seq != null) {
+            seq.ready();
             this.curSeq.add(seq);
-            seq = this.seqPlan.getNext(this.elapsed);
+            seq = this.seqPlan.getNext(this.totElapsed);
         }
     }
 
-    private void updateSequence() {
+    private void updateSequence(float elapsed) {
         for (GameSequence seq : this.curSeq) {
             seq.update(elapsed);
 
