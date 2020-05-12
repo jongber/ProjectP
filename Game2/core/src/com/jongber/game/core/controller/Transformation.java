@@ -5,7 +5,7 @@ import com.jongber.game.core.component.TransformComponent;
 
 import java.util.List;
 
-public class Transformation extends Controller implements Controller.Updater {
+public class Transformation extends Controller implements Controller.GraphBuilder, Controller.Updater {
 
     private List<GameObject> graph = null;
 

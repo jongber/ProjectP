@@ -1,10 +1,7 @@
 package com.jongber.game.core.controller.adapter;
 
-import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-
-import java.util.List;
 
 public class InputControlAdapter extends Controller implements Controller.InputProcessor {
     @Override
@@ -45,10 +42,6 @@ public class InputControlAdapter extends Controller implements Controller.InputP
     @Override
     public boolean scrolled(OrthoCameraWrapper camera, int amount) {
         return false;
-    }
-
-    @Override
-    public void build(List<GameObject> graph) {
     }
 
     @Override

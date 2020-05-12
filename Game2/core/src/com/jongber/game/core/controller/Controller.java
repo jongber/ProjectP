@@ -13,6 +13,10 @@ public abstract class Controller {
         void update(float elapsed);
     }
 
+    public interface GraphBuilder {
+        void build(List<GameObject> graph);
+    }
+
     public interface Renderer {
         void render(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed);
     }
@@ -31,8 +35,6 @@ public abstract class Controller {
         boolean mouseMoved(OrthoCameraWrapper camera, float worldX, float worldY);
         boolean scrolled(OrthoCameraWrapper camera, int amount);
     }
-
-    public abstract void build(List<GameObject> graph);
 
     public abstract void dispose();
 

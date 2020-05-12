@@ -23,30 +23,26 @@ public class GameLayer {
 
     private SceneGraph graph = new SceneGraph();
     private Transformation transform = new Transformation();
+    private GameEventHandler eventHandler = new GameEventHandler();
+    private SequencePlayer sequencePlayer = new SequencePlayer();
 
     private List<Controller> controllers = new ArrayList<>();
     private List<Controller.Renderer> renders = new ArrayList<>();
     private List<Controller.PostRenderer> postRenders = new ArrayList<>();
     private List<Controller.Updater> updaters = new ArrayList<>();
     private List<Controller.InputProcessor> inputProcessors = new ArrayList<>();
+    private List<Controller.GraphBuilder> graphBuilder = new ArrayList<>();
 
     private PackedArray<GameObject> objects = new PackedArray<>();
     private boolean modified = true;
 
     private GameLayerInput layerInput;
 
-    private GameEventHandler eventHandler = new GameEventHandler();
-    private SequencePlayer sequencePlayer = new SequencePlayer();
-
     public GameLayer() {
         this.cameraWrapper = new OrthoCameraWrapper(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.layerInput = new GameLayerInput(this.inputProcessors, this.cameraWrapper);
         this.batch = new SpriteBatch();
-    }
-
-    public GameLayer(Viewport viewport) {
-        this.cameraWrapper = new OrthoCameraWrapper(viewport);
-        this.layerInput = new GameLayerInput(this.inputProcessors, this.cameraWrapper);
+        this.registerController(this.sequencePlayer);
     }
 
     public GameLayerInput getInput() {
@@ -70,6 +66,10 @@ public class GameLayer {
             this.inputProcessors.add((Controller.InputProcessor)controller);
         }
 
+        if (controller instanceof Controller.GraphBuilder) {
+            this.graphBuilder.add((Controller.GraphBuilder)controller);
+        }
+
         this.controllers.add(controller);
         this.modified = true;
     }
@@ -89,6 +89,10 @@ public class GameLayer {
 
         if (controller instanceof Controller.PostRenderer) {
             this.postRenders.remove(controller);
+        }
+
+        if (controller instanceof Controller.GraphBuilder) {
+            this.graphBuilder.remove(controller);
         }
 
         this.controllers.remove(controller);
@@ -131,8 +135,6 @@ public class GameLayer {
         for (Controller.Updater updater : this.updaters) {
             updater.update(elapsed);
         }
-
-        this.sequencePlayer.update(elapsed);
     }
 
     public void setSequencePlan(SequencePlan plan) {
@@ -251,7 +253,7 @@ public class GameLayer {
         this.graph.build(this.objects);
         this.transform.build(this.graph.getGraph());
 
-        for (Controller controller : this.controllers) {
+        for (Controller.GraphBuilder controller : this.graphBuilder) {
             controller.build(this.graph.getGraph());
         }
 

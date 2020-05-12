@@ -11,7 +11,7 @@ import com.jongber.game.core.graphics.OrthoCameraWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextureRenderer extends Controller implements Controller.Renderer {
+public class TextureRenderer extends Controller implements Controller.GraphBuilder, Controller.Renderer {
 
   private List<GameObject> list = new ArrayList<>();
 

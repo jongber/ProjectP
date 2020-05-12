@@ -15,7 +15,7 @@ import com.jongber.game.core.component.TextComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextController extends Controller implements Controller.Renderer, Controller.InputProcessor {
+public class TextController extends Controller implements Controller.GraphBuilder, Controller.Renderer, Controller.InputProcessor {
 
     private FontManager fontManager = new FontManager();
     private List<GameObject> objs = new ArrayList<>();

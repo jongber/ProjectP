@@ -11,7 +11,7 @@ import com.jongber.game.desktop.common.component.RectComponent;
 
 import java.util.List;
 
-public class RectRenderer extends Controller implements Controller.Renderer {
+public class RectRenderer extends Controller implements Controller.Renderer, Controller.GraphBuilder {
 
     private List<GameObject> objs;
     private ShapeRenderer renderer = new ShapeRenderer();

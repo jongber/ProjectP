@@ -55,10 +55,6 @@ public class BlockGridRenderer extends Controller implements Controller.PostRend
     }
 
     @Override
-    public void build(List<GameObject> graph) {
-    }
-
-    @Override
     public void dispose() {
         renderer.dispose();
     }

@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.jongber.game.desktop.common.CallbackEvent;
 import com.jongber.game.desktop.editor.animation.AnimationCmd;
 import com.jongber.game.desktop.editor.animation.AnimationView;
-import com.jongber.game.desktop.editor.character.CharacterCmd;
-import com.jongber.game.desktop.editor.character.CharacterView;
 import com.jongber.game.desktop.editor.mainmenu.MainMenuCmd;
 import com.jongber.game.desktop.editor.mainmenu.MainMenuView;
 import com.jongber.game.desktop.editor.sequence.SequenceCmd;
@@ -22,7 +20,6 @@ public class Inflater {
 
     static {
         inflateMap.put(MainMenuCmd.class, MainMenuView.class);
-        inflateMap.put(CharacterCmd.class, CharacterView.class);
         inflateMap.put(AnimationCmd.class, AnimationView.class);
         inflateMap.put(SequenceCmd.class, SequenceView.class);
     }

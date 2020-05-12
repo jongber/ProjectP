@@ -32,5 +32,4 @@ public class SceneGraph {
     public List<GameObject> getGraph() {
         return this.sorted;
     }
-
 }

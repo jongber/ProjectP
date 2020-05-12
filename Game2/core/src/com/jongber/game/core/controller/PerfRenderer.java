@@ -8,7 +8,7 @@ import com.jongber.game.core.graphics.OrthoCameraWrapper;
 
 import java.util.List;
 
-public class PerfRenderer extends Controller implements Controller.Renderer{
+public class PerfRenderer extends Controller implements Controller.Renderer, Controller.GraphBuilder {
     private BitmapFont font;
     private Vector3 fpsPos = new Vector3();
     private float totalElapsed = 0.0f;
