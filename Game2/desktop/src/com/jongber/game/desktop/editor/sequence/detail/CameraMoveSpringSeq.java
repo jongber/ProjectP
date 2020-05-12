@@ -8,10 +8,10 @@ import com.jongber.game.core.sequence.GameSequence;
 public class CameraMoveSpringSeq implements GameSequence {
 
     private final Vector3 to;
-    private final float duration;
+    private final Float duration;
     private Vector3 pos;
 
-    private final float k;
+    private float k;
     private OrthoCameraWrapper c;
     private float totDist;
     private float halfDist;
@@ -25,7 +25,6 @@ public class CameraMoveSpringSeq implements GameSequence {
     public CameraMoveSpringSeq(Vector3 to, float duration) {
         this.to = to;
         this.duration = duration;
-        this.k = calcK();
     }
 
 
@@ -36,6 +35,11 @@ public class CameraMoveSpringSeq implements GameSequence {
 
     @Override
     public void ready() {
+        if (this.duration <= 0.0f) {
+            return;
+        }
+
+        this.k = calcK();
         this.c = layer.getCameraWrapper();
         this.pos = c.getPosition(new Vector3());
         this.pos.z = c.getZoom();
@@ -48,6 +52,10 @@ public class CameraMoveSpringSeq implements GameSequence {
 
     @Override
     public void update(float elapsed) {
+        if (this.duration <= 0.0f) {
+            return;
+        }
+
         this.elapsed += elapsed;
 
         pos = new Vector3(this.to);
