@@ -27,7 +27,7 @@ public class CameraMoveSeq implements GameSequence {
     }
 
     @Override
-    public void ready() {
+    public void start() {
         if (this.duration <= 0.0f)
             return;
 
@@ -54,6 +54,10 @@ public class CameraMoveSeq implements GameSequence {
         Vector3 velocity = new Vector3(this.direction).scl(spd * elapsed);
         this.c.getPosition().add(velocity.x, velocity.y, 0.0f);
         this.c.addZoom(velocity.z);
+    }
+
+    @Override
+    public void end() {
     }
 
     @Override

@@ -40,7 +40,7 @@ public class SequencePlayer extends Controller implements Controller.Updater, Co
     private void selectSequence() {
         GameSequence seq = this.seqPlan.getNext(this.totElapsed);
         while (seq != null) {
-            seq.ready();
+            seq.start();
             this.curSeq.add(seq);
             seq = this.seqPlan.getNext(this.totElapsed);
         }
@@ -51,6 +51,7 @@ public class SequencePlayer extends Controller implements Controller.Updater, Co
             seq.update(elapsed);
 
             if (seq.isEnded()) {
+                seq.end();
                 this.endSeqs.add(seq);
             }
         }
@@ -63,6 +64,7 @@ public class SequencePlayer extends Controller implements Controller.Updater, Co
             List<GameSequence> next = this.seqPlan.getNext(seq);
             if (next != null) {
                 for (GameSequence nextSeq : next) {
+                    nextSeq.start();
                     this.curSeq.add(nextSeq);
                 }
             }

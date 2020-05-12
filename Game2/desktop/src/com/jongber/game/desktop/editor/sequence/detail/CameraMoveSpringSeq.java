@@ -27,14 +27,13 @@ public class CameraMoveSpringSeq implements GameSequence {
         this.duration = duration;
     }
 
-
     @Override
     public void create(GameLayer layer) {
         this.layer = layer;
     }
 
     @Override
-    public void ready() {
+    public void start() {
         if (this.duration <= 0.0f) {
             return;
         }
@@ -66,6 +65,10 @@ public class CameraMoveSpringSeq implements GameSequence {
 
         c.getCamera().position.add(move * dir.x, move * dir.y , 0.0f);
         c.getCamera().zoom += move * dir.z;
+    }
+
+    @Override
+    public void end() {
     }
 
     @Override

@@ -6,9 +6,11 @@ public interface GameSequence {
 
     void create(GameLayer layer);
 
-    void ready();
+    void start();
 
     void update(float elapsed);
+
+    void end();
 
     boolean isEnded();
 }
