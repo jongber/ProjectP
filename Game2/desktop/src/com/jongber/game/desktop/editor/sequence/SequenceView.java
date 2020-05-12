@@ -1,21 +1,20 @@
 package com.jongber.game.desktop.editor.sequence;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import com.jongber.game.core.controller.Controller;
+import com.badlogic.gdx.math.Vector3;
 import com.jongber.game.core.sequence.SequencePlan;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.common.controller.BlockGridRenderer;
 import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.EditorView;
-import com.jongber.game.desktop.editor.sequence.detail.CameraMoveSeq;
+import com.jongber.game.desktop.editor.sequence.detail.CameraMoveSpringSeq;
 
 public class SequenceView extends EditorView {
 
     public SequenceView() {
         this.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
-        CameraMoveSeq seq = new CameraMoveSeq(new Tuple2<>(new Vector2(2000.0f, 0.0f), 1.0f), 1.0f * 500);
+        CameraMoveSpringSeq seq = new CameraMoveSpringSeq(new Vector3(2000.0f, 0.0f, 0.5f), 1.0f * 50);
         seq.create(this);
         SequencePlan plan = new SequencePlan();
         plan.plans.add(new Tuple2<>(0.0f, seq));
