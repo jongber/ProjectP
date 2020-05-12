@@ -56,7 +56,7 @@ public class CameraMoveSeq implements GameSequence {
     }
 
     @Override
-    public boolean ended() {
+    public boolean isEnded() {
 
         System.out.println(elapsed + " : " + this.duration + " " + this.cameraWrapper.getPosition());
 

@@ -54,7 +54,7 @@ public class CameraMoveSpringSeq implements GameSequence {
     }
 
     @Override
-    public boolean ended() {
+    public boolean isEnded() {
 
         if (this.elapsed >= this.duration) {
 

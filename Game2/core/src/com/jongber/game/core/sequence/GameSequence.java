@@ -8,5 +8,5 @@ public interface GameSequence {
 
     void update(float elapsed);
 
-    boolean ended();
+    boolean isEnded();
 }

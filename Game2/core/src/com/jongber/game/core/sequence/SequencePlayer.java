@@ -20,13 +20,13 @@ public class SequencePlayer extends Controller implements Controller.Updater, Co
         this.curSeq.clearAll();
     }
 
-    public boolean ended() {
+    public boolean isEnded() {
         return seqPlan == null || (this.curSeq.size() == 0 && seqPlan.ended());
     }
 
     @Override
     public void update(float elapsed) {
-        if (ended()) {
+        if (isEnded()) {
             return;
         }
 
@@ -34,7 +34,7 @@ public class SequencePlayer extends Controller implements Controller.Updater, Co
 
         this.selectSequence();
         this.updateSequence();
-        this.deleteEnded();
+        this.processEnded();
     }
 
     private void selectSequence() {
@@ -49,15 +49,22 @@ public class SequencePlayer extends Controller implements Controller.Updater, Co
         for (GameSequence seq : this.curSeq) {
             seq.update(elapsed);
 
-            if (seq.ended()) {
+            if (seq.isEnded()) {
                 this.endSeqs.add(seq);
             }
         }
     }
 
-    private void deleteEnded() {
+    private void processEnded() {
         for (GameSequence seq : this.endSeqs) {
             this.curSeq.remove(seq);
+
+            List<GameSequence> next = this.seqPlan.getNext(seq);
+            if (next != null) {
+                for (GameSequence nextSeq : next) {
+                    this.curSeq.add(nextSeq);
+                }
+            }
         }
 
         this.endSeqs.clear();
