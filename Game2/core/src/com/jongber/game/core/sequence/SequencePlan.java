@@ -2,61 +2,78 @@ package com.jongber.game.core.sequence;
 
 import com.jongber.game.core.util.Tuple2;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Queue;
+import java.util.PriorityQueue;
 
 public class SequencePlan {
-    private Queue<Tuple2<Float, GameSequence>> timePlans = new ArrayDeque<>();
-    private HashMap<GameSequence, List<GameSequence>> linkedPlans = new HashMap<>();
 
-    public void addLinkSeq(GameSequence from, List<GameSequence> next) {
-        List<GameSequence> seqs = linkedPlans.get(from);
-        if (seqs == null){
-            linkedPlans.put(from, next);
-        }
-        else {
-            seqs.addAll(next);
+    private float totElapsed;
+    private HashMap<GameSequence, List<Tuple2<Float, GameSequence>>> linkedPlans = new HashMap<>();
+    private PriorityQueue<Tuple2<Float, GameSequence>> timePlan = new PriorityQueue<>(128, new SeqComparator());
+
+    public void processEnd(GameSequence endedSeq) {
+        List<Tuple2<Float, GameSequence>> linked = linkedPlans.remove(endedSeq);
+        if (linked == null) return;
+
+        for (Tuple2<Float, GameSequence> item : linked) {
+            this.timePlan.add(new Tuple2<>(item.getItem1() + this.totElapsed, item.getItem2()));
         }
     }
 
-    public void addLinkSeq(GameSequence from, GameSequence next) {
-        List<GameSequence> seqs = linkedPlans.get(from);
-        if (seqs == null){
-            seqs = new ArrayList<>();
-            seqs.add(next);
-            linkedPlans.put(from, seqs);
-        }
-        else {
-            seqs.add(next);
-        }
+    public void addLinkedSeq(GameSequence from, GameSequence next) {
+        this.addLinkedSeq(from, next, 0.0f);
     }
 
-    public void removeLinkSeq(GameSequence seq) {
-        linkedPlans.remove(seq);
+    public void addLinkedSeq(GameSequence from, GameSequence next, float after) {
+        List<Tuple2<Float, GameSequence>> linked = linkedPlans.get(from);
+        if (linked == null) {
+            linked = new ArrayList<>();
+            linkedPlans.put(from, linked);
+        }
+
+        linked.add(new Tuple2<>(after, next));
     }
 
     public void addTimeSeq(float time, GameSequence seq) {
-        timePlans.add(new Tuple2<>(time, seq));
+        timePlan.add(new Tuple2<>(time, seq));
     }
 
     public boolean ended() {
-        return this.timePlans.isEmpty() && this.linkedPlans.size() == 0;
+        return this.timePlan.isEmpty() && this.linkedPlans.size() == 0;
     }
 
     public GameSequence getNext(float time) {
 
-        Tuple2<Float, GameSequence> plan = timePlans.peek();
+        totElapsed = time;
+
+        Tuple2<Float, GameSequence> plan = timePlan.peek();
         if (plan == null || plan.getItem1() > time) {
             return null;
         }
 
-        return timePlans.remove().getItem2();
+        return timePlan.remove().getItem2();
     }
 
-    public List<GameSequence> getNext(GameSequence ended) {
-        return this.linkedPlans.get(ended);
+    private class SeqComparator implements Comparator<Tuple2<Float, GameSequence>> {
+
+        @Override
+        public int compare(Tuple2<Float, GameSequence> lhs, Tuple2<Float, GameSequence> rhs) {
+            if (lhs.getItem1() > rhs.getItem1()) {
+                return 1;
+            }
+            else if (lhs.getItem1() > rhs.getItem1()) {
+                return -1;
+            }
+
+            return 0;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return false;
+        }
     }
 }

@@ -63,13 +63,6 @@ public class SequencePlayer extends Controller
 
     private void processEnded() {
         for (GameSequence seq : this.endSeqs) {
-            
-            List<GameSequence> next = this.seqPlan.getNext(seq);
-            if (next != null) {
-                for (GameSequence nextSeq : next) {
-                    this.startSequence(nextSeq);
-                }
-            }
 
             this.endSequence(seq);
         }
@@ -100,7 +93,7 @@ public class SequencePlayer extends Controller
         seq.dispose();
 
         this.playing.remove(seq);
-        this.seqPlan.removeLinkSeq(seq);
+        this.seqPlan.processEnd(seq);
 
         if (seq instanceof Controller.Renderer) {
             this.renders.remove((Controller.Renderer)seq);
