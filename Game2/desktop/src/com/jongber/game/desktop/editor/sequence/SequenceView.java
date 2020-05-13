@@ -8,6 +8,7 @@ import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.EditorView;
 import com.jongber.game.desktop.editor.sequence.detail.CameraMoveSpringSeq;
 import com.jongber.game.desktop.editor.sequence.detail.FadeInSeq;
+import com.jongber.game.desktop.editor.sequence.detail.FadeOutSeq;
 
 public class SequenceView extends EditorView {
 
@@ -25,7 +26,7 @@ public class SequenceView extends EditorView {
 //        plan.addLinkSeq(seq1, seq2);
 //        //plan.addTimeSeq(4.0f, seq);
 
-        FadeInSeq f = new FadeInSeq(10.0f);
+        FadeOutSeq f = new FadeOutSeq(10.0f);
         f.create(this);
         plan.addTimeSeq(1.5f, f);
 

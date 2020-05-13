@@ -3,6 +3,7 @@ package com.jongber.game.desktop.editor.sequence.detail;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.jongber.game.core.GameLayer;
@@ -26,15 +27,18 @@ public class FadeInSeq extends GameSequence implements Controller.PostRenderer {
     public void postRender(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
         batch.end();
 
-        Camera c = camera.getCamera();
+        OrthographicCamera c = camera.getCamera();
 
         Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
         Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
         renderer.setProjectionMatrix(c.combined);
         renderer.setColor(this.color);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        //renderer.rect();
-        renderer.rect(-100.0f, -100.0f, 1000, 1000);
+
+        float w = Gdx.graphics.getWidth() * c.zoom;
+        float h = Gdx.graphics.getHeight() * c.zoom;
+
+        renderer.rect(c.position.x - w, c.position.y - h, w * 2, h * 2);
         renderer.end();
         Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
 
@@ -77,6 +81,6 @@ public class FadeInSeq extends GameSequence implements Controller.PostRenderer {
 
     @Override
     public void dispose() {
-
+        this.renderer.dispose();
     }
 }
