@@ -45,6 +45,11 @@ public class GameLayer {
         this.registerController(this.sequencePlayer);
     }
 
+    public GameLayer(Viewport viewport) {
+        this.cameraWrapper = new OrthoCameraWrapper(viewport);
+        this.layerInput = new GameLayerInput(this.inputProcessors, this.cameraWrapper);
+    }
+
     public GameLayerInput getInput() {
         return this.layerInput;
     }
