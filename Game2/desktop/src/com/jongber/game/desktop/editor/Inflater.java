@@ -32,7 +32,7 @@ public class Inflater {
     }
 
     public static void returnToMain() {
-        Inflater.inflate(MainMenuCmd.class);
+        Inflater.inflate(AnimationCmd.class);
     }
 
     public static void inflate(Class<? extends EditorCmd> cmdClass) {

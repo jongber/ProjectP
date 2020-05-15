@@ -18,6 +18,7 @@ public class OrthoCameraWrapper {
 
     public OrthoCameraWrapper(Viewport port) {
         this.viewport = port;
+        this.viewport.setCamera(this.camera);
         this.viewport.apply();
     }
 

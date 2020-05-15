@@ -20,7 +20,7 @@ public class EditorApp extends ApplicationAdapter {
     public void create () {
         Inflater.init(this);
         //Inflater.returnToMain();
-        Inflater.inflate(BattleSceneCmd.class);
+        Inflater.returnToMain();
     }
 
     @Override

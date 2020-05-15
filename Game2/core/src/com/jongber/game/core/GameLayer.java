@@ -48,6 +48,8 @@ public class GameLayer {
     public GameLayer(Viewport viewport) {
         this.cameraWrapper = new OrthoCameraWrapper(viewport);
         this.layerInput = new GameLayerInput(this.inputProcessors, this.cameraWrapper);
+        this.batch = new SpriteBatch();
+        this.registerController(this.sequencePlayer);
     }
 
     public GameLayerInput getInput() {
