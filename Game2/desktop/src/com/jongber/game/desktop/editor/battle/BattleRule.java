@@ -2,7 +2,6 @@ package com.jongber.game.desktop.editor.battle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -14,11 +13,11 @@ import com.jongber.game.core.component.TextureComponent;
 import com.jongber.game.core.graphics.VFAnimation;
 import com.jongber.game.core.sequence.SequencePlan;
 import com.jongber.game.core.util.Tuple2;
-import com.jongber.game.desktop.common.component.RectComponent;
 import com.jongber.game.desktop.common.component.SpriteComponent;
 import com.jongber.game.desktop.common.sequence.CameraShakeSeq;
 import com.jongber.game.desktop.editor.EditorAssetManager;
 import com.jongber.game.desktop.editor.EditorCmd;
+import com.jongber.game.desktop.editor.battle.seq.GameObjectMoveSeq;
 
 import java.util.HashMap;
 import java.util.List;
@@ -79,7 +78,7 @@ public class BattleRule {
         object.addComponent(sc);
 
         BattleComponent bc = new BattleComponent();
-        bc.battlePosition = new Vector2(object.transform.getLocalPos());
+        bc.orgPos = new Vector2(object.transform.getLocalPos());
         object.addComponent(bc);
 
         return object;
@@ -96,18 +95,25 @@ public class BattleRule {
         object.addComponent(sc);
 
         BattleComponent bc = new BattleComponent();
-        bc.battlePosition = new Vector2(object.transform.getLocalPos());
+        bc.orgPos = new Vector2(object.transform.getLocalPos());
         object.addComponent(bc);
 
         return object;
     }
 
     public SequencePlan createAttackPlan() {
+        GameObject object = layer.getObjectAny("Player");
+        object.getComponent(BattleComponent.class).orgPos = object.transform.getLocalPos();
+        object.getComponent(BattleComponent.class).orgScale = object.transform.local.getScale(new Vector2());
+
         SequencePlan plan = new SequencePlan();
 
-        CameraShakeSeq seq = new CameraShakeSeq(this.layer, 2.0f, 0.15f);
+        GameObjectMoveSeq s1 = new GameObjectMoveSeq(this.layer, object, new Vector2(0.0f, 0.0f), 2.0f, 1.0f);
+        plan.addTimeSeq(0.0f, s1);
 
-        plan.addTimeSeq(0.2f, seq);
+        CameraShakeSeq seq = new CameraShakeSeq(this.layer, 2.0f, 0.15f);
+        plan.addLinkedSeq(s1, seq);
+        //plan.addTimeSeq(0.2f, seq);
 
         return plan;
     }

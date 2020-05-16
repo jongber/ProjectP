@@ -44,7 +44,10 @@ public class SpriteRender extends Controller implements Controller.GraphBuilder,
                     p.y = r.getRegionWidth() - p.y;
                 }
 
-                batch.draw(r, -p.x + w.x, -p.y + w.y);
+                batch.draw(r, -p.x + w.x, -p.y + w.y, 0.0f, 0.0f, r.getRegionWidth(), r.getRegionHeight(), c.scale.x, c.scale.y, c.rotation);
+                //batch.draw(r, -p.x, -p.y, w.x, w.y, r.getRegionWidth(), r.getRegionHeight(), c.scale.x, c.scale.y, c.rotation);
+                //batch.draw(r, -p.x + w.x, -p.y + w.y);
+                //batch.draw(r, w.x, w.y);
                 r.flip(c.flipX, c.flipY);
             }
         }
