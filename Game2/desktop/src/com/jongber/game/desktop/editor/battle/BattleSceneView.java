@@ -2,6 +2,7 @@ package com.jongber.game.desktop.editor.battle;
 
 import com.badlogic.gdx.Gdx;
 import com.jongber.game.core.controller.PerfRenderer;
+import com.jongber.game.core.controller.TextureRenderer;
 import com.jongber.game.desktop.common.controller.BlockGridRenderer;
 import com.jongber.game.desktop.common.controller.CameraController;
 import com.jongber.game.desktop.common.controller.RectRenderer;
@@ -23,6 +24,7 @@ public class BattleSceneView extends EditorView {
     }
 
     private void registerController() {
+        this.registerController(new TextureRenderer());
         this.registerController(new CameraController());
         this.registerController(new RectRenderer());
         this.registerController(new SpriteRender());

@@ -3,9 +3,13 @@ package com.jongber.game.desktop.editor.battle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AnimationAsset;
+import com.jongber.game.core.asset.AssetManager;
+import com.jongber.game.core.component.TextureComponent;
 import com.jongber.game.core.graphics.VFAnimation;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.common.component.RectComponent;
@@ -35,12 +39,30 @@ public class BattleRule {
             assets.put(item.getItem1().getName(), item.getItem1());
         }
 
-        createPlayer();
-        createEnemy("Enemy1", 1);
-        createEnemy("Enemy2", 2);
+        GameObject object;
+//        object = createBg();
+//        object = createPlayer();
+//        object = createEnemy("Enemy1", 1);
+//        object = createEnemy("Enemy2", 2);
+        object = createBg();
+
+        this.layer.addObject(object);
+        this.layer.addObject(object, createPlayer());
+        this.layer.addObject(object, createEnemy("Enemy1", 1));
+        this.layer.addObject(object, createEnemy("Enemy2", 2));
     }
 
-    public void createPlayer() {
+    public GameObject createBg() {
+        // projectz_old/house/wallpapers/3x3_1.png
+        GameObject object = new GameObject();
+        Texture t = AssetManager.getTexture("projectz_old/house/wallpapers/3x3_1.png");
+        TextureRegion r = new TextureRegion(t);
+        object.addComponent(new TextureComponent(r));
+
+        return object;
+    }
+
+    public GameObject createPlayer() {
         GameObject object = new GameObject("Player");
 
         SpriteComponent sc = new SpriteComponent();
@@ -52,10 +74,10 @@ public class BattleRule {
 
         object.transform.local.translate(-16.0f, 0.0f);
 
-        this.layer.addObject(object);
+        return object;
     }
 
-    public void createEnemy(String name, float pos) {
+    public GameObject createEnemy(String name, float pos) {
         GameObject object = new GameObject(name);
 
         SpriteComponent sc = new SpriteComponent();
@@ -68,6 +90,6 @@ public class BattleRule {
 
         object.transform.local.translate(16.0f * pos, 0.0f);
 
-        this.layer.addObject(object);
+        return object;
     }
 }
