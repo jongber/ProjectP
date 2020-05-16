@@ -29,10 +29,25 @@ public class SpriteRender extends Controller implements Controller.GraphBuilder,
         for (GameObject obj : objects) {
             SpriteComponent c = obj.getComponent(SpriteComponent.class);
             if (c.animation != null && c.animation.canPlay()) {
-                Vector2 p = c.asset.getPivot();
+
+                Vector2 p = new Vector2(c.asset.getPivot());
                 Vector2 w = obj.worldPos();
                 TextureRegion r = c.animation.getNext(elapsed);
-                batch.draw(r, p.x + w.x, p.y + w.y);
+
+                if (c.flipX || c.flipY) {
+                    r = new TextureRegion(r);
+                    r.flip(c.flipX, c.flipY);
+                }
+
+                if (c.flipX) {
+                    p.x = r.getRegionWidth() - p.x;
+                }
+
+                if (c.flipY) {
+                    p.y = r.getRegionWidth() - p.y;
+                }
+
+                batch.draw(r, -p.x + w.x, -p.y + w.y);
             }
         }
     }
