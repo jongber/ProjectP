@@ -2,7 +2,7 @@ package com.jongber.game.core.sequence.detail;
 
 import com.badlogic.gdx.math.Vector3;
 
-public class StringMovement {
+public class StringMovementWithin {
 
     private Vector3 from;
     private Vector3 to;
@@ -17,7 +17,7 @@ public class StringMovement {
 
     private float totElapsed;
 
-    public StringMovement(Vector3 from, Vector3 to, float time) {
+    public StringMovementWithin(Vector3 from, Vector3 to, float time) {
         this.from = from;
         this.to = to;
         this.time = time;
