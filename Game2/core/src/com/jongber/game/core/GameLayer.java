@@ -144,6 +144,10 @@ public class GameLayer {
         }
     }
 
+    public boolean isSequenceEnded() {
+        return this.sequencePlayer.isEnded();
+    }
+
     public void setSequencePlan(SequencePlan plan) {
         this.sequencePlayer.setPlan(plan);
     }

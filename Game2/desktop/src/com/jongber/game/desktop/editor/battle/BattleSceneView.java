@@ -16,9 +16,8 @@ public class BattleSceneView extends EditorView {
 
     @Override
     public void create(EditorCmd cmd) {
-        registerController();
-
         this.rule = new BattleRule(this);
+        registerController();
 
         Gdx.input.setInputProcessor(this.getInput());
     }
@@ -28,6 +27,7 @@ public class BattleSceneView extends EditorView {
         this.registerController(new CameraController());
         this.registerController(new RectRenderer());
         this.registerController(new SpriteRender());
+        this.registerController(new BattleController(this, this.rule));
         //this.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     }
 }
