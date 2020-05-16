@@ -28,6 +28,6 @@ public class BattleSceneView extends EditorView {
         this.registerController(new CameraController());
         this.registerController(new RectRenderer());
         this.registerController(new SpriteRender());
-        this.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        //this.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     }
 }

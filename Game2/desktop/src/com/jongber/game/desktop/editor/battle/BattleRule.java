@@ -47,9 +47,15 @@ public class BattleRule {
         object = createBg();
 
         this.layer.addObject(object);
-        this.layer.addObject(object, createPlayer());
+        this.layer.addObject(object, createPlayer("Player1", 1));
+        this.layer.addObject(object, createPlayer("Player2", 2));
+        this.layer.addObject(object, createPlayer("Player3", 3));
+        this.layer.addObject(object, createPlayer("Player4", 4));
+
         this.layer.addObject(object, createEnemy("Enemy1", 1));
         this.layer.addObject(object, createEnemy("Enemy2", 2));
+        this.layer.addObject(object, createEnemy("Enemy3", 3));
+        this.layer.addObject(object, createEnemy("Enemy4", 4));
     }
 
     public GameObject createBg() {
@@ -62,7 +68,7 @@ public class BattleRule {
         return object;
     }
 
-    public GameObject createPlayer() {
+    public GameObject createPlayer(String name, float pos) {
         GameObject object = new GameObject("Player");
 
         SpriteComponent sc = new SpriteComponent();
@@ -72,7 +78,7 @@ public class BattleRule {
         BattleComponent bc = new BattleComponent();
         object.addComponent(bc);
 
-        object.transform.local.translate(-16.0f, 0.0f);
+        object.transform.local.translate(-16.0f * pos, 0.0f);
 
         return object;
     }
