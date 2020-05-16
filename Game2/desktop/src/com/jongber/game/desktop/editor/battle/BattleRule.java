@@ -13,7 +13,6 @@ import com.jongber.game.desktop.common.component.SpriteComponent;
 import com.jongber.game.desktop.editor.EditorAssetManager;
 import com.jongber.game.desktop.editor.EditorCmd;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class BattleRule {
         createEnemy("Enemy1", 1);
         createEnemy("Enemy2", 2);
     }
-    
+
     public void createPlayer() {
         GameObject object = new GameObject("Player");
 
