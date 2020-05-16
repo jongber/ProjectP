@@ -22,7 +22,7 @@ public class CameraMoveSpringSeq extends GameSequence {
 
     public CameraMoveSpringSeq(GameLayer layer, Vector3 to, float duration) {
         super(layer);
-        this.to = to;
+        this.to = to.scl(1.03f);
         this.duration = duration;
     }
 
