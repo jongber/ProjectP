@@ -16,14 +16,11 @@ public class CameraMoveSeq extends GameSequence {
     private Vector3 direction;
     private float spd;
 
-    public CameraMoveSeq(Vector3 to, float duration) {
+    public CameraMoveSeq(GameLayer layer, Vector3 to, float duration) {
+        super(layer);
+        this.c = layer.getCameraWrapper();
         this.to = to;
         this.duration = duration;
-    }
-
-    @Override
-    public void create(GameLayer layer) {
-        this.c = layer.getCameraWrapper();
     }
 
     @Override

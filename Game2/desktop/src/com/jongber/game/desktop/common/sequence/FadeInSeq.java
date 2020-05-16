@@ -18,7 +18,8 @@ public class FadeInSeq extends GameSequence implements Controller.PostRenderer {
     private float totElapsed;
     private ShapeRenderer renderer = new ShapeRenderer();
 
-    public FadeInSeq(float time) {
+    public FadeInSeq(GameLayer layer, float time) {
+        super(layer);
         this.time = time;
         this.color.set(0.0f, 0.0f, 0.0f, 1.0f);
     }
@@ -43,11 +44,6 @@ public class FadeInSeq extends GameSequence implements Controller.PostRenderer {
         Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
 
         batch.begin();
-    }
-
-    @Override
-    public void create(GameLayer layer) {
-
     }
 
     @Override

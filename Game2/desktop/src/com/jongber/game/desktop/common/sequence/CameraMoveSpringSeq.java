@@ -20,16 +20,10 @@ public class CameraMoveSpringSeq extends GameSequence {
     private float elapsed;
     private Vector3 dir;
 
-    private GameLayer layer;
-
-    public CameraMoveSpringSeq(Vector3 to, float duration) {
+    public CameraMoveSpringSeq(GameLayer layer, Vector3 to, float duration) {
+        super(layer);
         this.to = to;
         this.duration = duration;
-    }
-
-    @Override
-    public void create(GameLayer layer) {
-        this.layer = layer;
     }
 
     @Override

@@ -17,28 +17,22 @@ public class SequenceView extends EditorView {
         this.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         SequencePlan plan = new SequencePlan();
-        CameraMoveSpringSeq seq1 = new CameraMoveSpringSeq(new Vector3(1000.0f, 0.0f, 0.3f), 1.0f);
-        seq1.create(this);
-
+        CameraMoveSpringSeq seq1 = new CameraMoveSpringSeq(this, new Vector3(1000.0f, 0.0f, 0.3f), 1.0f);
         plan.addTimeSeq(0.0f, seq1);
 
-        seq1 = new CameraMoveSpringSeq(new Vector3(0.0f, 0.0f, 1.0f), 1.0f);
-        seq1.create(this);
+        seq1 = new CameraMoveSpringSeq(this,new Vector3(0.0f, 0.0f, 1.0f), 1.0f);
 
         plan.addTimeSeq(3.0f, seq1);
 
-        CameraShakeSeq shake = new CameraShakeSeq(10.0f, 0.5f);
-        shake.create(this);
+        CameraShakeSeq shake = new CameraShakeSeq(this,10.0f, 0.5f);
 
         plan.addLinkedSeq(seq1, shake);
 
-        seq1 = new CameraMoveSpringSeq(new Vector3(0.0f, 0.0f, 1.0f), 1.0f);
-        seq1.create(this);
+        seq1 = new CameraMoveSpringSeq(this,new Vector3(0.0f, 0.0f, 1.0f), 1.0f);
 
         plan.addTimeSeq(1.0f, seq1);
 
-        seq1 = new CameraMoveSpringSeq(new Vector3(1000.0f, 0.0f, 0.3f), 1.0f);
-        seq1.create(this);
+        seq1 = new CameraMoveSpringSeq(this, new Vector3(1000.0f, 0.0f, 0.3f), 1.0f);
 
         plan.addTimeSeq(2.0f, seq1);
 

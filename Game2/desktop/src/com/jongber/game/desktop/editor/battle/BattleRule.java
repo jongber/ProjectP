@@ -105,8 +105,7 @@ public class BattleRule {
     public SequencePlan createAttackPlan() {
         SequencePlan plan = new SequencePlan();
 
-        CameraShakeSeq seq = new CameraShakeSeq(2.0f, 0.15f);
-        seq.create(this.layer);
+        CameraShakeSeq seq = new CameraShakeSeq(this.layer, 2.0f, 0.15f);
 
         plan.addTimeSeq(0.2f, seq);
 
