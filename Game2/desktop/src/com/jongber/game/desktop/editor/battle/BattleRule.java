@@ -70,7 +70,7 @@ public class BattleRule {
     }
 
     public GameObject createPlayer(String name, float pos) {
-        GameObject object = new GameObject("Player");
+        GameObject object = new GameObject(name);
         object.transform.local.translate(-16.0f * pos, 0.0f);
 
 
@@ -103,7 +103,7 @@ public class BattleRule {
     }
 
     public SequencePlan createAttackPlan() {
-        GameObject object = layer.getObjectAny("Player");
+        GameObject object = layer.getObjectAny("Player2");
         object.getComponent(BattleComponent.class).orgPos = object.transform.getLocalPos();
         object.getComponent(BattleComponent.class).orgScale = object.transform.local.getScale(new Vector2());
 //

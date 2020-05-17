@@ -39,8 +39,10 @@ public class GameObjectMoveSeq extends GameSequence {
 
     @Override
     public boolean isEnded() {
-        if (this.totElapsed >= this.duration)
+        if (this.totElapsed >= this.duration) {
+            this.character.transform.local.setToTranslation(to.x, to.y);
             return true;
+        }
 
         return false;
     }
