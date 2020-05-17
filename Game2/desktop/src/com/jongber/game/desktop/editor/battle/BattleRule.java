@@ -17,6 +17,7 @@ import com.jongber.game.desktop.common.component.SpriteComponent;
 import com.jongber.game.desktop.common.sequence.CameraShakeSeq;
 import com.jongber.game.desktop.editor.EditorAssetManager;
 import com.jongber.game.desktop.editor.EditorCmd;
+import com.jongber.game.desktop.editor.battle.seq.ChangeAnimSeq;
 import com.jongber.game.desktop.editor.battle.seq.GameObjectMoveSeq;
 import com.jongber.game.desktop.editor.battle.seq.SpriteScaleSeq;
 
@@ -102,15 +103,13 @@ public class BattleRule {
         return object;
     }
 
-    public SequencePlan createAttackPlan() {
-        GameObject object = layer.getObjectAny("Player2");
+    public void createAttackPlan(SequencePlan plan, String name) {
+        GameObject object = layer.getObjectAny(name);
 
         BattleComponent c = object.getComponent(BattleComponent.class);
 
         c.orgPos = object.transform.getLocalPos();
         c.orgScale = 1.0f;
-//
-        SequencePlan plan = new SequencePlan();
 
         GameObjectMoveSeq s1 = new GameObjectMoveSeq(object, new Vector2(-16.0f, -32.0f), 0.2f);
         plan.addTimeSeq(0.0f, s1);
@@ -118,8 +117,14 @@ public class BattleRule {
         SpriteScaleSeq s2 = new SpriteScaleSeq(object, 2.0f, 0.2f);
         plan.addTimeSeq(0.0f, s2);
 
-        CameraShakeSeq seq = new CameraShakeSeq(2.0f, 0.15f);
-        plan.addLinkedSeq(s1, seq);
+        ChangeAnimSeq cs = new ChangeAnimSeq(object, assets.get("project/male.json aMelee"), VFAnimation.PlayMode.ONCE);
+        plan.addLinkedSeq(s2, cs);
+
+        s1 = new GameObjectMoveSeq(object, new Vector2(-20.0f, -32.0f), 0.7f);
+        plan.addLinkedSeq(cs, s1);
+
+        CameraShakeSeq seq = new CameraShakeSeq(2.0f, 0.25f);
+        plan.addLinkedSeq(cs, seq, 0.3f);
 
         s1 = new GameObjectMoveSeq(object, c.orgPos, 0.2f);
         plan.addLinkedSeq(seq, s1);
@@ -127,6 +132,7 @@ public class BattleRule {
         s2 = new SpriteScaleSeq(object, c.orgScale, 0.2f);
         plan.addLinkedSeq(seq, s2);
 
-        return plan;
+        cs = new ChangeAnimSeq(object, assets.get("project/male.json Idle"), VFAnimation.PlayMode.LOOP);
+        plan.addLinkedSeq(s2, cs);
     }
 }

@@ -45,7 +45,8 @@ public class BattleController extends InputControlAdapter
             return false;
         }
 
-        SequencePlan plan = this.rule.createAttackPlan();
+        SequencePlan plan = new SequencePlan();
+        this.rule.createAttackPlan(plan, "Player3");
         this.layer.setSequencePlan(plan);
 
         return false;
