@@ -1,36 +1,35 @@
 package com.jongber.game.desktop.editor.battle.seq;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.sequence.GameSequence;
+import com.jongber.game.core.sequence.detail.MoveTo;
 import com.jongber.game.desktop.common.component.SpriteComponent;
 
 public class GameObjectMoveSeq extends GameSequence {
 
-    private GameObject object;
-    private Vector2 to;
-    private Vector2 from;
-
-    private float time;
-    private float scale;
+    private Vector3 to;
+    private float duration;
+    private GameObject character;
+    private MoveTo moveTo;
 
     private float totElapsed;
 
-    public GameObjectMoveSeq(GameLayer layer, GameObject object, Vector2 to, float scale, float time) {
+    public GameObjectMoveSeq(GameLayer layer, GameObject character, Vector2 to, float duration) {
         super(layer);
-        this.object = object;
-        this.time = time;
-        this.to = to;
-        this.from = object.transform.getLocalPos();
+        this.to = new Vector3(to, 0.0f);
+        this.duration = duration;
+        this.character = character;
 
-        this.time = time;
-        this.scale = scale;
+        Vector3 from= new Vector3(character.transform.getLocalPos(), 0.0f);
+        moveTo = new MoveTo(from, this.to, duration);
     }
 
     @Override
     public void start() {
-        object.transform.local.setToTranslation(this.to);
+
     }
 
     @Override
@@ -40,21 +39,19 @@ public class GameObjectMoveSeq extends GameSequence {
 
     @Override
     public boolean isEnded() {
-        if (this.totElapsed >= this.time) {
+        if (this.totElapsed >= this.duration)
             return true;
-        }
 
         return false;
     }
 
     @Override
     public void update(float elapsed) {
-        this.totElapsed += elapsed;
 
-//        this.from.lerp(this.to, elapsed/this.time);
-//
-//        object.transform.local.setToTranslation(this.from);
-//        object.getComponent(SpriteComponent.class).scale.scl(1.0f + this.scale * elapsed/this.time);
+        Vector3 moved = moveTo.update(elapsed);
+        this.character.transform.local.setToTranslation(moved.x, moved.y);
+
+        this.totElapsed += elapsed;
     }
 
     @Override

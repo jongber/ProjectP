@@ -6,8 +6,8 @@ import com.jongber.game.core.GameLayer;
 
 public abstract class EditorView extends GameLayer {
 
-    public static int width = 1600;
-    public static int height = 900;
+    public static int width = 256;
+    public static int height = 144;
 
     public EditorView() {
         super(new FillViewport(width, height));

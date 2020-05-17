@@ -18,6 +18,7 @@ import com.jongber.game.desktop.common.sequence.CameraShakeSeq;
 import com.jongber.game.desktop.editor.EditorAssetManager;
 import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.battle.seq.GameObjectMoveSeq;
+import com.jongber.game.desktop.editor.battle.seq.SpriteScaleSeq;
 
 import java.util.HashMap;
 import java.util.List;
@@ -105,15 +106,18 @@ public class BattleRule {
         GameObject object = layer.getObjectAny("Player");
         object.getComponent(BattleComponent.class).orgPos = object.transform.getLocalPos();
         object.getComponent(BattleComponent.class).orgScale = object.transform.local.getScale(new Vector2());
-
+//
         SequencePlan plan = new SequencePlan();
 
-        GameObjectMoveSeq s1 = new GameObjectMoveSeq(this.layer, object, new Vector2(0.0f, 0.0f), 2.0f, 1.0f);
+        GameObjectMoveSeq s1 = new GameObjectMoveSeq(this.layer, object, new Vector2(-16.0f, -32.0f), 0.2f);
         plan.addTimeSeq(0.0f, s1);
+
+        SpriteScaleSeq s2 = new SpriteScaleSeq(this.layer, object, 2.0f, 0.2f);
+        plan.addTimeSeq(0.0f, s2);
 
         CameraShakeSeq seq = new CameraShakeSeq(this.layer, 2.0f, 0.15f);
         plan.addLinkedSeq(s1, seq);
-        //plan.addTimeSeq(0.2f, seq);
+//        //plan.addTimeSeq(0.2f, seq);
 
         return plan;
     }

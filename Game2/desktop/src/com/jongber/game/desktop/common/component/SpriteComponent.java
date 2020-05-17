@@ -10,7 +10,7 @@ public class SpriteComponent extends Component {
     public boolean flipX = false;
     public boolean flipY = false;
 
-    public Vector2 scale = new Vector2(1.0f, 1.0f);
+    public float scale = 1.0f;
     public float rotation = 0.0f;
 
     public AnimationAsset asset;
