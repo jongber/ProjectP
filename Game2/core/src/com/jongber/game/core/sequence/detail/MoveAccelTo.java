@@ -15,7 +15,7 @@ public class MoveAccelTo {
     Vector3 curPos;
 
     public MoveAccelTo(Vector3 from, Vector3 to, float duration) {
-        this.to = new Vector3(to);
+        this.to = to;
         this.duration = duration;
 
         this.curPos = new Vector3(from);
@@ -31,7 +31,7 @@ public class MoveAccelTo {
     public Vector3 update(float elapsed) {
 
         if (dist <= 0 || this.totElapsed >= this.duration)
-            return to;
+            return curPos;
 
         if (this.totElapsed < this.duration / 2.0f) {
             spd += acc * elapsed;

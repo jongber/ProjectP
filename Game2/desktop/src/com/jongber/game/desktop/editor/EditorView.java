@@ -10,7 +10,7 @@ public abstract class EditorView extends GameLayer {
     public static int height = 900;
 
     public EditorView() {
-        //super(new FillViewport(width, height));
+        super(new FillViewport(width, height));
     }
 
     public abstract void create(EditorCmd cmd);
