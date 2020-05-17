@@ -33,7 +33,7 @@ public class MoveAccelTo {
         if (dist <= 0 || this.totElapsed >= this.duration)
             return to;
 
-        if (this.totElapsed <= this.duration / 2.0f) {
+        if (this.totElapsed < this.duration / 2.0f) {
             spd += acc * elapsed;
             curPos.add(dir.x * spd * elapsed, dir.y * spd * elapsed, dir.z * spd * elapsed);
         }
