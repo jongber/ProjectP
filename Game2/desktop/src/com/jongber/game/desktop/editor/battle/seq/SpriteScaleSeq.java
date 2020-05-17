@@ -20,14 +20,12 @@ public class SpriteScaleSeq extends GameSequence {
         this.object = object;
         this.duration = duration;
         this.c = this.object.getComponent(SpriteComponent.class);
-
-        spd = (scale - c.scale)/duration;
         this.scale = scale;
     }
 
     @Override
     public void start() {
-
+        spd = (scale - c.scale)/duration;
     }
 
     @Override
@@ -37,8 +35,9 @@ public class SpriteScaleSeq extends GameSequence {
 
     @Override
     public boolean isEnded() {
-        if (this.totElapsed >= this.duration)
+        if (this.totElapsed >= this.duration) {
             return true;
+        }
 
         return false;
     }
@@ -48,7 +47,6 @@ public class SpriteScaleSeq extends GameSequence {
         this.totElapsed += elapsed;
 
         c.scale += this.spd * elapsed;
-
     }
 
     @Override

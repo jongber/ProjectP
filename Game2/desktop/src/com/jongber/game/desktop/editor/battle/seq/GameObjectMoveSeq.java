@@ -22,14 +22,12 @@ public class GameObjectMoveSeq extends GameSequence {
         this.to = new Vector3(to, 0.0f);
         this.duration = duration;
         this.character = character;
-
-        Vector3 from= new Vector3(character.transform.getLocalPos(), 0.0f);
-        moveTo = new MoveTo(from, this.to, duration);
     }
 
     @Override
     public void start() {
-
+        Vector3 from= new Vector3(character.transform.getLocalPos(), 0.0f);
+        moveTo = new MoveTo(from, this.to, duration);
     }
 
     @Override

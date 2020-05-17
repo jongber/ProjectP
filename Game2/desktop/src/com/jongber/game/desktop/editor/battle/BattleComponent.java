@@ -5,6 +5,6 @@ import com.jongber.game.core.component.Component;
 
 // battle state..
 public class BattleComponent extends Component {
-    Vector2 orgPos = new Vector2();
-    Vector2 orgScale = new Vector2();
+    public Vector2 orgPos = new Vector2();
+    public float orgScale = 1.0f;
 }

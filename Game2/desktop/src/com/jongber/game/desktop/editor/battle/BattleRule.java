@@ -104,8 +104,11 @@ public class BattleRule {
 
     public SequencePlan createAttackPlan() {
         GameObject object = layer.getObjectAny("Player2");
-        object.getComponent(BattleComponent.class).orgPos = object.transform.getLocalPos();
-        object.getComponent(BattleComponent.class).orgScale = object.transform.local.getScale(new Vector2());
+
+        BattleComponent c = object.getComponent(BattleComponent.class);
+
+        c.orgPos = object.transform.getLocalPos();
+        c.orgScale = 1.0f;
 //
         SequencePlan plan = new SequencePlan();
 
@@ -117,7 +120,12 @@ public class BattleRule {
 
         CameraShakeSeq seq = new CameraShakeSeq(this.layer, 2.0f, 0.15f);
         plan.addLinkedSeq(s1, seq);
-//        //plan.addTimeSeq(0.2f, seq);
+
+        s1 = new GameObjectMoveSeq(this.layer, object, c.orgPos, 0.2f);
+        plan.addLinkedSeq(seq, s1);
+
+        s2 = new SpriteScaleSeq(this.layer, object, c.orgScale, 0.2f);
+        plan.addLinkedSeq(seq, s2);
 
         return plan;
     }
