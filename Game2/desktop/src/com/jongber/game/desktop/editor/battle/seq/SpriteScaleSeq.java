@@ -15,8 +15,7 @@ public class SpriteScaleSeq extends GameSequence {
     private float spd;
     private SpriteComponent c;
 
-    public SpriteScaleSeq(GameLayer layer, GameObject object, float scale, float duration) {
-        super(layer);
+    public SpriteScaleSeq(GameObject object, float scale, float duration) {
         this.object = object;
         this.duration = duration;
         this.c = this.object.getComponent(SpriteComponent.class);
@@ -24,7 +23,7 @@ public class SpriteScaleSeq extends GameSequence {
     }
 
     @Override
-    public void start() {
+    public void start(GameLayer layer) {
         spd = (scale - c.scale)/duration;
     }
 

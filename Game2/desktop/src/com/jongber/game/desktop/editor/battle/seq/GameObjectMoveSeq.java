@@ -6,7 +6,6 @@ import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.sequence.GameSequence;
 import com.jongber.game.core.sequence.detail.MoveTo;
-import com.jongber.game.desktop.common.component.SpriteComponent;
 
 public class GameObjectMoveSeq extends GameSequence {
 
@@ -17,15 +16,14 @@ public class GameObjectMoveSeq extends GameSequence {
 
     private float totElapsed;
 
-    public GameObjectMoveSeq(GameLayer layer, GameObject character, Vector2 to, float duration) {
-        super(layer);
+    public GameObjectMoveSeq(GameObject character, Vector2 to, float duration) {
         this.to = new Vector3(to, 0.0f);
         this.duration = duration;
         this.character = character;
     }
 
     @Override
-    public void start() {
+    public void start(GameLayer layer) {
         Vector3 from= new Vector3(character.transform.getLocalPos(), 0.0f);
         moveTo = new MoveTo(from, this.to, duration);
     }

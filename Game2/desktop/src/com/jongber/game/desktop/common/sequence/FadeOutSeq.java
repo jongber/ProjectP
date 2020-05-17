@@ -18,8 +18,7 @@ public class FadeOutSeq extends GameSequence implements Controller.PostRenderer 
     private float totElapsed;
     private ShapeRenderer renderer = new ShapeRenderer();
 
-    public FadeOutSeq(GameLayer layer, float time) {
-        super(layer);
+    public FadeOutSeq(float time) {
         this.time = time;
         this.color.set(0.0f, 0.0f, 0.0f, 0.0f);
     }
@@ -48,8 +47,7 @@ public class FadeOutSeq extends GameSequence implements Controller.PostRenderer 
     }
     
     @Override
-    public void start() {
-
+    public void start(GameLayer layer) {
     }
 
     @Override

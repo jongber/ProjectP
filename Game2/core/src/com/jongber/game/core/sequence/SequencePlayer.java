@@ -1,6 +1,7 @@
 package com.jongber.game.core.sequence;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
 import com.jongber.game.core.util.PackedArray;
@@ -20,7 +21,10 @@ public class SequencePlayer extends Controller
     private List<GameSequence> endSeqs = new ArrayList<>();
     private SequencePlan seqPlan = new SequencePlan();
 
-    public void setPlan(SequencePlan plan) {
+    private GameLayer layer;
+
+    public void setPlan(GameLayer layer, SequencePlan plan) {
+        this.layer = layer;
         this.seqPlan = plan;
         this.totElapsed = 0;
         this.playing.clearAll();
@@ -84,7 +88,7 @@ public class SequencePlayer extends Controller
             this.inputProcessors.add((Controller.InputProcessor)seq);
         }
 
-        seq.start();
+        seq.start(layer);
         this.playing.add(seq);
     }
 

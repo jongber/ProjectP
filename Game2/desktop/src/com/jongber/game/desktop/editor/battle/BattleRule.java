@@ -112,19 +112,19 @@ public class BattleRule {
 //
         SequencePlan plan = new SequencePlan();
 
-        GameObjectMoveSeq s1 = new GameObjectMoveSeq(this.layer, object, new Vector2(-16.0f, -32.0f), 0.2f);
+        GameObjectMoveSeq s1 = new GameObjectMoveSeq(object, new Vector2(-16.0f, -32.0f), 0.2f);
         plan.addTimeSeq(0.0f, s1);
 
-        SpriteScaleSeq s2 = new SpriteScaleSeq(this.layer, object, 2.0f, 0.2f);
+        SpriteScaleSeq s2 = new SpriteScaleSeq(object, 2.0f, 0.2f);
         plan.addTimeSeq(0.0f, s2);
 
-        CameraShakeSeq seq = new CameraShakeSeq(this.layer, 2.0f, 0.15f);
+        CameraShakeSeq seq = new CameraShakeSeq(2.0f, 0.15f);
         plan.addLinkedSeq(s1, seq);
 
-        s1 = new GameObjectMoveSeq(this.layer, object, c.orgPos, 0.2f);
+        s1 = new GameObjectMoveSeq(object, c.orgPos, 0.2f);
         plan.addLinkedSeq(seq, s1);
 
-        s2 = new SpriteScaleSeq(this.layer, object, c.orgScale, 0.2f);
+        s2 = new SpriteScaleSeq(object, c.orgScale, 0.2f);
         plan.addLinkedSeq(seq, s2);
 
         return plan;

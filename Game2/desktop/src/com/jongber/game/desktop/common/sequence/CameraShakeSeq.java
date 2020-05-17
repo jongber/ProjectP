@@ -14,15 +14,14 @@ public class CameraShakeSeq extends GameSequence {
 
     Vector3 orgPos;
 
-    public CameraShakeSeq(GameLayer layer, float intensity, float duration) {
-        super(layer);
-        this.camera = layer.getCameraWrapper();
+    public CameraShakeSeq(float intensity, float duration) {
         this.intensity = intensity;
         this.duration = duration;
     }
 
     @Override
-    public void start() {
+    public void start(GameLayer layer) {
+        this.camera = layer.getCameraWrapper();
         orgPos = new Vector3(this.camera.getPosition());
     }
 

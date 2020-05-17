@@ -149,7 +149,7 @@ public class GameLayer {
     }
 
     public void setSequencePlan(SequencePlan plan) {
-        this.sequencePlayer.setPlan(plan);
+        this.sequencePlayer.setPlan(this, plan);
     }
 
     public void addObject(GameObject object) {

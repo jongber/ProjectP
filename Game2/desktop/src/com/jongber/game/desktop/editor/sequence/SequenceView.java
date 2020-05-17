@@ -15,7 +15,7 @@ public class SequenceView extends EditorView {
         this.registerController(new BlockGridRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         SequencePlan plan = new SequencePlan();
-        CameraMoveSeq seq1 = new CameraMoveSeq(this, new Vector3(1000, 0.0f, 0.1f), 1.0f);
+        CameraMoveSeq seq1 = new CameraMoveSeq(new Vector3(1000, 0.0f, 0.1f), 1.0f);
         plan.addTimeSeq(0.5f, seq1);
 
         this.setSequencePlan(plan);

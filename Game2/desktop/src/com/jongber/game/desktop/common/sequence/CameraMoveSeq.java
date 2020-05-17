@@ -8,21 +8,23 @@ import com.jongber.game.core.sequence.detail.MoveTo;
 
 public class CameraMoveSeq extends GameSequence {
 
+    private final float duration;
+    private final Vector3 to;
+
     private MoveTo moveTo;
     private OrthoCameraWrapper c;
     private float totElapsed;
-    private float duration;
 
-    public CameraMoveSeq(GameLayer layer, Vector3 to, float duration) {
-        super(layer);
+
+    public CameraMoveSeq(Vector3 to, float duration) {
         this.duration = duration;
-        this.c = layer.getCameraWrapper();
-        moveTo = new MoveTo(this.cameraPos(), to, duration);
+        this.to = to;
     }
 
     @Override
-    public void start() {
-
+    public void start(GameLayer layer) {
+        this.c = layer.getCameraWrapper();
+        moveTo = new MoveTo(this.cameraPos(), to, duration);
     }
 
     @Override

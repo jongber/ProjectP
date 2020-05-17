@@ -16,16 +16,15 @@ public class CameraMoveAccSeq extends GameSequence {
 
     OrthoCameraWrapper c;
 
-    public CameraMoveAccSeq(GameLayer layer, Vector3 to, float duration) {
-        super(layer);
+    public CameraMoveAccSeq(Vector3 to, float duration) {
         this.duration = duration;
         this.to = to;
-        this.c = this.layer.getCameraWrapper();
-        this.moveAccelTo = new MoveAccelTo(this.cameraPos(), this.to, this.duration);
     }
 
     @Override
-    public void start() {
+    public void start(GameLayer layer) {
+        this.c = layer.getCameraWrapper();
+        this.moveAccelTo = new MoveAccelTo(this.cameraPos(), this.to, this.duration);
     }
 
     @Override
