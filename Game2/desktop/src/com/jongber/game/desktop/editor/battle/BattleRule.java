@@ -14,6 +14,7 @@ import com.jongber.game.core.graphics.VFAnimation;
 import com.jongber.game.core.sequence.SequencePlan;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.common.component.SpriteComponent;
+import com.jongber.game.desktop.common.sequence.CameraRotationSeq;
 import com.jongber.game.desktop.common.sequence.CameraShakeSeq;
 import com.jongber.game.desktop.editor.EditorAssetManager;
 import com.jongber.game.desktop.editor.EditorCmd;
@@ -111,28 +112,31 @@ public class BattleRule {
         c.orgPos = object.transform.getLocalPos();
         c.orgScale = 1.0f;
 
-        GameObjectMoveSeq s1 = new GameObjectMoveSeq(object, new Vector2(-16.0f, -32.0f), 0.2f);
-        plan.addTimeSeq(0.0f, s1);
+        plan.addTimeSeq(0.5f, new CameraRotationSeq(60.0f, 0.5f));
+        plan.addTimeSeq(1.1f, new CameraRotationSeq(60.0f, 0.5f));
 
-        SpriteScaleSeq s2 = new SpriteScaleSeq(object, 2.0f, 0.2f);
-        plan.addTimeSeq(0.0f, s2);
-
-        ChangeAnimSeq cs = new ChangeAnimSeq(object, assets.get("project/male.json aMelee"), VFAnimation.PlayMode.ONCE);
-        plan.addLinkedSeq(s2, cs);
-
-        s1 = new GameObjectMoveSeq(object, new Vector2(-20.0f, -32.0f), 0.7f);
-        plan.addLinkedSeq(cs, s1);
-
-        CameraShakeSeq seq = new CameraShakeSeq(2.0f, 0.25f);
-        plan.addLinkedSeq(cs, seq, 0.3f);
-
-        s1 = new GameObjectMoveSeq(object, c.orgPos, 0.2f);
-        plan.addLinkedSeq(seq, s1);
-
-        s2 = new SpriteScaleSeq(object, c.orgScale, 0.2f);
-        plan.addLinkedSeq(seq, s2);
-
-        cs = new ChangeAnimSeq(object, assets.get("project/male.json Idle"), VFAnimation.PlayMode.LOOP);
-        plan.addLinkedSeq(s2, cs);
+//        GameObjectMoveSeq s1 = new GameObjectMoveSeq(object, new Vector2(-16.0f, -32.0f), 0.2f);
+//        plan.addTimeSeq(0.0f, s1);
+//
+//        SpriteScaleSeq s2 = new SpriteScaleSeq(object, 2.0f, 0.2f);
+//        plan.addTimeSeq(0.0f, s2);
+//
+//        ChangeAnimSeq cs = new ChangeAnimSeq(object, assets.get("project/male.json aMelee"), VFAnimation.PlayMode.ONCE);
+//        plan.addLinkedSeq(s2, cs);
+//
+//        s1 = new GameObjectMoveSeq(object, new Vector2(-20.0f, -32.0f), 0.7f);
+//        plan.addLinkedSeq(cs, s1);
+//
+//        CameraShakeSeq seq = new CameraShakeSeq(2.0f, 0.25f);
+//        plan.addLinkedSeq(cs, seq, 0.3f);
+//
+//        s1 = new GameObjectMoveSeq(object, c.orgPos, 0.2f);
+//        plan.addLinkedSeq(seq, s1);
+//
+//        s2 = new SpriteScaleSeq(object, c.orgScale, 0.2f);
+//        plan.addLinkedSeq(seq, s2);
+//
+//        cs = new ChangeAnimSeq(object, assets.get("project/male.json Idle"), VFAnimation.PlayMode.LOOP);
+//        plan.addLinkedSeq(s2, cs);
     }
 }
