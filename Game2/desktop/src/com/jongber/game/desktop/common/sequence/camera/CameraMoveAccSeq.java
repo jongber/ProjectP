@@ -1,22 +1,22 @@
-package com.jongber.game.desktop.common.sequence;
+package com.jongber.game.desktop.common.sequence.camera;
 
 import com.badlogic.gdx.math.Vector3;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
 import com.jongber.game.core.sequence.GameSequence;
-import com.jongber.game.core.sequence.detail.MoveTo;
+import com.jongber.game.core.sequence.detail.MoveAccelTo;
 
-public class CameraMoveSeq extends GameSequence {
+public class CameraMoveAccSeq extends GameSequence {
 
-    private final float duration;
-    private final Vector3 to;
+    MoveAccelTo moveAccelTo;
 
-    private MoveTo moveTo;
-    private OrthoCameraWrapper c;
-    private float totElapsed;
+    float totElapsed;
+    float duration;
+    Vector3 to;
 
+    OrthoCameraWrapper c;
 
-    public CameraMoveSeq(Vector3 to, float duration) {
+    public CameraMoveAccSeq(Vector3 to, float duration) {
         this.duration = duration;
         this.to = to;
     }
@@ -24,7 +24,7 @@ public class CameraMoveSeq extends GameSequence {
     @Override
     public void start(GameLayer layer) {
         this.c = layer.getCameraWrapper();
-        moveTo = new MoveTo(this.cameraPos(), to, duration);
+        this.moveAccelTo = new MoveAccelTo(this.cameraPos(), this.to, this.duration);
     }
 
     @Override
@@ -42,11 +42,11 @@ public class CameraMoveSeq extends GameSequence {
 
     @Override
     public void update(float elapsed) {
-        totElapsed += elapsed;
-        Vector3 moved = this.moveTo.update(elapsed);
-        this.c.getCamera().position.x = moved.x;
-        this.c.getCamera().position.y = moved.y;
-        this.c.getCamera().zoom = moved.z;
+        this.totElapsed += elapsed;
+        Vector3 pos = this.moveAccelTo.update(elapsed);
+        this.c.getCamera().position.x = pos.x;
+        this.c.getCamera().position.y = pos.y;
+        this.c.getCamera().zoom = pos.z;
     }
 
     @Override

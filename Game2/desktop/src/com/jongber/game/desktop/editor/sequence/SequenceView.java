@@ -4,8 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.jongber.game.core.sequence.SequencePlan;
 import com.jongber.game.desktop.common.controller.BlockGridRenderer;
-import com.jongber.game.desktop.common.sequence.CameraMoveAccSeq;
-import com.jongber.game.desktop.common.sequence.CameraMoveSeq;
+import com.jongber.game.desktop.common.sequence.camera.CameraMoveSeq;
 import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.EditorView;
 
