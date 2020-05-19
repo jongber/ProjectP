@@ -106,7 +106,7 @@ public class GameLayer {
         this.modified = true;
     }
 
-    public Controller getController(Class type) {
+    public Controller getAnyController(Class type) {
         for (Controller controller : this.controllers) {
             if (type.isInstance(controller)) {
                 return controller;
@@ -114,6 +114,18 @@ public class GameLayer {
         }
 
         return null;
+    }
+
+    public List<Controller> getControllers(Class type) {
+        List<Controller> list = new ArrayList<>();
+
+        for (Controller controller : this.controllers) {
+            if (type.isInstance(controller)) {
+                list.add(controller);
+            }
+        }
+
+        return list;
     }
 
     public void render(float elapsed) {

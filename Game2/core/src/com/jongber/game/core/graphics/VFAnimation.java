@@ -25,6 +25,12 @@ public class VFAnimation {
         set(asset, mode);
     }
 
+    public void rewind() {
+        this.elapsed = 0;
+        this.curIndex = 0;
+        this.playbackCount = 0;
+    }
+
     public void set(AnimationAsset asset, PlayMode mode) {
         this.mode = mode;
         this.asset = asset;
