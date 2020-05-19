@@ -10,11 +10,12 @@ import java.util.Queue;
 
 public class SceneGraph {
     private List<GameObject> sorted = new ArrayList<>();
+    private Queue<GameObject> travel = new ArrayDeque<>();
 
     public void build(PackedArray<GameObject> objects) {
         this.sorted.clear();
+        this.travel.clear();
 
-        Queue<GameObject> travel = new ArrayDeque<>();
         for (GameObject node : objects) {
             travel.add(node);
         }
