@@ -10,7 +10,7 @@ import java.util.Queue;
 
 public class SceneGraph {
     private List<GameObject> sorted = new ArrayList<>();
-    private Queue<GameObject> travel = new ArrayDeque<>();
+    private Queue<GameObject> travel = new ArrayDeque<>(1024);
 
     public void build(PackedArray<GameObject> objects) {
         this.sorted.clear();
