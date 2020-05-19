@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.editor.battle.seq;
+package com.jongber.game.desktop.common.sequence;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;

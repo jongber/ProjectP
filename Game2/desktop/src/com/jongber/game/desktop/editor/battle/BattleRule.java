@@ -21,7 +21,7 @@ import com.jongber.game.desktop.common.sequence.camera.CameraShakeSeq;
 import com.jongber.game.desktop.editor.EditorAssetManager;
 import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.battle.seq.ChangeAnimSeq;
-import com.jongber.game.desktop.editor.battle.seq.GameObjectMoveSeq;
+import com.jongber.game.desktop.common.sequence.GameObjectMoveSeq;
 import com.jongber.game.desktop.editor.battle.seq.SpriteScaleSeq;
 
 import java.util.HashMap;

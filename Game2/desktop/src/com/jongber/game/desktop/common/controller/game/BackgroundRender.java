@@ -1,6 +1,7 @@
 package com.jongber.game.desktop.common.controller.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class BackgroundRender extends Controller implements Controller.Renderer, Controller.GraphBuilder {
 
-    List<GameObject> objects;
+    private List<GameObject> objects;
 
     @Override
     public void dispose() {
