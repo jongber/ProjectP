@@ -54,13 +54,12 @@ public class GameLayer {
 
     //// for sharing components
     public GameLayer(OrthoCameraWrapper camera,
-                     GameLayerInput input,
-                     SpriteBatch batch,
                      SequencePlayer sequencePlayer) {
         this.cameraWrapper = camera;
-        this.layerInput = input;
-        this.batch = batch;
+        this.batch = new SpriteBatch();
         this.sequencePlayer = sequencePlayer;
+        this.layerInput = new GameLayerInput(this.inputProcessors, this.cameraWrapper);
+
     }
 
     public GameLayerInput getInput() {
@@ -265,6 +264,10 @@ public class GameLayer {
         return this.cameraWrapper;
     }
 
+    public SpriteBatch getBatch() { return this.batch; }
+
+    public SequencePlayer getSequencePlayer() { return this.sequencePlayer; }
+
     public void post(GameEvent event) {
         this.eventHandler.post(event);
     }
@@ -277,6 +280,7 @@ public class GameLayer {
         for (Controller controller : this.controllers) {
             controller.dispose();
         }
+
         this.batch.dispose();
     }
 

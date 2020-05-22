@@ -2,15 +2,12 @@ package com.jongber.game.desktop.editor;
 
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.jongber.game.MainLayer;
 import com.jongber.game.core.GameLayer;
 
-public abstract class EditorView extends GameLayer {
-
-    public static int width = 256;
-    public static int height = 144;
-
+public abstract class EditorView extends MainLayer {
     public EditorView() {
-        super(new FillViewport(width, height));
+        //super(new FillViewport(width, height));
     }
 
     public abstract void create(EditorCmd cmd);
