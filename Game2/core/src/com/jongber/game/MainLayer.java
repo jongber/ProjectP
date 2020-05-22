@@ -19,6 +19,8 @@ public class MainLayer extends GameLayer implements InputProcessor {
     public enum LayerType {
         Map,
         Actor,
+        Dialog,
+        UI,
         Fps,
     }
 
@@ -30,6 +32,8 @@ public class MainLayer extends GameLayer implements InputProcessor {
 
         this.addLayer(LayerType.Map, new GameLayer(this.getCameraWrapper(), this.getSequencePlayer()));
         this.addLayer(LayerType.Actor, new GameLayer(this.getCameraWrapper(), this.getSequencePlayer()));
+        this.addLayer(LayerType.Dialog, new GameLayer());
+        this.addLayer(LayerType.UI, new GameLayer());
         this.addLayer(LayerType.Fps, new GameLayer());
 
         this.registerController(LayerType.Fps, new PerfRenderer());

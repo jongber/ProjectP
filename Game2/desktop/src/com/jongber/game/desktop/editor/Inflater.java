@@ -6,10 +6,10 @@ import com.jongber.game.desktop.editor.animation.AnimationCmd;
 import com.jongber.game.desktop.editor.animation.AnimationView;
 import com.jongber.game.desktop.editor.battle.BattleSceneCmd;
 import com.jongber.game.desktop.editor.battle.BattleSceneView;
+import com.jongber.game.desktop.editor.dialog.DialogCmd;
+import com.jongber.game.desktop.editor.dialog.DialogView;
 import com.jongber.game.desktop.editor.mainmenu.MainMenuCmd;
 import com.jongber.game.desktop.editor.mainmenu.MainMenuView;
-import com.jongber.game.desktop.editor.sequence.SequenceCmd;
-import com.jongber.game.desktop.editor.sequence.SequenceView;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -23,7 +23,7 @@ public class Inflater {
     static {
         inflateMap.put(MainMenuCmd.class, MainMenuView.class);
         inflateMap.put(AnimationCmd.class, AnimationView.class);
-        inflateMap.put(SequenceCmd.class, SequenceView.class);
+        inflateMap.put(DialogCmd.class, DialogView.class);
         inflateMap.put(BattleSceneCmd.class, BattleSceneView.class);
     }
 
@@ -32,7 +32,7 @@ public class Inflater {
     }
 
     public static void returnToMain() {
-        Inflater.inflate(BattleSceneCmd.class);
+        Inflater.inflate(DialogCmd.class);
     }
 
     public static void inflate(Class<? extends EditorCmd> cmdClass) {

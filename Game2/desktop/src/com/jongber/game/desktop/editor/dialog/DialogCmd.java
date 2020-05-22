@@ -1,14 +1,11 @@
-package com.jongber.game.desktop.editor.sequence;
+package com.jongber.game.desktop.editor.dialog;
 
 import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.EditorView;
 
-public class SequenceCmd extends EditorCmd {
-
-    SequenceView view;
-
+public class DialogCmd extends EditorCmd {
     @Override
     public void create(EditorView layer) {
-        this.view = (SequenceView)layer;
+
     }
 }

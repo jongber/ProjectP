@@ -6,9 +6,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.event.GameEvent;
 import com.jongber.game.core.event.GameEventHandler;
-import com.jongber.game.desktop.editor.animation.AnimationCmd;
-import com.jongber.game.desktop.editor.battle.BattleSceneCmd;
-import com.jongber.game.desktop.editor.sequence.SequenceCmd;
 
 public class EditorApp extends ApplicationAdapter {
 
