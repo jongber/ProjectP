@@ -1,5 +1,7 @@
 package com.jongber.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.controller.Controller;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainLayer extends GameLayer {
+public class MainLayer extends GameLayer implements InputProcessor {
 
     public static final int width = 256;
     public static final int height = 144;
@@ -31,6 +33,8 @@ public class MainLayer extends GameLayer {
         this.addLayer(LayerType.Fps, new GameLayer());
 
         this.registerController(LayerType.Fps, new PerfRenderer());
+
+        Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -79,5 +83,112 @@ public class MainLayer extends GameLayer {
     private void addLayer(LayerType type, GameLayer layer) {
         this.layers.add(layer);
         this.layerMap.put(type, layer);
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+
+        this.getInput().keyDown(keycode);
+
+        for (int i = this.layers.size() - 1; i >= 0; --i) {
+            GameLayer layer = this.layers.get(i);
+            if (layer.getInput().keyDown(keycode))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        this.getInput().keyUp(keycode);
+
+        for (int i = this.layers.size() - 1; i >= 0; --i) {
+            GameLayer layer = this.layers.get(i);
+            if (layer.getInput().keyUp(keycode))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        this.getInput().keyTyped(character);
+
+        for (int i = this.layers.size() - 1; i >= 0; --i) {
+            GameLayer layer = this.layers.get(i);
+            if (layer.getInput().keyTyped(character))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        this.getInput().touchDown(screenX, screenY, pointer, button);
+
+        for (int i = this.layers.size() - 1; i >= 0; --i) {
+            GameLayer layer = this.layers.get(i);
+            if (layer.getInput().touchDown(screenX, screenY, pointer, button))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+        this.getInput().touchUp(screenX, screenY, pointer, button);
+
+        for (int i = this.layers.size() - 1; i >= 0; --i) {
+            GameLayer layer = this.layers.get(i);
+            if (layer.getInput().touchUp(screenX, screenY, pointer, button))
+                return true;
+        }
+
+        return false;
+
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        this.getInput().touchDragged(screenX, screenY, pointer);
+
+        for (int i = this.layers.size() - 1; i >= 0; --i) {
+            GameLayer layer = this.layers.get(i);
+            if (layer.getInput().touchDragged(screenX, screenY, pointer))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        this.getInput().mouseMoved(screenX, screenY);
+
+        for (int i = this.layers.size() - 1; i >= 0; --i) {
+            GameLayer layer = this.layers.get(i);
+            if (layer.getInput().mouseMoved(screenX, screenY))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        this.getInput().scrolled(amount);
+
+        for (int i = this.layers.size() - 1; i >= 0; --i) {
+            GameLayer layer = this.layers.get(i);
+            if (layer.getInput().scrolled(amount))
+                return true;
+        }
+
+        return false;
     }
 }

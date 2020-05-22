@@ -19,7 +19,7 @@ public class BattleSceneView extends EditorView {
         this.rule = new BattleRule(this);
         registerController();
 
-        Gdx.input.setInputProcessor(this.getInput());
+        ////Gdx.input.setInputProcessor(this.getInput());
     }
 
     private void registerController() {
