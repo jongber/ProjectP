@@ -52,6 +52,17 @@ public class GameLayer {
         this.registerController(this.sequencePlayer);
     }
 
+    //// for sharing components
+    public GameLayer(OrthoCameraWrapper camera,
+                     GameLayerInput input,
+                     SpriteBatch batch,
+                     SequencePlayer sequencePlayer) {
+        this.cameraWrapper = camera;
+        this.layerInput = input;
+        this.batch = batch;
+        this.sequencePlayer = sequencePlayer;
+    }
+
     public GameLayerInput getInput() {
         return this.layerInput;
     }
