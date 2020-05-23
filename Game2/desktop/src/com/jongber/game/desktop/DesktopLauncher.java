@@ -2,6 +2,7 @@ package com.jongber.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.jongber.game.desktop.editor.EditorApp;
 
 public class DesktopLauncher {

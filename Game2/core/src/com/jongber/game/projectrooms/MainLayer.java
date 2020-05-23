@@ -2,8 +2,10 @@ package com.jongber.game.projectrooms;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.jongber.game.core.GameLayer;
+import com.jongber.game.core.asset.AssetManager;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.controller.PerfRenderer;
 
