@@ -4,11 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.jongber.game.MainLayer;
-import com.jongber.game.core.GameObject;
+import com.jongber.game.projectrooms.MainLayer;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import java.util.List;
 
 public class BlockGridRenderer extends Controller implements Controller.PostRenderer {
 

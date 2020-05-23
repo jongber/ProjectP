@@ -1,4 +1,4 @@
-package com.jongber.game;
+package com.jongber.game.projectrooms;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class MainLayer extends GameLayer implements InputProcessor {
 
-    public static final int defaltScale = 4;
+    public static final int defaltScale = 5;
     public static final int width = 256 * defaltScale;
     public static final int height = 144 * defaltScale;
 
