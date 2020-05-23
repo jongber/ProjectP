@@ -13,7 +13,7 @@ public class TextComponent extends Component {
     public FontManager.TextBlock textBlock = new FontManager.TextBlock();
     public float width = 0;
     public float height = 0;
-    public int align = Align.center;
+    public int align = Align.left;
     public Color background = Color.CLEAR;
     private ClickListener listener;
 
