@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.jongber.game.MainLayer;
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AnimationAsset;
@@ -75,7 +76,7 @@ public class BattleRule {
 
     public GameObject createPlayer(String name, float pos) {
         GameObject object = new GameObject(name);
-        object.transform.local.translate(-16.0f * pos, 0.0f);
+        object.transform.local.translate(-16.0f * pos * MainLayer.defaltScale, 0.0f);
 
 
         SpriteComponent sc = new SpriteComponent();
@@ -91,7 +92,7 @@ public class BattleRule {
 
     public GameObject createEnemy(String name, float pos) {
         GameObject object = new GameObject(name);
-        object.transform.local.translate(16.0f * pos, 0.0f);
+        object.transform.local.translate(16.0f * pos * MainLayer.defaltScale, 0.0f);
 
 
         SpriteComponent sc = new SpriteComponent();
@@ -114,7 +115,7 @@ public class BattleRule {
         c.orgPos = object.transform.getLocalPos();
         c.orgScale = 1.0f;
 
-        GameObjectMoveSeq s1 = new GameObjectMoveSeq(object, new Vector2(-16.0f, -32.0f), 0.2f);
+        GameObjectMoveSeq s1 = new GameObjectMoveSeq(object, new Vector2(-16.0f * MainLayer.defaltScale, -32.0f * MainLayer.defaltScale), 0.2f);
         plan.addTimeSeq(0.0f, s1);
 
         SpriteScaleSeq s2 = new SpriteScaleSeq(object, 2.0f, 0.2f);
@@ -127,7 +128,7 @@ public class BattleRule {
 
         plan.addLinkedSeq(cs, new CameraRotationSeq(14.0f, 0.2f));
 
-        s1 = new GameObjectMoveSeq(object, new Vector2(-20.0f, -32.0f), 0.7f);
+        s1 = new GameObjectMoveSeq(object, new Vector2(-20.0f * MainLayer.defaltScale, -32.0f * MainLayer.defaltScale), 0.7f);
         plan.addLinkedSeq(cs, s1);
 
         CameraShakeSeq seq = new CameraShakeSeq(2.0f, 0.25f);

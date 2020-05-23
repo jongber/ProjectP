@@ -3,6 +3,7 @@ package com.jongber.game.desktop.common.controller;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.jongber.game.MainLayer;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
@@ -44,9 +45,9 @@ public class SpriteRender extends Controller implements Controller.GraphBuilder,
                     p.y = r.getRegionWidth() - p.y;
                 }
 
-                p.scl(c.scale);
+                p.scl(c.scale * MainLayer.defaltScale);
 
-                batch.draw(r, -p.x + w.x, -p.y + w.y, 0.0f, 0.0f, r.getRegionWidth(), r.getRegionHeight(), c.scale, c.scale, c.rotation);
+                batch.draw(r, -p.x + w.x, -p.y + w.y, 0.0f, 0.0f, r.getRegionWidth(), r.getRegionHeight(), c.scale * MainLayer.defaltScale, c.scale * MainLayer.defaltScale, c.rotation);
                 //batch.draw(r, -p.x, -p.y, w.x, w.y, r.getRegionWidth(), r.getRegionHeight(), c.scale.x, c.scale.y, c.rotation);
                 //batch.draw(r, -p.x + w.x, -p.y + w.y);
                 //batch.draw(r, w.x, w.y);

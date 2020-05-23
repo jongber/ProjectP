@@ -13,8 +13,9 @@ import java.util.List;
 
 public class MainLayer extends GameLayer implements InputProcessor {
 
-    public static final int width = 256;
-    public static final int height = 144;
+    public static final int defaltScale = 4;
+    public static final int width = 256 * defaltScale;
+    public static final int height = 144 * defaltScale;
 
     public enum LayerType {
         Map,
@@ -32,8 +33,8 @@ public class MainLayer extends GameLayer implements InputProcessor {
 
         this.addLayer(LayerType.Map, new GameLayer(this.getCameraWrapper(), this.getSequencePlayer()));
         this.addLayer(LayerType.Actor, new GameLayer(this.getCameraWrapper(), this.getSequencePlayer()));
-        this.addLayer(LayerType.Dialog, new GameLayer());
-        this.addLayer(LayerType.UI, new GameLayer());
+        this.addLayer(LayerType.Dialog, new GameLayer(this.getCameraWrapper(), this.getSequencePlayer()));
+        this.addLayer(LayerType.UI, new GameLayer(this.getCameraWrapper(), this.getSequencePlayer()));
         this.addLayer(LayerType.Fps, new GameLayer());
 
         this.registerController(LayerType.Fps, new PerfRenderer());
