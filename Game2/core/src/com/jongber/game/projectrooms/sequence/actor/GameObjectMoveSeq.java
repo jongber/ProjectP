@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.common.sequence;
+package com.jongber.game.projectrooms.sequence.actor;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;

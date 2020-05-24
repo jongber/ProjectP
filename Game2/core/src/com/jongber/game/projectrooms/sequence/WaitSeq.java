@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.common.sequence;
+package com.jongber.game.projectrooms.sequence;
 
 import com.jongber.game.core.GameLayer;
 import com.jongber.game.core.sequence.GameSequence;

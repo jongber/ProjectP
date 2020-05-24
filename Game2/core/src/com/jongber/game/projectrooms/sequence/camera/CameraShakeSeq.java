@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.common.sequence.camera;
+package com.jongber.game.projectrooms.sequence.camera;
 
 import com.badlogic.gdx.math.Vector3;
 import com.jongber.game.core.GameLayer;

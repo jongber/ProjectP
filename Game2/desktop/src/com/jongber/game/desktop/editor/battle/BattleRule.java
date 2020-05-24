@@ -16,13 +16,13 @@ import com.jongber.game.core.graphics.VFAnimation;
 import com.jongber.game.core.sequence.SequencePlan;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.common.component.SpriteComponent;
-import com.jongber.game.desktop.common.sequence.camera.CameraMoveSeq;
-import com.jongber.game.desktop.common.sequence.camera.CameraRotationSeq;
-import com.jongber.game.desktop.common.sequence.camera.CameraShakeSeq;
+import com.jongber.game.projectrooms.sequence.camera.CameraMoveSeq;
+import com.jongber.game.projectrooms.sequence.camera.CameraRotationSeq;
+import com.jongber.game.projectrooms.sequence.camera.CameraShakeSeq;
 import com.jongber.game.desktop.editor.EditorAssetManager;
 import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.battle.seq.ChangeAnimSeq;
-import com.jongber.game.desktop.common.sequence.GameObjectMoveSeq;
+import com.jongber.game.projectrooms.sequence.actor.GameObjectMoveSeq;
 import com.jongber.game.desktop.editor.battle.seq.SpriteScaleSeq;
 
 import java.util.HashMap;
