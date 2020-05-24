@@ -32,7 +32,7 @@ public class Inflater {
     }
 
     public static void returnToMain() {
-        Inflater.inflate(BattleSceneCmd.class);
+        Inflater.inflate(DialogCmd.class);
     }
 
     public static void inflate(Class<? extends EditorCmd> cmdClass) {

@@ -79,5 +79,6 @@ public class AssetManager {
 
         fileHandles.clear();
         textureAssets.clear();
+        bundles.clear();
     }
 }
