@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.common.component.game;
+package com.jongber.game.projectrooms.component;
 
 import com.jongber.game.core.asset.FontManager;
 import com.jongber.game.core.component.Component;

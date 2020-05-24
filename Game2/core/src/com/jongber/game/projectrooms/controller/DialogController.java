@@ -1,4 +1,4 @@
-package com.jongber.game.desktop.common.controller.game;
+package com.jongber.game.projectrooms.controller;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -9,7 +9,7 @@ import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.FontManager;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
-import com.jongber.game.desktop.common.component.game.DialogComponent;
+import com.jongber.game.projectrooms.component.DialogComponent;
 
 import java.util.ArrayList;
 import java.util.List;

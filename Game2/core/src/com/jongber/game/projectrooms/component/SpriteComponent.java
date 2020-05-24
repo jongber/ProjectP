@@ -31,4 +31,8 @@ public class SpriteComponent {
         this.flipX = x;
         this.flipY = y;
     }
+
+    public void scale(float scale) {
+        this.scale.scl(scale);
+    }
 }

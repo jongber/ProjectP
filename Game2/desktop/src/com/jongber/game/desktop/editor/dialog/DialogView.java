@@ -1,16 +1,11 @@
 package com.jongber.game.desktop.editor.dialog;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Align;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.asset.AssetManager;
-import com.jongber.game.core.component.TextComponent;
-import com.jongber.game.core.controller.TextController;
-import com.jongber.game.desktop.common.component.game.DialogComponent;
-import com.jongber.game.desktop.common.controller.BlockGridRenderer;
-import com.jongber.game.desktop.common.controller.game.DialogController;
 import com.jongber.game.desktop.editor.EditorCmd;
 import com.jongber.game.desktop.editor.EditorView;
+import com.jongber.game.projectrooms.component.DialogComponent;
+import com.jongber.game.projectrooms.controller.DialogController;
 
 public class DialogView extends EditorView {
 
