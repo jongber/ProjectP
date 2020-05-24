@@ -29,7 +29,7 @@ public class FontManager {
     }
 
     public FontManager() {
-        this("fonts/Jua-Regular.ttf");
+        this("fonts/DWImpactamin.ttf");
     }
 
     public void build(List<TextBlock> list) {
