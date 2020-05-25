@@ -3,9 +3,11 @@ package com.jongber.game.core.asset;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.jongber.game.core.util.Tuple2;
 
 import java.io.File;
 import java.util.HashMap;
@@ -13,14 +15,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 
-public class AssetLoader {
+public class CoreAssetManager {
 
     // think about hash collision..because key is string..!
-    private final static HashMap<String, FileHandle> fileHandles = new HashMap<>();
-    private final static HashMap<String, Texture> textureAssets = new HashMap<>();
-    private final static HashMap<String, I18NBundle> bundles = new HashMap<>();
+    private final HashMap<String, FileHandle> fileHandles = new HashMap<>();
+    private final HashMap<String, Texture> textureAssets = new HashMap<>();
+    private final HashMap<String, I18NBundle> bundles = new HashMap<>();
 
-    public static FileHandle getFile(String path) {
+    public FileHandle getFile(String path) {
 
         if (fileHandles.containsKey(path)) {
             return fileHandles.get(path);
@@ -32,11 +34,11 @@ public class AssetLoader {
         }
     }
 
-    public static void removeFile(String path) {
+    public void removeFile(String path) {
         fileHandles.remove(path);
     }
 
-    public static Texture getTexture(String filename) {
+    public Texture getTexture(String filename) {
 
         if (textureAssets.containsKey(filename)) {
             return textureAssets.get(filename);
@@ -50,7 +52,7 @@ public class AssetLoader {
         }
     }
 
-    public static void removeTexture(String filename) {
+    public void removeTexture(String filename) {
         Texture tex = textureAssets.get(filename);
         if (tex != null) {
             tex.dispose();
@@ -58,7 +60,7 @@ public class AssetLoader {
         }
     }
 
-    public static I18NBundle getBundle(String filename) {
+    public I18NBundle getBundle(String filename) {
         if (bundles.containsKey(filename) == false) {
             FileHandle handle = getFile(filename);
             Locale locale = Locale.getDefault();
@@ -72,7 +74,7 @@ public class AssetLoader {
         }
     }
 
-    public static String getAllText(String property) {
+    public String getAllText(String property) {
         StringBuilder builder = new StringBuilder(FreeTypeFontGenerator.DEFAULT_CHARS);
 
         FileHandle handle = getFile(property + ".properties");
@@ -91,7 +93,7 @@ public class AssetLoader {
         return mergeText(builder.toString().toCharArray());
     }
 
-    private static String mergeText(char[] arr ) {
+    private String mergeText(char[] arr ) {
 
         HashSet<Character> hashSet = new HashSet<>();
 
@@ -111,7 +113,7 @@ public class AssetLoader {
         return builder.toString();
     }
 
-    public static void clear() {
+    public void clear() {
         for (Texture asset : textureAssets.values()) {
             asset.dispose();
         }

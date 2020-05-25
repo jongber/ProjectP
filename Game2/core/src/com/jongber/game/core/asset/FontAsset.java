@@ -1,6 +1,7 @@
 package com.jongber.game.core.asset;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
@@ -9,25 +10,25 @@ import java.util.Map;
 
 public class FontAsset {
 
-    private String fontPath;
     private FreeTypeFontGenerator generator;
     private Map<Integer, BitmapFont> fonts = new HashMap<>();
 
-    public FontAsset(String fontPath) {
-        this.fontPath = fontPath;
-        this.generator = new FreeTypeFontGenerator(Gdx.files.internal(this.fontPath));
+    public FontAsset(FileHandle fontFile) {
+        this.generator = new FreeTypeFontGenerator(fontFile);
     }
 
-    public FontAsset() {
-        this("fonts/DWImpactamin.ttf");
-    }
-
-    public void build(String chars, int... fontSizes) {
+    public void build(String charset, int... fontSizes) {
         for (int size : fontSizes) {
+
+            BitmapFont prev = this.fonts.remove(size);
+            if (prev != null)
+                prev.dispose();
+
             FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
             param.size = size;
-            param.characters = chars;
+            param.characters = charset;
             BitmapFont font = this.generator.generateFont(param);
+
             this.fonts.put(size, font);
         }
     }

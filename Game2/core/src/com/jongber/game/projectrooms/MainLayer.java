@@ -17,6 +17,8 @@ public class MainLayer extends GameLayer implements InputProcessor {
     public static final int width = 256 * defaltScale;
     public static final int height = 144 * defaltScale;
 
+    public static final AssetManager assets = new AssetManager();
+
     public enum LayerType {
         Map,
         Actor,
@@ -75,6 +77,8 @@ public class MainLayer extends GameLayer implements InputProcessor {
         for (GameLayer layer : layers) {
             layer.dispose();
         }
+
+        assets.clear();
     }
 
     public GameLayer getLayer(LayerType type) {

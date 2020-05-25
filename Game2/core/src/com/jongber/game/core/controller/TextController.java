@@ -15,9 +15,10 @@ import com.jongber.game.core.component.TextComponent;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class TextController extends Controller implements Controller.GraphBuilder, Controller.Renderer, Controller.InputProcessor {
 
-    private FontManager fontManager = new FontManager();
+    private FontManager fontManager = null;
     private List<GameObject> objs = new ArrayList<>();
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 

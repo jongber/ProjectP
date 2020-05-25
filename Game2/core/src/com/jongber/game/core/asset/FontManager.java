@@ -1,5 +1,6 @@
 package com.jongber.game.core.asset;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -11,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Deprecated
 public class FontManager {
-    private String fontPath;
     private FreeTypeFontGenerator generator;
     private Map<Integer, BitmapFont> fonts = new HashMap<>();
 
@@ -23,14 +24,13 @@ public class FontManager {
         public Color color = Color.WHITE;
     }
 
-    public FontManager(String fontPath) {
-        this.fontPath = fontPath;
-        this.generator = new FreeTypeFontGenerator(AssetLoader.getFile(this.fontPath));
+    public FontManager(FileHandle handle) {
+        this.generator = new FreeTypeFontGenerator(handle);
     }
 
-    public FontManager() {
-        this("fonts/DWImpactamin.ttf");
-    }
+//    public FontManager() {
+//        this("fonts/DWImpactamin.ttf");
+//    }
 
     public void build(List<TextBlock> list) {
         this.clear();
@@ -63,7 +63,6 @@ public class FontManager {
     public void dispose() {
         this.clear();
         this.generator.dispose();
-        AssetLoader.removeFile(this.fontPath);
     }
 
     private void clear() {

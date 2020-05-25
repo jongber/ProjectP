@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;
 import com.jongber.game.core.asset.FontManager;
 
+@Deprecated
 public class TextComponent extends Component {
 
     public interface ClickListener {
