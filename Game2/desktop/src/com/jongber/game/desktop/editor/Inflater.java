@@ -2,8 +2,11 @@ package com.jongber.game.desktop.editor;
 
 import com.badlogic.gdx.Gdx;
 import com.jongber.game.desktop.common.CallbackEvent;
+import com.jongber.game.desktop.editor.dialog.DialogCmd;
+import com.jongber.game.desktop.editor.dialog.DialogView;
 import com.jongber.game.desktop.editor.mainmenu.MainMenuCmd;
 import com.jongber.game.desktop.editor.mainmenu.MainMenuView;
+import com.jongber.game.projectrooms.component.DialogComponent;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -16,6 +19,7 @@ public class Inflater {
 
     static {
         inflateMap.put(MainMenuCmd.class, MainMenuView.class);
+        inflateMap.put(DialogCmd.class, DialogView.class);
     }
 
     public static void init(EditorApp app) {
@@ -23,7 +27,7 @@ public class Inflater {
     }
 
     public static void returnToMain() {
-        Inflater.inflate(MainMenuCmd.class);
+        Inflater.inflate(DialogCmd.class);
     }
 
     public static void inflate(Class<? extends EditorCmd> cmdClass) {

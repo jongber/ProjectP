@@ -1,20 +1,30 @@
 package com.jongber.game.projectrooms.component;
 
-import com.jongber.game.core.asset.FontManager;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.utils.Align;
 import com.jongber.game.core.component.Component;
+import com.jongber.game.projectrooms.MainLayer;
+
 
 public class DialogComponent extends Component {
-    public FontManager.TextBlock textBlock = new FontManager.TextBlock();
 
-    public int _width;
-    public int _height;
+    public String text;
+
+    public GlyphLayout layout = new GlyphLayout();
 
     public DialogComponent(String text) {
         this.set(text);
     }
 
     public DialogComponent set(String text) {
-        textBlock.text = text;
+        this.text = text;
+
+        BitmapFont font = MainLayer.assets.getFont();
+
+        layout.setText(font, text, Color.WHITE, 300, Align.left, true);
+
         return this;
     }
 }
