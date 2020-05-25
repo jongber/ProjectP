@@ -18,6 +18,11 @@ public class BlockGridRenderer extends Controller implements Controller.PostRend
 
     public boolean showGrid = true;
 
+    public BlockGridRenderer() {
+        this.gridY = Gdx.graphics.getWidth() * 3 / BlockSize * BlockSize;
+        this.gridX = Gdx.graphics.getHeight() * 3 / BlockSize * BlockSize;
+    }
+
     public BlockGridRenderer(int screenW, int screenH) {
         this.gridY = screenH * 3 / BlockSize * BlockSize;
         this.gridX = screenW * 3 / BlockSize * BlockSize;

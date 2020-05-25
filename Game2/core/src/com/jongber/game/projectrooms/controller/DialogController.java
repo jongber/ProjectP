@@ -30,12 +30,12 @@ public class DialogController extends Controller implements Controller.GraphBuil
 
     @Override
     public void render(SpriteBatch batch, OrthoCameraWrapper camera, float elapsed) {
-
         BitmapFont font = MainLayer.assets.getFont();
 
         for (GameObject obj : objects) {
             DialogComponent c = obj.getComponent(DialogComponent.class);
-            font.draw(batch, c.layout, 0, 0);
+            GlyphLayout layout = c.getLayout(elapsed);
+            font.draw(batch, layout, 0, 0);
         }
     }
 }
