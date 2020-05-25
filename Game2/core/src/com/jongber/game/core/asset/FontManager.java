@@ -25,7 +25,7 @@ public class FontManager {
 
     public FontManager(String fontPath) {
         this.fontPath = fontPath;
-        this.generator = new FreeTypeFontGenerator(AssetManager.getFile(this.fontPath));
+        this.generator = new FreeTypeFontGenerator(AssetLoader.getFile(this.fontPath));
     }
 
     public FontManager() {
@@ -63,7 +63,7 @@ public class FontManager {
     public void dispose() {
         this.clear();
         this.generator.dispose();
-        AssetManager.removeFile(this.fontPath);
+        AssetLoader.removeFile(this.fontPath);
     }
 
     private void clear() {

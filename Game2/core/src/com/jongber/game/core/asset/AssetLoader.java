@@ -13,9 +13,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 
-public class AssetManager {
+public class AssetLoader {
 
-    private final static String defaultProperties = "project/text/strings";
     // think about hash collision..because key is string..!
     private final static HashMap<String, FileHandle> fileHandles = new HashMap<>();
     private final static HashMap<String, Texture> textureAssets = new HashMap<>();
@@ -57,14 +56,6 @@ public class AssetManager {
             tex.dispose();
             textureAssets.remove(filename);
         }
-    }
-
-    public static I18NBundle getBundle() {
-        return getBundle(defaultProperties);
-    }
-
-    public static String getAllText() {
-        return getAllText(defaultProperties);
     }
 
     public static I18NBundle getBundle(String filename) {
@@ -120,7 +111,7 @@ public class AssetManager {
         return builder.toString();
     }
 
-    public static void dispose() {
+    public static void clear() {
         for (Texture asset : textureAssets.values()) {
             asset.dispose();
         }

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.jongber.game.core.asset.AnimationAsset;
-import com.jongber.game.core.asset.AssetManager;
+import com.jongber.game.core.asset.AssetLoader;
 import com.jongber.game.core.util.Tuple2;
 import com.jongber.game.desktop.Utility;
 import com.jongber.game.desktop.common.json.AnimationJson;
@@ -45,7 +45,7 @@ public class EditorAssetManager {
         List<Tuple2<AnimationAsset, String>> assets = new ArrayList<>();
 
         for (AnimationJson json : jsons.list) {
-            Texture t = AssetManager.getTexture(json.image);
+            Texture t = AssetLoader.getTexture(json.image);
             List<TextureRegion> regions = new ArrayList<>();
             List<Integer> durations = new ArrayList<>();
 
@@ -81,7 +81,7 @@ public class EditorAssetManager {
 
         for (AsepriteJson.FrameTag tag : json.meta.frameTags) {
 
-            Texture t = AssetManager.getTexture(jsonFile.getParent() + File.separator + json.meta.image);
+            Texture t = AssetLoader.getTexture(jsonFile.getParent() + File.separator + json.meta.image);
 
             for (int i = tag.from; i <= tag.to; ++i) {
                 AsepriteJson.xywh size = json.frames.get(i).frame;
