@@ -11,8 +11,10 @@ public class DialogView extends EditorView {
 
     @Override
     public void create(EditorCmd cmd) {
-        String str = AssetManager.getBundle().get("_test_text");
+        String str = AssetManager.getBundle().get("_test_long_text");
         GameObject object = this.create(str);
+
+        String test = AssetManager.getAllText();
 
         this.getLayer(LayerType.Dialog).addObject(object);
 
