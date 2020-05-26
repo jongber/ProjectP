@@ -1,10 +1,8 @@
 package com.jongber.game.projectrooms.controller;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Align;
 import com.jongber.game.core.GameObject;
 import com.jongber.game.core.controller.Controller;
 import com.jongber.game.core.graphics.OrthoCameraWrapper;
@@ -13,7 +11,7 @@ import com.jongber.game.projectrooms.component.DialogComponent;
 
 import java.util.List;
 
-
+//// TODO : Optimize THIS!!
 public class DialogController extends Controller implements Controller.GraphBuilder, Controller.Renderer {
 
     List<GameObject> objects;
