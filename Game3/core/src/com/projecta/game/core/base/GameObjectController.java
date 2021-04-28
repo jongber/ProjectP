@@ -18,6 +18,8 @@ public abstract class GameObjectController {
 
     public abstract void onRemove(GameObject obj);
 
+    public abstract void dispose();
+
     public void update(float elapsed) {
         for (GameObject obj : this.objList) {
             this.updateInternal(obj, elapsed);

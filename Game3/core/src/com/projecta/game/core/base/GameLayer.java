@@ -26,6 +26,12 @@ public class GameLayer {
         this.oControllers.add(p);
     }
 
+    public void dispose() {
+        for (GameObjectController c : this.oControllers) {
+            c.dispose();
+        }
+    }
+
     private void processLifecycle() {
         if (this.lController.objectLifeCache.isEmpty() == false) {
 

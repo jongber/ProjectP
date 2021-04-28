@@ -22,6 +22,15 @@ public abstract class GameLayerAppAdapter extends ApplicationAdapter {
         this.updateLayers(Gdx.graphics.getDeltaTime());
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        for (GameLayer layer : this.layers) {
+            layer.dispose();
+        }
+    }
+
     private void updateLayers(float elapsed) {
         for (GameLayer layer : this.layers) {
             layer.update(elapsed);
