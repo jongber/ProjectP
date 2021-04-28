@@ -4,41 +4,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameLayer {
-    private List<GameObjectController> objectControllers = new ArrayList<>();
-    private GameLayerController lc = new GameLayerController();
+    private List<GameObjectController> oControllers = new ArrayList<>();
+    private GameLayerController lController = new GameLayerController();
 
     public GameLayer() {
     }
 
     public GameLayerController getLayerController() {
-        return this.lc;
+        return this.lController;
     }
 
-    public void run(float elapsed) {
-        for (GameObjectController c : this.objectControllers) {
-            c.run(elapsed);
+    public void update(float elapsed) {
+        for (GameObjectController c : this.oControllers) {
+            c.update(elapsed);
         }
 
         this.processLifecycle();
     }
 
     public void addObjectController(GameObjectController p) {
-        this.objectControllers.add(p);
+        this.oControllers.add(p);
     }
 
     private void processLifecycle() {
-        if (this.lc.objectLifeCache.isEmpty() == false) {
+        if (this.lController.objectLifeCache.isEmpty() == false) {
 
-            for (GameObjectController c : this.objectControllers) {
+            for (GameObjectController c : this.oControllers) {
 
-                for (GameObject obj : this.lc.objectLifeCache.removeCache)
+                for (GameObject obj : this.lController.objectLifeCache.removeCache)
                     c.removeObject(obj);
 
-                for (GameObject obj : this.lc.objectLifeCache.addCache)
+                for (GameObject obj : this.lController.objectLifeCache.addCache)
                     c.addObject(obj);
             }
 
-            this.lc.objectLifeCache.clear();
+            this.lController.objectLifeCache.clear();
         }
     }
 }

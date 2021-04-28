@@ -12,15 +12,15 @@ public abstract class GameObjectController {
 
     public abstract boolean canAdd(GameObject obj);
 
-    public abstract void runInternal(GameObject obj, float elapsed);
+    public abstract void updateInternal(GameObject obj, float elapsed);
 
     public abstract void onAdd(GameObject obj);
 
     public abstract void onRemove(GameObject obj);
 
-    public void run(float elapsed) {
+    public void update(float elapsed) {
         for (GameObject obj : this.objList) {
-            this.runInternal(obj, elapsed);
+            this.updateInternal(obj, elapsed);
         }
     }
 
