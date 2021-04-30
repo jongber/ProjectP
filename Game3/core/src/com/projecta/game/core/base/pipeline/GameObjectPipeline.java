@@ -1,12 +1,14 @@
-package com.projecta.game.core.base;
+package com.projecta.game.core.base.pipeline;
 
+import com.projecta.game.core.base.layer.GameLayerController;
+import com.projecta.game.core.base.object.GameObject;
 import com.projecta.game.core.util.PackedArray;
 
-public abstract class GameObjectController {
+public abstract class GameObjectPipeline extends GamePipeline {
     private PackedArray<GameObject> objList = new PackedArray<>();
     protected GameLayerController gameLayerController;
 
-    public GameObjectController(GameLayerController c) {
+    public GameObjectPipeline(GameLayerController c) {
         this.gameLayerController = c;
     }
 
@@ -18,8 +20,7 @@ public abstract class GameObjectController {
 
     public abstract void onRemove(GameObject obj);
 
-    public abstract void dispose();
-
+    @Override
     public void update(float elapsed) {
         for (GameObject obj : this.objList) {
             this.updateInternal(obj, elapsed);

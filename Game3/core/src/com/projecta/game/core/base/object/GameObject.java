@@ -1,4 +1,4 @@
-package com.projecta.game.core.base;
+package com.projecta.game.core.base.object;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

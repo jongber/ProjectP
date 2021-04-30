@@ -3,7 +3,7 @@ package com.projecta.game.core;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.projecta.game.core.base.GameLayer;
+import com.projecta.game.core.base.layer.GameLayer;
 
 import java.util.ArrayList;
 import java.util.List;
