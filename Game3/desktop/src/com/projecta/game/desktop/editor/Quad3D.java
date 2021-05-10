@@ -38,8 +38,8 @@ public class Quad3D {
 
         // clock wise
         // position
-        quad.vert[idx++] =  -100.0f;
-        quad.vert[idx++] =  -100.0f;
+        quad.vert[idx++] =  -1.0f;
+        quad.vert[idx++] =  -1.0f;
         quad.vert[idx++] =  0.0f;
 
         if (quad.useUV) {
@@ -48,8 +48,8 @@ public class Quad3D {
         }
 
         // position
-        quad.vert[idx++] =  -100.0f;
-        quad.vert[idx++] =  100.0f;
+        quad.vert[idx++] =  -1.0f;
+        quad.vert[idx++] =  1.0f;
         quad.vert[idx++] =  0.0f;
 
         if (quad.useUV) {
@@ -58,8 +58,8 @@ public class Quad3D {
         }
 
         // position
-        quad.vert[idx++] =  100.0f;
-        quad.vert[idx++] =  100.0f;
+        quad.vert[idx++] =  1.0f;
+        quad.vert[idx++] =  1.0f;
         quad.vert[idx++] =  0.0f;
 
         if (quad.useUV) {
@@ -68,8 +68,8 @@ public class Quad3D {
         }
 
         // position
-        quad.vert[idx++] =  100.0f;
-        quad.vert[idx++] =  -100.0f;
+        quad.vert[idx++] =  1.0f;
+        quad.vert[idx++] =  -1.0f;
         quad.vert[idx++] =  0.0f;
 
         if (quad.useUV) {

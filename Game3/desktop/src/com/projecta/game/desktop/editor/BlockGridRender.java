@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -20,31 +21,27 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
     private OrthographicCamera camera;
     private ShaderProgram shader;
     private Mesh mesh;
+    private Matrix4 worldTransform = new Matrix4();
 
     public BlockGridRender() {
+
+        this.createShader();
+        this.createQuad();
 
         this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //this.viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.camera);
         //this.viewport.apply();
-        String vShader = Gdx.files.internal("shader/blockgrid.vert").readString();
-        String fShader = Gdx.files.internal("shader/blockgrid.frag").readString();
-        this.shader = new ShaderProgram(vShader, fShader);
-        if (this.shader.isCompiled() == false) {
-            Gdx.app.log("ERROR", this.shader.getLog());
-        }
 
-        Quad3D quad = Quad3D.createQuad(false);
-
-        this.mesh = new Mesh(Mesh.VertexDataType.VertexArray, true, Quad3D.MAX_VERTICES, Quad3D.MAX_INDICES,
-                new VertexAttribute(VertexAttributes.Usage.Position, Quad3D.POSITION_COMPONENT, "a_position"));
-        this.mesh.setVertices(quad.vert);
-        this.mesh.setIndices(quad.indices);
+        this.worldTransform.idt();
+        this.worldTransform.scale(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.0f);
     }
 
     @Override
     public void update(float elapsed) {
+
         this.shader.bind();
         this.shader.setUniformMatrix("u_projTrans", camera.combined);
+        this.shader.setUniformMatrix("u_worldTrans", this.worldTransform);
         this.shader.setUniformf("u_camera", camera.position);
         this.mesh.render(shader, GL20.GL_TRIANGLES);
     }
@@ -72,6 +69,7 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        System.out.println("touchDown x " + screenX + " y " + screenY + " p " + pointer + " b " + button);
         return false;
     }
 
@@ -82,6 +80,7 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        System.out.println("touchDragged x " + screenX + " y " + screenY + " p " + pointer);
         return false;
     }
 
@@ -93,6 +92,24 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
     @Override
     public boolean scrolled(float amountX, float amountY) {
         return false;
+    }
+
+    private void createQuad() {
+        Quad3D quad = Quad3D.createQuad(false);
+
+        this.mesh = new Mesh(Mesh.VertexDataType.VertexArray, true, Quad3D.MAX_VERTICES, Quad3D.MAX_INDICES,
+                new VertexAttribute(VertexAttributes.Usage.Position, Quad3D.POSITION_COMPONENT, "a_position"));
+        this.mesh.setVertices(quad.vert);
+        this.mesh.setIndices(quad.indices);
+    }
+
+    private void createShader() {
+        String vShader = Gdx.files.internal("shader/blockgrid.vert").readString();
+        String fShader = Gdx.files.internal("shader/blockgrid.frag").readString();
+        this.shader = new ShaderProgram(vShader, fShader);
+        if (this.shader.isCompiled() == false) {
+            Gdx.app.log("ERROR", this.shader.getLog());
+        }
     }
 }
 
