@@ -26,8 +26,9 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
         this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //this.viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.camera);
         //this.viewport.apply();
-
-        this.shader = new ShaderProgram(Gdx.files.internal("shader/blockgrid.vert").readString(), Gdx.files.internal("shader/blockgrid.frag").readString());
+        String vShader = Gdx.files.internal("shader/blockgrid.vert").readString();
+        String fShader = Gdx.files.internal("shader/blockgrid.frag").readString();
+        this.shader = new ShaderProgram(vShader, fShader);
         if (this.shader.isCompiled() == false) {
             Gdx.app.log("ERROR", this.shader.getLog());
         }
@@ -44,6 +45,7 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
     public void update(float elapsed) {
         this.shader.bind();
         this.shader.setUniformMatrix("u_projTrans", camera.combined);
+        this.shader.setUniformf("u_camera", camera.position);
         this.mesh.render(shader, GL20.GL_TRIANGLES);
     }
 
