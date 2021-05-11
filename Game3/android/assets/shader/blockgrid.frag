@@ -3,11 +3,19 @@
 precision mediump float;
 #endif
 
-varying vec2 v_position;
+uniform vec4 u_axisColor;
+uniform float u_lineWidth;
 
-uniform vec3 u_camera;
+varying vec3 v_position;
+
 
 void main() {
-    //gl_FragColor = vec4(v_position, 1.0, 1.0);
-    gl_FragColor = vec4(u_camera, 1.0);
+
+    float test = u_lineWidth;
+    if (v_position.x < 100.0f) {
+        gl_FragColor = u_axisColor;
+    }
+    else {
+        gl_FragColor = vec4(v_position, 1.0f);
+    }
 }

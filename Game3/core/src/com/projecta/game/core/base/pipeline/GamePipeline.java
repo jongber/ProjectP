@@ -20,8 +20,14 @@ public abstract class GamePipeline {
         boolean scrolled(float amountX, float amountY);
     }
 
+    public interface Renderer {
+        void resize(int w, int h);
+        void render(float elapsed);
+    }
+
     public interface Updater{
         void update(float elapsed);
-        void dispose();
     }
+
+    public abstract void dispose();
 }

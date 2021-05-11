@@ -3,6 +3,7 @@ package com.projecta.game.desktop.editor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.projecta.game.core.base.pipeline.GamePipeline;
 
-public class BlockGridRender extends GamePipeline implements GamePipeline.InputProcessor, GamePipeline.Updater {
+public class BlockGridRender extends GamePipeline implements GamePipeline.InputProcessor, GamePipeline.Renderer {
 
     private Viewport viewport;
     private OrthographicCamera camera;
@@ -23,29 +24,41 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
     private Mesh mesh;
     private Matrix4 worldTransform = new Matrix4();
 
+    private MouseState mouse = new MouseState();
+
+    private float lineWidth = 5.0f;
+    private Color axisColor = Color.GRAY;
+
     public BlockGridRender() {
 
         this.createShader();
         this.createQuad();
 
         this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        //this.viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.camera);
-        //this.viewport.apply();
+        this.viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.camera);
+        this.viewport.apply();
 
         this.worldTransform.idt();
         this.worldTransform.scale(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.0f);
     }
 
     @Override
-    public void update(float elapsed) {
-
-        this.shader.bind();
-        this.shader.setUniformMatrix("u_projTrans", camera.combined);
-        this.shader.setUniformMatrix("u_worldTrans", this.worldTransform);
-        this.shader.setUniformf("u_camera", camera.position);
-        this.mesh.render(shader, GL20.GL_TRIANGLES);
+    public void resize(int w, int h) {
+        this.viewport.update(w, h);
+        this.camera.update();
     }
 
+    @Override
+    public void render(float elapsed) {
+        this.shader.bind();
+        this.shader.setUniformf("u_axisColor", this.axisColor);
+        this.shader.setUniformf("u_lineWidth", this.lineWidth);
+
+        this.shader.setUniformMatrix("u_projTrans", camera.combined);
+        this.shader.setUniformMatrix("u_worldTrans", this.worldTransform);
+
+        this.mesh.render(shader, GL20.GL_TRIANGLES);
+    }
     @Override
     public void dispose() {
         this.mesh.dispose();
@@ -69,18 +82,25 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        System.out.println("touchDown x " + screenX + " y " + screenY + " p " + pointer + " b " + button);
+        this.mouse.button.touchDown = true;
+        this.mouse.button.x = screenX;
+        this.mouse.button.y = screenY;
+        this.mouse.button.button = button;
+
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        this.mouse.button.touchDown = false;
+
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        System.out.println("touchDragged x " + screenX + " y " + screenY + " p " + pointer);
+        this.mouse.drag.x = screenX;
+        this.mouse.drag.y = screenY;
         return false;
     }
 
@@ -110,6 +130,8 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
         if (this.shader.isCompiled() == false) {
             Gdx.app.log("ERROR", this.shader.getLog());
         }
+
+        this.shader.pedantic = false;
     }
 }
 

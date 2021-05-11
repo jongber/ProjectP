@@ -17,6 +17,7 @@ public class GameLayer implements InputProcessor {
     private List<GameObjectPipeline> objectPipelines = new ArrayList<>();
     private List<GamePipeline.InputProcessor> inputProcessors = new ArrayList<>();
     private List<GamePipeline.Updater> updaters = new ArrayList<>();
+    private List<GamePipeline.Renderer> renderers = new ArrayList<>();
 
     public GameLayer() {
     }
@@ -35,19 +36,34 @@ public class GameLayer implements InputProcessor {
         if (pipeline instanceof GamePipeline.InputProcessor) {
             this.inputProcessors.add((GamePipeline.InputProcessor)pipeline);
         }
+
+        if (pipeline instanceof GamePipeline.Renderer) {
+            this.renderers.add((GamePipeline.Renderer)pipeline);
+        }
     }
 
     public void update(float elapsed) {
+
         for (GamePipeline.Updater updater : this.updaters) {
             updater.update(elapsed);
+        }
+
+        for (GamePipeline.Renderer renderer : this.renderers) {
+            renderer.render(elapsed);
         }
 
         this.processAddRemoveObjects();
     }
 
     public void dispose() {
-        for (GamePipeline.Updater u : this.updaters) {
-            u.dispose();
+        for (GamePipeline p : this.pipelines) {
+            p.dispose();
+        }
+    }
+
+    public void resize(int width, int height) {
+        for (GamePipeline.Renderer renderer : this.renderers) {
+            renderer.resize(width, height);
         }
     }
 
