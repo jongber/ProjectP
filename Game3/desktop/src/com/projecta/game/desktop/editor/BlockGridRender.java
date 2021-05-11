@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -26,8 +27,20 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
     private MouseState mouse = new MouseState();
 
-    private float lineWidth = 5.0f;
-    private Color axisColor = Color.GRAY;
+    private float lineWidth = 1.0f;
+    private Color axisColor = Color.LIGHT_GRAY;
+    private Color gridColor = Color.DARK_GRAY;
+    private Color backgroundColor = Color.GRAY;
+    private float gridSize = 50.0f;
+
+    public BlockGridRender(float gridSize, float lineWidth, Color axisColor, Color gridColor, Color backgroundColor) {
+        this();
+        this.gridColor = gridColor;
+        this.lineWidth = lineWidth;
+        this.gridSize = gridSize;
+        this.axisColor = axisColor;
+        this.backgroundColor = backgroundColor;
+    }
 
     public BlockGridRender() {
 
@@ -35,7 +48,7 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
         this.createQuad();
 
         this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        this.viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.camera);
+        this.viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.camera);
         this.viewport.apply();
 
         this.worldTransform.idt();
@@ -46,13 +59,19 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
     public void resize(int w, int h) {
         this.viewport.update(w, h);
         this.camera.update();
+
+        this.worldTransform.idt();
+        this.worldTransform.scale(w, h, 0.0f);
     }
 
     @Override
     public void render(float elapsed) {
         this.shader.bind();
         this.shader.setUniformf("u_axisColor", this.axisColor);
+        this.shader.setUniformf("u_gridColor", this.gridColor);
+        this.shader.setUniformf("u_backgroundColor", this.backgroundColor);
         this.shader.setUniformf("u_lineWidth", this.lineWidth);
+        this.shader.setUniformf("u_gridSize", this.gridSize);
 
         this.shader.setUniformMatrix("u_projTrans", camera.combined);
         this.shader.setUniformMatrix("u_worldTrans", this.worldTransform);
