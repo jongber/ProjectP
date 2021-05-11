@@ -25,7 +25,7 @@ void main() {
     float gridWeight = step(1.0f, gridValue.x + gridValue.y - axisValue.x - axisValue.y);
     float axisWeight = step(1.0f, axisValue.x + axisValue.y);
 
-    gl_FragColor = u_gridColor * gridWeight
+    gl_FragColor = u_gridColor * gridWeight * (1 - axisWeight)
                 + u_axisColor * axisWeight
                 + u_backgroundColor * step(gridWeight + axisWeight, 0.0f);
 }
