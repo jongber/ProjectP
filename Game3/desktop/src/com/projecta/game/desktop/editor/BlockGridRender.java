@@ -126,15 +126,14 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
             int diffX = button.x - screenX;
             int diffY = button.y - screenY;
 
-            Vector3 translate = new Vector3(diffX, diffY, 0.0f);
+            Vector3 translate = new Vector3(diffX, -diffY, 0.0f);
             this.worldTransform.translate(translate);
+            this.camera.translate(translate);
+            this.camera.update();
 
             button.x = screenX;
             button.y = screenY;
         }
-
-        this.mouse.drag.x = screenX;
-        this.mouse.drag.y = screenY;
 
         return false;
     }
