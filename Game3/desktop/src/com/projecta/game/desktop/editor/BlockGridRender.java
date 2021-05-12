@@ -1,8 +1,6 @@
 package com.projecta.game.desktop.editor;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetDescriptor;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
@@ -11,9 +9,8 @@ import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.projecta.game.core.base.pipeline.GamePipeline;
 
@@ -31,7 +28,7 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
     private Color axisColor = Color.LIGHT_GRAY;
     private Color gridColor = Color.DARK_GRAY;
     private Color backgroundColor = Color.GRAY;
-    private float gridSize = 50.0f;
+    private float gridSize = 100.0f;
 
     public BlockGridRender(float gridSize, float lineWidth, Color axisColor, Color gridColor, Color backgroundColor) {
         this();
@@ -52,7 +49,6 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
         this.viewport.apply();
 
         this.worldTransform.idt();
-        this.worldTransform.scale(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.0f);
     }
 
     @Override
@@ -61,16 +57,17 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
         this.camera.update();
 
         this.worldTransform.idt();
-        this.worldTransform.scale(w, h, 0.0f);
+        this.worldTransform.scale(w * 2, h * 2, 0.0f);
     }
 
     @Override
     public void render(float elapsed) {
+
         this.shader.bind();
         this.shader.setUniformf("u_axisColor", this.axisColor);
         this.shader.setUniformf("u_gridColor", this.gridColor);
         this.shader.setUniformf("u_backgroundColor", this.backgroundColor);
-        this.shader.setUniformf("u_lineWidth", this.lineWidth);
+        this.shader.setUniformf("u_lineWidth", this.lineWidth * this.camera.zoom);
         this.shader.setUniformf("u_gridSize", this.gridSize);
 
         this.shader.setUniformMatrix("u_projTrans", camera.combined);
@@ -78,6 +75,7 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
         this.mesh.render(shader, GL20.GL_TRIANGLES);
     }
+
     @Override
     public void dispose() {
         this.mesh.dispose();
@@ -118,8 +116,23 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+
+        MouseState.ButtonState button = this.mouse.button;
+
+        if (button.touchDown) {
+            int diffX = button.x - screenX;
+            int diffY = button.y - screenY;
+
+            Vector3 translate = new Vector3(diffX * 0.01f, diffY * 0.01f, 0.0f);
+            this.worldTransform.translate(translate);
+
+            button.x = screenX;
+            button.y = screenY;
+        }
+
         this.mouse.drag.x = screenX;
         this.mouse.drag.y = screenY;
+
         return false;
     }
 
@@ -130,6 +143,16 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
+
+        float zoomAmount = amountY * 0.02f;
+
+        if (this.camera.zoom + zoomAmount < 0.3f || this.camera.zoom + zoomAmount> 1.8f) {
+            return false;
+        }
+
+        this.camera.zoom += zoomAmount;
+        this.camera.update();
+
         return false;
     }
 

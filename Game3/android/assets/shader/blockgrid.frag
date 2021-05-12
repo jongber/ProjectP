@@ -9,9 +9,7 @@ uniform vec4 u_backgroundColor;
 
 uniform float u_lineWidth;
 uniform float u_gridSize;
-
 varying vec3 v_position;
-
 
 void main() {
 
