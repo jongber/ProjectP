@@ -13,6 +13,7 @@ public class EditorApp extends GameLayerAppAdapter {
         super.create();
 
         layer.addPipeline(new BlockGridRender());
+        layer.addPipeline(new PerfRender());
 
         this.addLayer(layer);
 
