@@ -1,4 +1,4 @@
-package com.projecta.game.desktop.editor;
+package com.projecta.game.desktop.editor.pipeline;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -13,6 +13,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.projecta.game.core.base.pipeline.GamePipeline;
+import com.projecta.game.desktop.editor.etc.MouseState;
+import com.projecta.game.desktop.editor.etc.Quad3D;
 
 public class BlockGridRender extends GamePipeline implements GamePipeline.InputProcessor, GamePipeline.Renderer {
 
@@ -29,15 +31,6 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
     private Color gridColor = Color.DARK_GRAY;
     private Color backgroundColor = Color.GRAY;
     private float gridSize = 100.0f;
-
-    public BlockGridRender(float gridSize, float lineWidth, Color axisColor, Color gridColor, Color backgroundColor) {
-        this();
-        this.gridColor = gridColor;
-        this.lineWidth = lineWidth;
-        this.gridSize = gridSize;
-        this.axisColor = axisColor;
-        this.backgroundColor = backgroundColor;
-    }
 
     public BlockGridRender() {
 

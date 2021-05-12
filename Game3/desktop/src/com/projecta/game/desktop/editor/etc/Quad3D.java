@@ -1,6 +1,4 @@
-package com.projecta.game.desktop.editor;
-
-import sun.security.jgss.GSSCaller;
+package com.projecta.game.desktop.editor.etc;
 
 public class Quad3D {
 
