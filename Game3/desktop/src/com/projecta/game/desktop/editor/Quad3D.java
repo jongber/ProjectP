@@ -1,5 +1,7 @@
 package com.projecta.game.desktop.editor;
 
+import sun.security.jgss.GSSCaller;
+
 public class Quad3D {
 
     // x, y, z
@@ -17,16 +19,25 @@ public class Quad3D {
     public boolean useUV;
 
     public static Quad3D createQuad(boolean useUV) {
+        return createQuad(useUV, 1.0f);
+    }
+
+    public static Quad3D createQuad(boolean useUV, float scale) {
+
+        if (scale <= 0.0f || scale >= 100000000.0f) {
+            scale = 1.0f;
+        }
+
         Quad3D quad = new Quad3D();
         quad.useUV = useUV;
 
-        createVertices(quad);
+        createVertices(quad, scale);
         createIndices(quad);
 
         return quad;
     }
 
-    private static void createVertices(Quad3D quad) {
+    private static void createVertices(Quad3D quad, float scale) {
         int length = POSITION_COMPONENT * MAX_VERTICES;
         if (quad.useUV) {
             length += UV_COMPONENT * MAX_VERTICES;
@@ -38,8 +49,8 @@ public class Quad3D {
 
         // clock wise
         // position
-        quad.vert[idx++] =  -1.0f;
-        quad.vert[idx++] =  -1.0f;
+        quad.vert[idx++] =  -1.0f * scale;
+        quad.vert[idx++] =  -1.0f * scale;
         quad.vert[idx++] =  0.0f;
 
         if (quad.useUV) {
@@ -48,8 +59,8 @@ public class Quad3D {
         }
 
         // position
-        quad.vert[idx++] =  -1.0f;
-        quad.vert[idx++] =  1.0f;
+        quad.vert[idx++] =  -1.0f * scale;
+        quad.vert[idx++] =  1.0f * scale;
         quad.vert[idx++] =  0.0f;
 
         if (quad.useUV) {
@@ -58,8 +69,8 @@ public class Quad3D {
         }
 
         // position
-        quad.vert[idx++] =  1.0f;
-        quad.vert[idx++] =  1.0f;
+        quad.vert[idx++] =  1.0f * scale;
+        quad.vert[idx++] =  1.0f * scale;
         quad.vert[idx++] =  0.0f;
 
         if (quad.useUV) {
@@ -68,8 +79,8 @@ public class Quad3D {
         }
 
         // position
-        quad.vert[idx++] =  1.0f;
-        quad.vert[idx++] =  -1.0f;
+        quad.vert[idx++] =  1.0f * scale;
+        quad.vert[idx++] =  -1.0f * scale;
         quad.vert[idx++] =  0.0f;
 
         if (quad.useUV) {

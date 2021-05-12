@@ -21,7 +21,6 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
     private ShaderProgram shader;
     private Mesh mesh;
     private Matrix4 worldTransform = new Matrix4();
-    private Matrix4 scaleTransform = new Matrix4();
 
     private MouseState mouse = new MouseState();
 
@@ -50,7 +49,6 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
         this.viewport.apply();
 
         this.worldTransform.idt();
-        this.scaleTransform.idt();
     }
 
     @Override
@@ -59,7 +57,6 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
         this.camera.update();
 
         this.worldTransform.idt();
-        this.scaleTransform.scale(w * 2, h * 2, 0.0f);
     }
 
     @Override
@@ -74,7 +71,6 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
         this.shader.setUniformMatrix("u_projTrans", camera.combined);
         this.shader.setUniformMatrix("u_worldTrans", this.worldTransform);
-        this.shader.setUniformMatrix("u_scaleTrans", this.scaleTransform);
 
         this.mesh.render(shader, GL20.GL_TRIANGLES);
     }
@@ -159,7 +155,7 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
     }
 
     private void createQuad() {
-        Quad3D quad = Quad3D.createQuad(false);
+        Quad3D quad = Quad3D.createQuad(false, 10000.0f);
 
         this.mesh = new Mesh(Mesh.VertexDataType.VertexArray, true, Quad3D.MAX_VERTICES, Quad3D.MAX_INDICES,
                 new VertexAttribute(VertexAttributes.Usage.Position, Quad3D.POSITION_COMPONENT, "a_position"));
