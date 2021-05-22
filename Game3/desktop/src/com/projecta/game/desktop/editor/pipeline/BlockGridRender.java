@@ -38,7 +38,8 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
         this.createQuad();
 
         this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        this.viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.camera);
+        this.viewport = new ExtendViewport(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight(), this.camera);
+        this.viewport.setScreenBounds(0, 0, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
         this.viewport.apply();
 
         this.worldTransform.idt();
@@ -46,7 +47,8 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
     @Override
     public void resize(int w, int h) {
-        this.viewport.update(w, h);
+        this.viewport.update(w/2, h);
+        this.viewport.setScreenBounds(0, 0, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
         this.camera.update();
 
         this.worldTransform.idt();
@@ -54,6 +56,7 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
     @Override
     public void render(float elapsed) {
+        this.viewport.apply();
 
         this.shader.bind();
         this.shader.setUniformf("u_axisColor", this.axisColor);

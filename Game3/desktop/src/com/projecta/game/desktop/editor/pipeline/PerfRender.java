@@ -38,6 +38,7 @@ public class PerfRender extends GamePipeline implements GamePipeline.Renderer {
 
     @Override
     public void render(float elapsed) {
+        this.viewport.apply();
 
         this.batch.setProjectionMatrix(this.camera.combined);
         this.batch.begin();
