@@ -4,12 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.projecta.game.core.GameLayerAppAdapter;
 import com.projecta.game.core.base.layer.GameLayer;
 import com.projecta.game.core.base.pipeline.EventHandlePipeline;
+import com.projecta.game.core.util.Tuple2;
+import com.projecta.game.desktop.common.GamePanel;
 import com.projecta.game.desktop.editor.pipeline.BlockGridRender;
-import com.projecta.game.desktop.editor.pipeline.PerfRender;
+import com.projecta.game.desktop.common.pipeline.PerfRender;
 
 public class EditorApp extends GameLayerAppAdapter {
 
-    private GameLayer layer = new GameLayer();
+    private GamePanel panel;
 
     private EventHandlePipeline eventHandler = new EventHandlePipeline();
 
@@ -17,19 +19,20 @@ public class EditorApp extends GameLayerAppAdapter {
     public void create() {
         super.create();
 
-        layer.addPipeline(eventHandler);
-        layer.addPipeline(new BlockGridRender());
-        layer.addPipeline(new PerfRender());
+        this.panel = new GamePanel(new Tuple2<>(0.70f, 1.0f), new Tuple2<>(0.3f, 0.0f));
+        this.panel.addPipeline(eventHandler);
+        this.panel.addPipeline(new BlockGridRender(this.panel.getCamera()));
+        this.panel.addPipeline(new PerfRender());
 
-        this.addLayer(layer);
+        this.addLayer(this.panel);
 
-        Gdx.input.setInputProcessor(layer);
+        Gdx.input.setInputProcessor(this);
     }
 
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        this.layer.resize(width, height);
+        this.panel.resize(width, height);
     }
 
     @Override

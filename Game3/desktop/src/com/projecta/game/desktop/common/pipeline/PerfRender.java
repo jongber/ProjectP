@@ -1,4 +1,4 @@
-package com.projecta.game.desktop.editor.pipeline;
+package com.projecta.game.desktop.common.pipeline;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;

@@ -13,12 +13,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.projecta.game.core.base.pipeline.GamePipeline;
-import com.projecta.game.desktop.editor.etc.MouseState;
-import com.projecta.game.desktop.editor.etc.Quad3D;
+import com.projecta.game.desktop.common.MouseState;
+import com.projecta.game.desktop.common.Quad3D;
 
 public class BlockGridRender extends GamePipeline implements GamePipeline.InputProcessor, GamePipeline.Renderer {
 
-    private Viewport viewport;
     private OrthographicCamera camera;
     private ShaderProgram shader;
     private Mesh mesh;
@@ -26,29 +25,24 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
     private MouseState mouse = new MouseState();
 
-    private float lineWidth = 1.0f;
+    private float lineWidth = 1.5f;
     private Color axisColor = Color.LIGHT_GRAY;
     private Color gridColor = Color.DARK_GRAY;
     private Color backgroundColor = Color.GRAY;
     private float gridSize = 100.0f;
 
-    public BlockGridRender() {
+    public BlockGridRender(OrthographicCamera camera) {
 
         this.createShader();
         this.createQuad();
 
-        this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        this.viewport = new ExtendViewport(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight(), this.camera);
-        this.viewport.setScreenBounds(0, 0, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
-        this.viewport.apply();
+        this.camera = camera;
 
         this.worldTransform.idt();
     }
 
     @Override
     public void resize(int w, int h) {
-        this.viewport.update(w/2, h);
-        this.viewport.setScreenBounds(0, 0, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
         this.camera.update();
 
         this.worldTransform.idt();
@@ -56,7 +50,6 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
     @Override
     public void render(float elapsed) {
-        this.viewport.apply();
 
         this.shader.bind();
         this.shader.setUniformf("u_axisColor", this.axisColor);

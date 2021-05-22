@@ -1,4 +1,4 @@
-package com.projecta.game.desktop.editor.etc;
+package com.projecta.game.desktop.common;
 
 public class MouseState {
 
