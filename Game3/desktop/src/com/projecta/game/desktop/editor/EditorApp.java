@@ -2,7 +2,6 @@ package com.projecta.game.desktop.editor;
 
 import com.badlogic.gdx.Gdx;
 import com.projecta.game.core.GameLayerAppAdapter;
-import com.projecta.game.core.base.pipeline.EventHandlePipeline;
 import com.projecta.game.core.util.Tuple2;
 import com.projecta.game.desktop.common.GamePanel;
 import com.projecta.game.desktop.common.pipeline.BlockGridRender;
@@ -12,14 +11,11 @@ public class EditorApp extends GameLayerAppAdapter {
 
     private GamePanel panel;
 
-    private EventHandlePipeline eventHandler = new EventHandlePipeline();
-
     @Override
     public void create() {
         super.create();
 
         this.panel = new GamePanel(new Tuple2<>(0.70f, 1.0f), new Tuple2<>(0.3f, 0.0f));
-        this.panel.addPipeline(eventHandler);
         this.panel.addPipeline(new BlockGridRender(this.panel.getCamera()));
         this.panel.addPipeline(new PerfRender());
 

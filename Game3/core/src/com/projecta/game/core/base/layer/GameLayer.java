@@ -12,6 +12,7 @@ import java.util.List;
 public class GameLayer implements InputProcessor {
     private PackedArray<GameObject> objects = new PackedArray<>();
     private GameLayerController lc = new GameLayerController();
+    private GameLayerMessageHandler handler = new GameLayerMessageHandler();
 
     private List<GamePipeline> pipelines = new ArrayList<>();
     private List<GameObjectPipeline> objectPipelines = new ArrayList<>();
@@ -44,6 +45,8 @@ public class GameLayer implements InputProcessor {
 
     public void update(float elapsed) {
 
+        this.handler.handle(this);
+
         for (GamePipeline.Updater updater : this.updaters) {
             updater.update(elapsed);
         }
@@ -67,8 +70,12 @@ public class GameLayer implements InputProcessor {
         }
     }
 
-    public GameLayerController getLayerController() {
-        return this.lc;
+    public void addObject(GameObject obj) {
+        this.lc.addObject(obj);
+    }
+
+    public void removeObject(GameObject obj) {
+        this.lc.removeObject(obj);
     }
 
     private void processAddRemoveObjects() {

@@ -47,11 +47,6 @@ public class GamePanel extends GameLayer {
     }
 
     @Override
-    public GameLayerController getLayerController() {
-        return super.getLayerController();
-    }
-
-    @Override
     public boolean keyDown(int keycode) {
         return super.keyDown(keycode);
     }
