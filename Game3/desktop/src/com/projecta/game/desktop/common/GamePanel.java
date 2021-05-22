@@ -40,8 +40,15 @@ public class GamePanel extends GameLayer {
 
     @Override
     public void resize(int width, int height) {
-        this.viewport.update((int)(width * this.screenRatio.getItem1()), (int)(height * this.screenRatio.getItem2()));
-        this.viewport.setScreenBounds((int)(width * this.posRatio.getItem1()), (int)(height * this.posRatio.getItem2()), (int)(width * this.screenRatio.getItem1()), (int)(height * this.screenRatio.getItem2()));
+
+        int screenX = Math.round(width * this.screenRatio.getItem1());
+        int screenY = Math.round(height * this.screenRatio.getItem2());
+
+        int posX = Math.round(width * this.posRatio.getItem1());
+        int posY = Math.round(height * this.posRatio.getItem2());
+
+        this.viewport.update(screenX, screenY);
+        this.viewport.setScreenBounds(posX, posY, screenX, screenY);
 
         super.resize(width, height);
     }
