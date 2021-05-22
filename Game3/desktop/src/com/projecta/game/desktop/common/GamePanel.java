@@ -2,10 +2,12 @@ package com.projecta.game.desktop.common;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.projecta.game.core.base.layer.GameLayer;
 import com.projecta.game.core.base.layer.GameLayerController;
 import com.projecta.game.core.util.Tuple2;
+import com.projecta.game.desktop.common.data.MouseState;
 
 public class GamePanel extends GameLayer {
 
@@ -14,6 +16,8 @@ public class GamePanel extends GameLayer {
 
     private OrthographicCamera camera;
     private ExtendViewport viewport;
+
+    private MouseState mouseState = new MouseState();
 
     public GamePanel(Tuple2<Float, Float> screenRatio, Tuple2<Float, Float> posRatio) {
         this.screenRatio = screenRatio;
@@ -70,6 +74,11 @@ public class GamePanel extends GameLayer {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+        if (!this.isInScreenArea(screenX, screenY)) {
+            return false;
+        }
+
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
@@ -85,11 +94,28 @@ public class GamePanel extends GameLayer {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+
+        this.mouseState.move.x = screenX;
+        this.mouseState.move.y = screenY;
+
         return super.mouseMoved(screenX, screenY);
     }
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
+
+        if (!this.isInScreenArea(this.mouseState.move.x, this.mouseState.move.y)) {
+            return false;
+        }
+
         return super.scrolled(amountX, amountY);
+    }
+
+    private boolean isInScreenArea(int screenX, int screenY) {
+
+        return !(screenX < this.viewport.getScreenX()
+                || this.viewport.getScreenX() + this.viewport.getScreenWidth() < screenX
+                || screenY < this.viewport.getScreenY()
+                || this.viewport.getScreenY() + this.viewport.getScreenHeight() < screenY);
     }
 }

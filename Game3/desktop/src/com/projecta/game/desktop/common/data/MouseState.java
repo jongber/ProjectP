@@ -14,6 +14,12 @@ public class MouseState {
         public int y;
     }
 
+    public static class MouseMove {
+        public int x;
+        public int y;
+    }
+
+    public MouseMove move = new MouseMove();
     public ButtonState button = new ButtonState();
     public DragState drag = new DragState();
 }
