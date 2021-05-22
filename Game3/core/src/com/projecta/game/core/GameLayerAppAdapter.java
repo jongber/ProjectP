@@ -3,6 +3,7 @@ package com.projecta.game.core;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.projecta.game.core.base.layer.GameLayer;
 
@@ -19,7 +20,7 @@ public abstract class GameLayerAppAdapter extends ApplicationAdapter implements 
 
     @Override
     public void render () {
-        ScreenUtils.clear(1, 0, 0, 1);
+        ScreenUtils.clear(Color.GRAY);
         this.updateLayers(Gdx.graphics.getDeltaTime());
     }
 

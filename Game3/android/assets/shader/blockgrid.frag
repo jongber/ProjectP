@@ -5,7 +5,6 @@ precision mediump float;
 
 uniform vec4 u_axisColor;
 uniform vec4 u_gridColor;
-uniform vec4 u_backgroundColor;
 
 uniform float u_lineWidth;
 uniform float u_gridSize;
@@ -23,7 +22,12 @@ void main() {
     float gridWeight = step(1.0f, gridValue.x + gridValue.y - axisValue.x - axisValue.y);
     float axisWeight = step(1.0f, axisValue.x + axisValue.y);
 
-    gl_FragColor = u_gridColor * gridWeight * (1 - axisWeight)
-                + u_axisColor * axisWeight
-                + u_backgroundColor * step(gridWeight + axisWeight, 0.0f);
+    vec4 result = u_gridColor * gridWeight * (1 - axisWeight)
+                + u_axisColor * axisWeight;
+
+    if (result.rgb == vec3(0.0f, 0.0f, 0.0)) {
+        discard;
+    }
+
+    gl_FragColor = result;
 }

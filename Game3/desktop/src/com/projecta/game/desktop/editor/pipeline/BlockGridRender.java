@@ -25,10 +25,9 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
 
     private MouseState mouse = new MouseState();
 
-    private float lineWidth = 1.5f;
+    private float lineWidth = 1.0f;
     private Color axisColor = Color.LIGHT_GRAY;
     private Color gridColor = Color.DARK_GRAY;
-    private Color backgroundColor = Color.GRAY;
     private float gridSize = 100.0f;
 
     public BlockGridRender(OrthographicCamera camera) {
@@ -54,7 +53,6 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
         this.shader.bind();
         this.shader.setUniformf("u_axisColor", this.axisColor);
         this.shader.setUniformf("u_gridColor", this.gridColor);
-        this.shader.setUniformf("u_backgroundColor", this.backgroundColor);
         this.shader.setUniformf("u_lineWidth", this.lineWidth * this.camera.zoom);
         this.shader.setUniformf("u_gridSize", this.gridSize);
 
