@@ -1,4 +1,4 @@
-package com.projecta.game.desktop.editor.pipeline;
+package com.projecta.game.desktop.common.pipeline;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -10,11 +10,9 @@ import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.projecta.game.core.base.pipeline.GamePipeline;
-import com.projecta.game.desktop.common.MouseState;
-import com.projecta.game.desktop.common.Quad3D;
+import com.projecta.game.desktop.common.data.MouseState;
+import com.projecta.game.desktop.common.data.Quad3D;
 
 public class BlockGridRender extends GamePipeline implements GamePipeline.InputProcessor, GamePipeline.Renderer {
 

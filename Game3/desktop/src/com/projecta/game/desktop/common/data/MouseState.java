@@ -1,4 +1,4 @@
-package com.projecta.game.desktop.common;
+package com.projecta.game.desktop.common.data;
 
 public class MouseState {
 
