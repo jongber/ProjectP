@@ -19,6 +19,14 @@ public abstract class GameLayerAppAdapter extends ApplicationAdapter implements 
     }
 
     @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        for (GameLayer layer : this.layers) {
+            layer.resize(width, height);
+        }
+    }
+
+    @Override
     public void render () {
         ScreenUtils.clear(Color.GRAY);
         this.updateLayers(Gdx.graphics.getDeltaTime());
