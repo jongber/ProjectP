@@ -1,18 +1,11 @@
 package com.projecta.game.desktop.editor;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Array;
 import com.projecta.game.core.GameLayerAppAdapter;
 import com.projecta.game.core.util.Tuple2;
-import com.projecta.game.desktop.common.Env;
 import com.projecta.game.desktop.common.GamePanel;
 import com.projecta.game.desktop.common.pipeline.BlockGridRender;
 import com.projecta.game.desktop.common.pipeline.PerfRender;
-
-import java.io.File;
-
-import javax.swing.JFileChooser;
 
 public class EditorApp extends GameLayerAppAdapter {
 

@@ -7,10 +7,14 @@ import com.projecta.game.core.base.pipeline.GamePipeline;
 import com.projecta.game.core.util.PackedArray;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
 
 public class GameLayer implements InputProcessor {
     private PackedArray<GameObject> objects = new PackedArray<>();
+    private HashMap<String, PackedArray<GameObject>> nameMap = new HashMap<>();
+
     private GameLayerController lc = new GameLayerController();
     private GameLayerMessageHandler handler = new GameLayerMessageHandler();
 
@@ -78,6 +82,21 @@ public class GameLayer implements InputProcessor {
         this.lc.removeObject(obj);
     }
 
+    public PackedArray<GameObject> getObjects(String name) {
+        return this.nameMap.get(name);
+    }
+
+    public GameObject getObjectFirst(String name) {
+
+        PackedArray<GameObject> arr = this.getObjects(name);
+
+        if (arr != null && arr.size() > 0) {
+            return arr.get(0);
+        }
+
+        return null;
+    }
+
     private void processAddRemoveObjects() {
 
         if (this.lc.objectLifeCache.isEmpty()) {
@@ -85,11 +104,29 @@ public class GameLayer implements InputProcessor {
         }
 
         for (GameObjectPipeline p : this.objectPipelines) {
-            for (GameObject o : this.lc.objectLifeCache.removeCache)
+            for (GameObject o : this.lc.objectLifeCache.removeCache) {
                 p.removeObject(o);
+                this.objects.remove(o);
+                PackedArray<GameObject> arr = this.getObjects(o.name());
+                if (arr != null) {
+                    arr.remove(o);
+                }
+            }
 
-            for (GameObject o : this.lc.objectLifeCache.addCache)
+            for (GameObject o : this.lc.objectLifeCache.addCache) {
                 p.addObject(o);
+                this.objects.add(o);
+                
+                PackedArray<GameObject> arr = this.getObjects(o.name());
+                if (arr != null) {
+                    arr.add(o);
+                }
+                else {
+                    arr = new PackedArray<>();
+                    arr.add(o);
+                    this.nameMap.put(o.name(), arr);
+                }
+            }
         }
 
         this.lc.objectLifeCache.clear();

@@ -6,8 +6,32 @@ import java.util.HashMap;
 public class GameObject {
     private HashMap<String, GameObjectComponent> componentHashMap = new HashMap<>();
 
+    private static int globalId = 0;
+    private int myId;
+    private String name = "";
+
+    public GameObject(String name) {
+        this();
+        this.name = name;
+    }
+
+    public GameObject() {
+        globalId++;
+        myId = globalId;
+    }
+
+    public String name() {return this.name;}
+
+    public int id() {
+        return this.myId;
+    }
+
     public void addComponent(Class type, GameObjectComponent c) {
         this.componentHashMap.put(type.getName(), c);
+    }
+
+    public GameObjectComponent getComponent(Class type) {
+        return this.componentHashMap.get(type.getName());
     }
 
     public void bindComponent() {

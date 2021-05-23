@@ -4,7 +4,7 @@ import com.projecta.game.core.base.object.GameObject;
 import com.projecta.game.core.util.PackedArray;
 
 public abstract class GameObjectPipeline extends GamePipeline{
-    private PackedArray<GameObject> objects = new PackedArray<>();
+    protected PackedArray<GameObject> objects = new PackedArray<>();
 
     public abstract boolean canAddObject(GameObject obj);
 
