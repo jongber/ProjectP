@@ -1,7 +1,7 @@
 package com.projecta.game.desktop.editor.panel;
 
 import com.projecta.game.core.util.Tuple2;
-import com.projecta.game.desktop.common.GamePanel;
+import com.projecta.game.desktop.common.panel.GamePanel;
 import com.projecta.game.desktop.common.pipeline.BlockGridRender;
 
 public class SpritePanel extends GamePanel {

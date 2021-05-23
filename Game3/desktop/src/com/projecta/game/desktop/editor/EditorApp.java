@@ -3,7 +3,7 @@ package com.projecta.game.desktop.editor;
 import com.badlogic.gdx.Gdx;
 import com.projecta.game.core.GameLayerAppAdapter;
 import com.projecta.game.core.util.Tuple2;
-import com.projecta.game.desktop.common.GamePanel;
+import com.projecta.game.desktop.common.panel.GamePanel;
 import com.projecta.game.desktop.common.pipeline.BlockGridRender;
 import com.projecta.game.desktop.common.pipeline.PerfRender;
 

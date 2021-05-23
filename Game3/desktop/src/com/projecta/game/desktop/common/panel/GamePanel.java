@@ -1,4 +1,4 @@
-package com.projecta.game.desktop.common;
+package com.projecta.game.desktop.common.panel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
