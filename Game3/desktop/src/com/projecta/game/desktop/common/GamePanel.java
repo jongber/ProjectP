@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.projecta.game.core.base.layer.GameLayer;
 import com.projecta.game.core.base.layer.GameLayerController;
 import com.projecta.game.core.util.Tuple2;
@@ -15,7 +18,7 @@ public class GamePanel extends GameLayer {
     private Tuple2<Float, Float> posRatio;
 
     private OrthographicCamera camera;
-    private ExtendViewport viewport;
+    private Viewport viewport;
 
     private MouseState mouseState = new MouseState();
 
@@ -113,9 +116,12 @@ public class GamePanel extends GameLayer {
 
     private boolean isInScreenArea(int screenX, int screenY) {
 
-        return !(screenX < this.viewport.getScreenX()
-                || this.viewport.getScreenX() + this.viewport.getScreenWidth() < screenX
-                || screenY < this.viewport.getScreenY()
-                || this.viewport.getScreenY() + this.viewport.getScreenHeight() < screenY);
+        boolean yCheck =  screenY < Gdx.graphics.getHeight() - this.viewport.getScreenY()
+                && screenY > Gdx.graphics.getHeight() - this.viewport.getScreenY() - this.viewport.getScreenHeight();
+
+        boolean xCheck = screenX > this.viewport.getScreenX()
+                && screenX < this.viewport.getScreenWidth() + this.viewport.getScreenX();
+
+        return yCheck && xCheck;
     }
 }
