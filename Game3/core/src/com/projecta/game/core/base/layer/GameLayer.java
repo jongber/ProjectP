@@ -116,7 +116,7 @@ public class GameLayer implements InputProcessor {
             for (GameObject o : this.lc.objectLifeCache.addCache) {
                 p.addObject(o);
                 this.objects.add(o);
-                
+
                 PackedArray<GameObject> arr = this.getObjects(o.name());
                 if (arr != null) {
                     arr.add(o);
