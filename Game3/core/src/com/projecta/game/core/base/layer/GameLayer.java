@@ -47,6 +47,10 @@ public class GameLayer implements InputProcessor {
         }
     }
 
+    public void postMessage(GameLayerMessage msg) {
+        this.handler.post(msg);
+    }
+
     public void update(float elapsed) {
 
         this.handler.handle(this);
