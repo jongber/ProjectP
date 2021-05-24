@@ -86,6 +86,16 @@ public class GameLayer implements InputProcessor {
         this.lc.removeObject(obj);
     }
 
+    public void removeAllObjects() {
+        for (GameObject obj : this.objects) {
+            this.removeObject(obj);
+        }
+    }
+
+    public PackedArray<GameObject> getObjects() {
+        return this.objects;
+    }
+
     public PackedArray<GameObject> getObjects(String name) {
         return this.nameMap.get(name);
     }

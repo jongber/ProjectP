@@ -3,6 +3,7 @@ package com.projecta.game.desktop.editor;
 import com.badlogic.gdx.Gdx;
 import com.projecta.game.core.GameLayerAppAdapter;
 import com.projecta.game.core.util.Tuple2;
+import com.projecta.game.desktop.common.Env;
 import com.projecta.game.desktop.common.panel.HUDPanel;
 import com.projecta.game.desktop.editor.panel.HUDSpriteEditPanel;
 import com.projecta.game.desktop.editor.panel.SpriteFramePanel;
@@ -46,6 +47,7 @@ public class SpriteEditor extends GameLayerAppAdapter {
     @Override
     public void dispose() {
         super.dispose();
+        Env.assetManager.dispose();
     }
 }
 
