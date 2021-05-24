@@ -2,6 +2,7 @@ package com.projecta.game.desktop.editor.panel;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.projecta.game.core.util.Tuple2;
 import com.projecta.game.desktop.common.component.TextureComponent;
 import com.projecta.game.desktop.common.panel.GamePanel;
@@ -24,6 +25,9 @@ public class TextureRegionPanel extends GamePanel {
         TextureObject obj = new TextureObject();
         obj.addComponent(TextureComponent.class, new TextureComponent(new TextureRegion(texture)));
         obj.bindComponent();
+
+        this.getCamera().position.x = texture.getWidth() * 0.5f;
+        this.getCamera().position.y = texture.getHeight() * 0.5f;
 
         this.addObject(obj);
     }
