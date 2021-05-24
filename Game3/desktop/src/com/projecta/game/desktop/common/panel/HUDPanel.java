@@ -2,13 +2,22 @@ package com.projecta.game.desktop.common.panel;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.projecta.game.core.base.layer.GameLayer;
+import com.projecta.game.core.util.Tuple2;
 
-public class HUDPanel extends GameLayer {
+public class HUDPanel extends GamePanel {
 
-    protected Stage stage = new Stage(new ScreenViewport());
+    protected Stage stage;
 
     public HUDPanel() {
+        super(new Tuple2<>(1.0f, 1.0f), new Tuple2<>(0.0f, 0.0f));
+        stage = new Stage(this.getViewport());
+    }
+
+    public HUDPanel(Tuple2<Float, Float> screenRatio, Tuple2<Float, Float> posRatio) {
+        super(screenRatio, posRatio);
+        stage = new Stage(this.getViewport());
     }
 
     @Override
@@ -22,7 +31,6 @@ public class HUDPanel extends GameLayer {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        this.stage.getViewport().update(width, height, true);
     }
 
     @Override

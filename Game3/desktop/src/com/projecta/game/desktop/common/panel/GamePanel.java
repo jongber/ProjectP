@@ -34,6 +34,8 @@ public class GamePanel extends GameLayer {
         this.viewport.setScreenBounds((int)(width * this.posRatio.getItem1()), (int)(height * this.posRatio.getItem2()), (int)(width * this.screenRatio.getItem1()), (int)(height * this.screenRatio.getItem2()));
     }
 
+    public Viewport getViewport() {return this.viewport;}
+
     public OrthographicCamera getCamera() {
         return this.camera;
     }

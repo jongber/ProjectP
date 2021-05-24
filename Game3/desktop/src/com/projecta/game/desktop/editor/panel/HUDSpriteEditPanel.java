@@ -2,7 +2,6 @@ package com.projecta.game.desktop.editor.panel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -10,10 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.projecta.game.core.base.layer.GameLayer;
 import com.projecta.game.core.base.layer.GameLayerMessage;
+import com.projecta.game.desktop.common.Adjuster;
 import com.projecta.game.desktop.common.Env;
 import com.projecta.game.desktop.common.panel.HUDPanel;
 import com.projecta.game.desktop.common.pipeline.PerfRender;
-import com.projecta.game.desktop.editor.SpriteEditor;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -22,7 +21,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
-public class SpriteEditorHUDPanel extends HUDPanel {
+public class HUDSpriteEditPanel extends HUDPanel {
 
     private AtomicBoolean jfcRunning = new AtomicBoolean(false);
 
@@ -32,9 +31,9 @@ public class SpriteEditorHUDPanel extends HUDPanel {
     private SpriteAnimatePanel animatePanel;
     private TextureRegionPanel regionPanel;
 
-    private Texture texture;
+    private String loadedFileName;
 
-    public SpriteEditorHUDPanel(SpriteFramePanel framePanel, SpriteAnimatePanel animatePanel, TextureRegionPanel regionPanel) {
+    public HUDSpriteEditPanel(SpriteFramePanel framePanel, SpriteAnimatePanel animatePanel, TextureRegionPanel regionPanel) {
         this.framePanel = framePanel;
         this.animatePanel = animatePanel;
         this.regionPanel = regionPanel;
@@ -58,7 +57,7 @@ public class SpriteEditorHUDPanel extends HUDPanel {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                SpriteEditorHUDPanel.this.createClicked();
+                HUDSpriteEditPanel.this.createClicked();
             }
         });
         this.stage.addActor(button);
@@ -71,7 +70,7 @@ public class SpriteEditorHUDPanel extends HUDPanel {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                SpriteEditorHUDPanel.this.loadClicked();
+                HUDSpriteEditPanel.this.loadClicked();
             }
         });
         this.stage.addActor(button);
@@ -84,7 +83,7 @@ public class SpriteEditorHUDPanel extends HUDPanel {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                SpriteEditorHUDPanel.this.saveClicked();
+                HUDSpriteEditPanel.this.saveClicked();
             }
         });
         this.stage.addActor(button);
@@ -97,7 +96,7 @@ public class SpriteEditorHUDPanel extends HUDPanel {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                SpriteEditorHUDPanel.this.clearClicked();
+                HUDSpriteEditPanel.this.clearClicked();
             }
         });
         this.stage.addActor(button);
@@ -107,9 +106,6 @@ public class SpriteEditorHUDPanel extends HUDPanel {
     public void dispose() {
         super.dispose();
         this.skin.dispose();
-        if (this.texture != null) {
-            this.texture.dispose();
-        }
     }
 
     private void createClicked() {
@@ -151,10 +147,10 @@ public class SpriteEditorHUDPanel extends HUDPanel {
                             return;
                         }
 
-                        SpriteEditorHUDPanel.this.postMessage(new GameLayerMessage() {
+                        HUDSpriteEditPanel.this.postMessage(new GameLayerMessage() {
                             @Override
                             public void handle(GameLayer layer) {
-                                SpriteEditorHUDPanel.this.handleCreate(f);
+                                HUDSpriteEditPanel.this.handleCreate(f);
                             }
                         });
                     }
@@ -167,11 +163,17 @@ public class SpriteEditorHUDPanel extends HUDPanel {
     }
 
     private void handleCreate(File file) {
-        if (this.texture != null) {
-            this.texture.dispose();
+        if (this.loadedFileName != null && this.loadedFileName.isEmpty() == false) {
+            Env.assetManager.unload(this.loadedFileName);
         }
 
-        this.texture = new Texture(Gdx.files.internal(file.getAbsolutePath()));
+        this.loadedFileName = Adjuster.adjustFilePath(file.getAbsolutePath());
+        Env.assetManager.load(this.loadedFileName, Texture.class);
+        Env.assetManager.finishLoading();
+
+        Texture t = Env.assetManager.get(this.loadedFileName);
+
+        this.regionPanel.onLoadTexture(t);
     }
 
     private void loadClicked() {
