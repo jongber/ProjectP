@@ -20,6 +20,18 @@ public class HUDPanel extends GameLayer {
     }
 
     @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        this.stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        this.stage.dispose();
+    }
+
+    @Override
     public boolean keyDown(int keycode) {
 
         if (this.stage.keyDown(keycode)) {
