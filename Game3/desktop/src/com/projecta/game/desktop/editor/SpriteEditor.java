@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.projecta.game.core.GameLayerAppAdapter;
 import com.projecta.game.core.util.Tuple2;
 import com.projecta.game.desktop.common.Env;
-import com.projecta.game.desktop.common.panel.HUDPanel;
+import com.projecta.game.desktop.editor.cmdwindow.SpriteEditCmd;
 import com.projecta.game.desktop.editor.panel.HUDSpriteEditPanel;
 import com.projecta.game.desktop.editor.panel.SpriteFramePanel;
 import com.projecta.game.desktop.editor.panel.SpriteAnimatePanel;
@@ -15,7 +15,7 @@ public class SpriteEditor extends GameLayerAppAdapter {
     private TextureRegionPanel texturePanel;
     private SpriteAnimatePanel animatePanel;
     private SpriteFramePanel framePanel;
-    private HUDPanel hud;
+    private HUDSpriteEditPanel hud;
 
     @Override
     public void create() {
@@ -32,6 +32,8 @@ public class SpriteEditor extends GameLayerAppAdapter {
         this.addLayer(this.hud);
 
         Gdx.input.setInputProcessor(this);
+
+        SpriteEditCmd.create(this.hud);
     }
 
     @Override

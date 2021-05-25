@@ -52,7 +52,7 @@ public class HUDSpriteEditPanel extends HUDPanel {
         int widthSum = 0;
 
         Button button = new TextButton("Create", this.skin, "colored");
-        button.setPosition(width * 0.005f, height * 0.05f);
+        button.setPosition(width * 0.005f, height - height * 0.1f);
         button.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -65,7 +65,7 @@ public class HUDSpriteEditPanel extends HUDPanel {
         widthSum += button.getWidth();
 
         button = new TextButton("Load", this.skin, "colored");
-        button.setPosition(width * 0.005f + widthSum, height * 0.05f);
+        button.setPosition(width * 0.005f + widthSum, height - height * 0.1f);
         button.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -78,7 +78,7 @@ public class HUDSpriteEditPanel extends HUDPanel {
         widthSum += button.getWidth();
 
         button = new TextButton("Save", this.skin, "colored");
-        button.setPosition( width * 0.005f + widthSum, height * 0.05f);
+        button.setPosition( width * 0.005f + widthSum, height - height * 0.1f);
         button.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -91,7 +91,7 @@ public class HUDSpriteEditPanel extends HUDPanel {
         widthSum += button.getWidth();
 
         button = new TextButton("Clear", this.skin, "colored");
-        button.setPosition(width * 0.005f + widthSum, height * 0.05f);
+        button.setPosition(width * 0.005f + widthSum, height - height * 0.1f);
         button.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
