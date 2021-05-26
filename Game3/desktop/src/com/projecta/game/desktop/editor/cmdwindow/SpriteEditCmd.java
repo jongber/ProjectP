@@ -20,13 +20,17 @@ import javax.swing.SpinnerNumberModel;
 public class SpriteEditCmd extends JFrame {
     private HUDSpriteEditPanel hud;
 
+    private ButtonArea buttonArea;
+    private ImageLoadArea imageLoadArea;
+    private PivotArea pivotArea;
+    private TextureRegionArea regionArea;
+
     public SpriteEditCmd(HUDSpriteEditPanel hud) {
         super();
         this.hud = hud;
     }
 
     public static void create(HUDSpriteEditPanel hud) {
-        JPanel panel = null;
         GridBagConstraints c = new GridBagConstraints();
 
         SpriteEditCmd frame = new SpriteEditCmd(hud);
@@ -34,22 +38,22 @@ public class SpriteEditCmd extends JFrame {
 
         int row = 0;
 
-        panel = new SaveLoadArea();
+        frame.buttonArea = new ButtonArea();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridy = row++;
-        frame.add(panel, c);
+        frame.add(frame.buttonArea, c);
 
-        panel = new ImageLoadArea();
+        frame.imageLoadArea = new ImageLoadArea();
         c.gridy = row++;
-        frame.add(panel, c);
+        frame.add(frame.imageLoadArea, c);
 
-        panel = new PivotArea();
+        frame.pivotArea = new PivotArea();
         c.gridy = row++;
-        frame.add(panel, c);
+        frame.add(frame.pivotArea, c);
 
-        panel = new TextureRegionArea();
+        frame.regionArea = new TextureRegionArea();
         c.gridy = row++;
-        frame.add(panel, c);
+        frame.add(frame.regionArea, c);
 
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -59,15 +63,18 @@ public class SpriteEditCmd extends JFrame {
             }
         });
         frame.pack();
+        frame.setSize(frame.getWidth(), frame.getHeight() + 100);
         frame.setVisible(true);
     }
 }
 
-class SaveLoadArea extends JPanel {
-    private JButton save;
-    private JButton load;
+class ButtonArea extends JPanel {
+    public JButton btSave;
+    public JButton btLoad;
+    public JButton btApply;
+    public JButton btClear;
 
-    public SaveLoadArea() {
+    public ButtonArea() {
         this.setBorder(BorderFactory.createTitledBorder("Save Load Area"));
         this.setLayout(new GridBagLayout());
         this.init();
@@ -75,16 +82,25 @@ class SaveLoadArea extends JPanel {
     }
 
     private void init() {
-        this.save = new JButton("Save");
-        this.load = new JButton("Load");
+        this.btSave = new JButton("Save");
+        this.btLoad = new JButton("Load");
+        this.btApply = new JButton("Apply");
+        this.btClear = new JButton("Clear");
 
+        int gridx = 0;
         GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
+        c.gridx = gridx++;
         c.insets = new Insets(0, 10, 0, 10);
-        this.add(this.save, c);
+        this.add(this.btSave, c);
 
-        c.gridx = 1;
-        this.add(this.load, c);
+        c.gridx = gridx++;
+        this.add(this.btLoad, c);
+
+        c.gridx = gridx++;
+        this.add(this.btApply, c);
+
+        c.gridx = gridx++;
+        this.add(this.btClear, c);
     }
 
     private void setListener() {
@@ -93,8 +109,8 @@ class SaveLoadArea extends JPanel {
 }
 
 class ImageLoadArea extends JPanel {
-    private JLabel pathLabel;
-    private JButton loadButton;
+    public JLabel lbPath;
+    public JButton btLoad;
 
     public ImageLoadArea() {
         this.setBorder(BorderFactory.createTitledBorder("Sprite sheet path"));
@@ -106,17 +122,17 @@ class ImageLoadArea extends JPanel {
     private void init() {
         GridBagConstraints c = new GridBagConstraints();
 
-        this.pathLabel = new JLabel("set image path");
+        this.lbPath = new JLabel("set image path");
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.insets = new Insets(0, 10,0,0);
-        this.add(this.pathLabel, c);
+        this.add(this.lbPath, c);
 
-        this.loadButton = new JButton("Load Image");
+        this.btLoad = new JButton("Load Image");
         c.gridx = 1;
         c.gridy = 0;
         c.insets = new Insets(0, 10,0,10);
-        this.add(this.loadButton, c);
+        this.add(this.btLoad, c);
 
         this.setListener();
     }
@@ -127,10 +143,10 @@ class ImageLoadArea extends JPanel {
 
 class PivotArea extends JPanel {
     private JLabel xText;
-    private JSpinner xSpinner;
+    public JSpinner xSpinner;
 
     private JLabel yText;
-    private JSpinner ySpinner;
+    public JSpinner ySpinner;
 
     public PivotArea() {
         this.setBorder(BorderFactory.createTitledBorder("Pivot setting area"));
@@ -176,12 +192,12 @@ class PivotArea extends JPanel {
 class TextureRegionArea extends JPanel {
 
     private JLabel unitText;
-    private JSpinner unitSpinner;
+    public JSpinner unitSpinner;
 
     private JLabel fromText;
-    private JSpinner fromIndex;
+    public JSpinner fromIndex;
     private JLabel toText;
-    private JSpinner toIndex;
+    public JSpinner toIndex;
 
     public TextureRegionArea() {
         this.setBorder(BorderFactory.createTitledBorder("Texture Region area"));
