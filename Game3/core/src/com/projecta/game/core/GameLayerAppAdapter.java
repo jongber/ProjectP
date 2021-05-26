@@ -30,8 +30,6 @@ public abstract class GameLayerAppAdapter extends ApplicationAdapter implements 
     @Override
     public void render () {
         ScreenUtils.clear(Color.GRAY, true);
-        Gdx.gl20.glEnable(GL20.GL_DEPTH_TEST);
-        Gdx.gl20.glEnable(GL20.GL_ALWAYS);
 
         this.updateLayers(Gdx.graphics.getDeltaTime());
     }

@@ -1,6 +1,7 @@
 package com.projecta.game.desktop.editor.cmdwindow;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.projecta.game.desktop.editor.panel.HUDSpriteEditPanel;
 
 import java.awt.GridBagConstraints;

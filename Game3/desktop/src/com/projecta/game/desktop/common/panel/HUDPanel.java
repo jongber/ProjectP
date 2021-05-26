@@ -1,5 +1,7 @@
 package com.projecta.game.desktop.common.panel;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -22,6 +24,7 @@ public class HUDPanel extends GamePanel {
 
     @Override
     public void update(float elapsed) {
+        Gdx.gl20.glDisable(GL20.GL_DEPTH_TEST);
         super.update(elapsed);
 
         this.stage.act();

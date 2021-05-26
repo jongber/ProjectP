@@ -1,6 +1,7 @@
 package com.projecta.game.desktop.common.panel;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -42,6 +43,9 @@ public class GamePanel extends GameLayer {
 
     @Override
     public void update(float elapsed) {
+        Gdx.gl20.glEnable(GL20.GL_DEPTH_TEST);
+        Gdx.gl20.glEnable(GL20.GL_ALWAYS);
+
         this.viewport.apply();
 
         super.update(elapsed);
