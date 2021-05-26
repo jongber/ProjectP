@@ -98,7 +98,7 @@ class PivotArea extends JPanel {
     private JSpinner ySpinner;
 
     public PivotArea() {
-        this.setBorder(BorderFactory.createTitledBorder("Sprite sheet path"));
+        this.setBorder(BorderFactory.createTitledBorder("Pivot setting area"));
         this.setLayout(new GridBagLayout());
 
         this.init();
@@ -140,7 +140,21 @@ class PivotArea extends JPanel {
 
 class TextureRegionArea extends JPanel {
 
+    private JLabel unitText;
+    private JSpinner unitSpinner;
+
+    private JLabel indexText;
+    private JSpinner fromIndex;
+    private JSpinner toIndex;
+
     public TextureRegionArea() {
+        this.setBorder(BorderFactory.createTitledBorder("Texture Region area"));
+        this.setLayout(new GridBagLayout());
+        this.init();
+    }
+
+    private void init() {
+
     }
 }
 
