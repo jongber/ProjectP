@@ -1,4 +1,4 @@
-package com.projecta.game.desktop.editor.panel;
+package com.projecta.game.desktop.editor.spriteeditor.panel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

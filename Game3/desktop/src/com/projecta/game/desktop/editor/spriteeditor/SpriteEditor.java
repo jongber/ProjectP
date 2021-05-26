@@ -1,14 +1,14 @@
-package com.projecta.game.desktop.editor;
+package com.projecta.game.desktop.editor.spriteeditor;
 
 import com.badlogic.gdx.Gdx;
 import com.projecta.game.core.GameLayerAppAdapter;
 import com.projecta.game.core.util.Tuple2;
 import com.projecta.game.desktop.common.Env;
-import com.projecta.game.desktop.editor.cmdwindow.SpriteEditCmd;
-import com.projecta.game.desktop.editor.panel.HUDSpriteEditPanel;
-import com.projecta.game.desktop.editor.panel.SpriteFramePanel;
-import com.projecta.game.desktop.editor.panel.SpriteAnimatePanel;
-import com.projecta.game.desktop.editor.panel.TextureRegionPanel;
+import com.projecta.game.desktop.editor.spriteeditor.cmdwindow.SpriteEditCmd;
+import com.projecta.game.desktop.editor.spriteeditor.panel.HUDSpriteEditPanel;
+import com.projecta.game.desktop.editor.spriteeditor.panel.SpriteFramePanel;
+import com.projecta.game.desktop.editor.spriteeditor.panel.SpriteAnimatePanel;
+import com.projecta.game.desktop.editor.spriteeditor.panel.TextureRegionPanel;
 
 public class SpriteEditor extends GameLayerAppAdapter {
 

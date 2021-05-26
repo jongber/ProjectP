@@ -1,7 +1,7 @@
-package com.projecta.game.desktop.editor.cmdwindow;
+package com.projecta.game.desktop.editor.spriteeditor.cmdwindow;
 
 import com.badlogic.gdx.Gdx;
-import com.projecta.game.desktop.editor.panel.HUDSpriteEditPanel;
+import com.projecta.game.desktop.editor.spriteeditor.panel.HUDSpriteEditPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,9 +21,8 @@ public class SpriteEditCmd extends JFrame {
     private HUDSpriteEditPanel hud;
 
     private ButtonArea buttonArea;
-    private ImageLoadArea imageLoadArea;
-    private PivotArea pivotArea;
-    private TextureRegionArea regionArea;
+
+    private boolean isActive = false;
 
     public SpriteEditCmd(HUDSpriteEditPanel hud) {
         super();
@@ -38,22 +37,10 @@ public class SpriteEditCmd extends JFrame {
 
         int row = 0;
 
-        frame.buttonArea = new ButtonArea();
+        frame.buttonArea = new ButtonArea(frame);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridy = row++;
         frame.add(frame.buttonArea, c);
-
-        frame.imageLoadArea = new ImageLoadArea();
-        c.gridy = row++;
-        frame.add(frame.imageLoadArea, c);
-
-        frame.pivotArea = new PivotArea();
-        c.gridy = row++;
-        frame.add(frame.pivotArea, c);
-
-        frame.regionArea = new TextureRegionArea();
-        c.gridy = row++;
-        frame.add(frame.regionArea, c);
 
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -62,19 +49,44 @@ public class SpriteEditCmd extends JFrame {
                 Gdx.app.exit();
             }
         });
+
+        frame.init();
         frame.pack();
         frame.setSize(frame.getWidth(), frame.getHeight() + 100);
         frame.setVisible(true);
     }
+
+    public void init() {
+        this.inactivate();
+    }
+
+    public void apply() {
+    }
+
+    public void save() {
+    }
+
+    public void load() {
+    }
+
+    public void clear() {
+    }
+
+    public void inactivate() {
+        this.buttonArea.inactivate();
+    }
 }
 
 class ButtonArea extends JPanel {
+    private SpriteEditCmd cmd;
+
+    public JButton btCreate;
     public JButton btSave;
     public JButton btLoad;
-    public JButton btApply;
     public JButton btClear;
 
-    public ButtonArea() {
+    public ButtonArea(SpriteEditCmd cmd) {
+        this.cmd = cmd;
         this.setBorder(BorderFactory.createTitledBorder("Save Load Area"));
         this.setLayout(new GridBagLayout());
         this.init();
@@ -84,27 +96,37 @@ class ButtonArea extends JPanel {
     private void init() {
         this.btSave = new JButton("Save");
         this.btLoad = new JButton("Load");
-        this.btApply = new JButton("Apply");
+        this.btCreate = new JButton("Create");
         this.btClear = new JButton("Clear");
 
         int gridx = 0;
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = gridx++;
         c.insets = new Insets(0, 10, 0, 10);
-        this.add(this.btSave, c);
+        this.add(this.btCreate, c);
 
         c.gridx = gridx++;
         this.add(this.btLoad, c);
 
         c.gridx = gridx++;
-        this.add(this.btApply, c);
+        this.add(this.btSave, c);
 
         c.gridx = gridx++;
         this.add(this.btClear, c);
     }
 
     private void setListener() {
+    }
 
+    public void inactivate() {
+        this.btSave.setEnabled(false);
+        this.btCreate.setEnabled(true);
+        this.btClear.setEnabled(false);
+    }
+
+    public void activate() {
+        this.btSave.setEnabled(true);
+        this.btClear.setEnabled(true);
     }
 }
 
@@ -139,6 +161,14 @@ class ImageLoadArea extends JPanel {
 
     private void setListener() {
     }
+
+    public void inactivate() {
+        this.btLoad.setEnabled(false);
+    }
+
+    public void activate() {
+        this.btLoad.setEnabled(true);
+    }
 }
 
 class PivotArea extends JPanel {
@@ -154,6 +184,16 @@ class PivotArea extends JPanel {
 
         this.init();
         this.setListener();
+    }
+
+    public void inactivate() {
+        this.xSpinner.setEnabled(false);
+        this.ySpinner.setEnabled(false);
+    }
+
+    public void activate() {
+        this.xSpinner.setEnabled(true);
+        this.ySpinner.setEnabled(true);
     }
 
     private void init() {
@@ -199,6 +239,9 @@ class TextureRegionArea extends JPanel {
     private JLabel toText;
     public JSpinner toIndex;
 
+    private JLabel baseFrameText;
+    public JSpinner baseFrameSpinner;
+
     public TextureRegionArea() {
         this.setBorder(BorderFactory.createTitledBorder("Texture Region area"));
         this.setLayout(new GridBagLayout());
@@ -206,14 +249,32 @@ class TextureRegionArea extends JPanel {
         this.setListener();
     }
 
+    public void inactivate() {
+        unitSpinner.setEnabled(false);
+        fromIndex.setEnabled(false);
+        toIndex.setEnabled(false);
+        baseFrameSpinner.setEnabled(false);
+    }
+
+    public void activate() {
+        unitSpinner.setEnabled(true);
+        fromIndex.setEnabled(true);
+        toIndex.setEnabled(true);
+        baseFrameSpinner.setEnabled(true);
+    }
+
     private void init() {
         this.unitText = new JLabel("pixel unit per frame");
-        this.unitSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 2048, 1));
+        //SpinnerNumberModel(double value, double minimum, double maximum, double stepSize)
+        this.unitSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 2048, 1));
 
         this.fromText = new JLabel("index from");
         this.fromIndex = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
         this.toText = new JLabel("index to");
         this.toIndex = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
+
+        this.baseFrameText = new JLabel("base frame time(ms)");
+        this.baseFrameSpinner = new JSpinner(new SpinnerNumberModel(10, 10, 1000, 1));
 
         GridBagConstraints c = new GridBagConstraints();
 
@@ -238,10 +299,16 @@ class TextureRegionArea extends JPanel {
 
         c.gridx = 3;
         this.add(this.toIndex, c);
+
+        c.gridx = 0;
+        c.gridy = 2;
+        this.add(this.baseFrameText, c);
+
+        c.gridx = 1;
+        this.add(this.baseFrameSpinner, c);
     }
 
     private void setListener() {
-
     }
 }
 

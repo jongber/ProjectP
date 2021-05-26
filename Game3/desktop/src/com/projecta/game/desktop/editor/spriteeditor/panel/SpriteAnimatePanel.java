@@ -1,4 +1,4 @@
-package com.projecta.game.desktop.editor.panel;
+package com.projecta.game.desktop.editor.spriteeditor.panel;
 
 import com.projecta.game.core.util.Tuple2;
 import com.projecta.game.desktop.common.panel.GamePanel;
