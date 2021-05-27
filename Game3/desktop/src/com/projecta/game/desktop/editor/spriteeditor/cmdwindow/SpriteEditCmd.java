@@ -2,6 +2,9 @@ package com.projecta.game.desktop.editor.spriteeditor.cmdwindow;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.projecta.game.core.util.Struct2;
+import com.projecta.game.core.util.Struct3;
+import com.projecta.game.core.util.Tuple2;
 import com.projecta.game.desktop.editor.spriteeditor.panel.HUDSpriteEditPanel;
 
 import java.awt.GridBagConstraints;
@@ -74,7 +77,11 @@ public class SpriteEditCmd extends JFrame {
         dialog.setVisible(true);
     }
 
-    public void receiveCreate() {
+    public void receiveCreate(String imagePath,
+                              Struct2<Integer, Integer> pivot,
+                              int pixelUnit,
+                              Struct2<Integer, Integer> indexRange,
+                              int frame) {
     }
 
     public void onSave() {

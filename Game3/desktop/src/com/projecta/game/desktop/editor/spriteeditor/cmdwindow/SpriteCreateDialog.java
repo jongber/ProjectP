@@ -81,6 +81,14 @@ public class SpriteCreateDialog extends JDialog {
             JOptionPane.showMessageDialog(null, validity.getItem2());
             return;
         }
+
+        this.cmd.receiveCreate(this.imageArea.imageFile.getAbsolutePath(),
+                this.pivotArea.getPivot(),
+                (Integer) this.regionArea.unitSpinner.getValue(),
+                new Struct2<>((Integer)this.regionArea.fromIndex.getValue(), (Integer)this.regionArea.toIndex.getValue()),
+                (Integer) this.regionArea.baseFrameSpinner.getValue());
+
+        this.setVisible(false);
     }
 
     private Tuple2<Boolean, String> checkValidity() {
