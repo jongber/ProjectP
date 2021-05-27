@@ -1,32 +1,15 @@
 package com.projecta.game.desktop.editor.spriteeditor.panel;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.projecta.game.core.base.layer.GameLayer;
-import com.projecta.game.core.base.layer.GameLayerMessage;
-import com.projecta.game.desktop.common.Adjuster;
-import com.projecta.game.desktop.common.Env;
 import com.projecta.game.desktop.common.panel.HUDPanel;
 import com.projecta.game.desktop.common.pipeline.PerfRender;
 
-import java.io.File;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
 
 public class HUDSpriteEditPanel extends HUDPanel {
-
-    private AtomicBoolean jfcRunning = new AtomicBoolean(false);
-
-    private Skin skin;
+    //private Skin skin;
 
     private SpriteFramePanel framePanel;
     private SpriteAnimatePanel animatePanel;
     private TextureRegionPanel regionPanel;
-
-    private String loadedFileName;
 
     public HUDSpriteEditPanel(SpriteFramePanel framePanel, SpriteAnimatePanel animatePanel, TextureRegionPanel regionPanel) {
         this.framePanel = framePanel;
@@ -104,6 +87,6 @@ public class HUDSpriteEditPanel extends HUDPanel {
     @Override
     public void dispose() {
         super.dispose();
-        this.skin.dispose();
+        //this.skin.dispose();
     }
 }
