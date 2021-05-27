@@ -1,8 +1,9 @@
 package com.projecta.game.desktop.editor.spriteeditor.cmdwindow;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.projecta.game.core.util.Struct2;
 import com.projecta.game.core.util.Struct3;
+import com.projecta.game.core.util.Struct4;
 import com.projecta.game.core.util.Tuple2;
 
 import java.awt.GridBagConstraints;
@@ -18,7 +19,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -77,55 +77,56 @@ public class SpriteCreateDialog extends JDialog {
 
     private void onClickOK() {
         Tuple2<Boolean, String> validity = this.checkValidity();
-        if (validity.getItem1() == false) {
+        if (!validity.getItem1()) {
             JOptionPane.showMessageDialog(null, validity.getItem2());
             return;
         }
 
         this.cmd.receiveCreate(this.imageArea.imageFile.getAbsolutePath(),
                 this.pivotArea.getPivot(),
-                (Integer) this.regionArea.unitSpinner.getValue(),
-                new Struct2<>((Integer)this.regionArea.fromIndex.getValue(), (Integer)this.regionArea.toIndex.getValue()),
+                (Integer) this.regionArea.unitSpinnerX.getValue(), (Integer) this.regionArea.unitSpinnerY.getValue(),
+                (Integer)this.regionArea.fromIndex.getValue(), (Integer)this.regionArea.toIndex.getValue(),
                 (Integer) this.regionArea.baseFrameSpinner.getValue());
 
         this.setVisible(false);
     }
 
     private Tuple2<Boolean, String> checkValidity() {
-        String err = "";
         BufferedImage image = null;
         try {
             image = ImageIO.read(this.imageArea.imageFile);
         }
         catch (Exception e) {
-            err = "invalid image!!";
-            return new Tuple2<>(false, err);
+            return new Tuple2<>(false, "invalid image!!");
         }
 
-        Struct3<Integer, Integer, Integer> values = this.regionArea.getValues();
-        int pixelUnit = values.item1;
-        int from = values.item2;
-        int to = values.item3;
+        Struct4<Integer, Integer, Integer, Integer> values = this.regionArea.getValues();
+        int pixelUnitX = values.item1;
+        int pixelUnitY = values.item2;
+        int from = values.item3;
+        int to = values.item4;
 
-        if (pixelUnit == 0 || from > to) {
-            err = "pixel unit / from, to has problem";
-            return new Tuple2<>(false, err);
+        if (pixelUnitX == 0 || from > to) {
+            return new Tuple2<>(false, "pixel unit / from, to has problem");
         }
 
-        int xUnit = image.getWidth() / pixelUnit;
-        int yUnit = image.getHeight() / pixelUnit;
+        int xUnit = image.getWidth() / pixelUnitX;
+        int yUnit = image.getHeight() / pixelUnitY;
 
         if (xUnit == 0 || yUnit == 0) {
-            err = "pixel unit too big";
-            return new Tuple2<>(false, err);
+            return new Tuple2<>(false, "pixel unit too big");
         }
 
         if (from < 0 || from >= xUnit * yUnit || to >= xUnit * yUnit) {
-            err = "index too big";
-            return new Tuple2<>(false, err);
+            return new Tuple2<>(false, "index too big");
         }
 
-        return new Tuple2<>(true, err);
+        int frameMs = (Integer)this.regionArea.baseFrameSpinner.getValue();
+        if (frameMs <= 0) {
+            return new Tuple2<>(false, "invalid frame rate..");
+        }
+
+        return new Tuple2<>(true, "success");
     }
 }
 
@@ -220,8 +221,8 @@ class PivotArea extends JPanel {
         this.init();
     }
 
-    public Struct2<Integer, Integer> getPivot() {
-        return new Struct2<>((Integer)xSpinner.getValue(), (Integer)ySpinner.getValue());
+    public Vector2 getPivot() {
+        return new Vector2((float)xSpinner.getValue(), (float)ySpinner.getValue());
     }
 
     private void init() {
@@ -256,8 +257,11 @@ class PivotArea extends JPanel {
 
 class TextureRegionArea extends JPanel {
 
-    private JLabel unitText;
-    public JSpinner unitSpinner;
+    private JLabel unitTextX;
+    public JSpinner unitSpinnerX;
+
+    private JLabel unitTextY;
+    public JSpinner unitSpinnerY;
 
     private JLabel fromText;
     public JSpinner fromIndex;
@@ -273,14 +277,18 @@ class TextureRegionArea extends JPanel {
         this.init();
     }
 
-    public Struct3<Integer, Integer, Integer> getValues() {
-        return new Struct3<>((Integer)this.unitSpinner.getValue(), (Integer)this.fromIndex.getValue(), (Integer)this.toIndex.getValue());
+    public Struct4<Integer, Integer, Integer, Integer> getValues() {
+        return new Struct4<>((Integer)this.unitSpinnerX.getValue(), (Integer)this.unitSpinnerY.getValue(),
+                (Integer)this.fromIndex.getValue(), (Integer)this.toIndex.getValue());
     }
 
     private void init() {
-        this.unitText = new JLabel("pixel unit per frame");
+        this.unitTextX = new JLabel("pixel unit X");
         //SpinnerNumberModel(double value, double minimum, double maximum, double stepSize)
-        this.unitSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 2048, 1));
+        this.unitSpinnerX = new JSpinner(new SpinnerNumberModel(1, 1, 2048, 1));
+
+        this.unitTextY = new JLabel("pixel unit Y");
+        this.unitSpinnerY = new JSpinner(new SpinnerNumberModel(1, 1, 2048, 1));
 
         this.fromText = new JLabel("index from");
         this.fromIndex = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
@@ -296,10 +304,16 @@ class TextureRegionArea extends JPanel {
         c.gridx = 0;
         // top, left, bottom, right
         c.insets = new Insets(0, 10, 0, 10);
-        this.add(this.unitText, c);
+        this.add(this.unitTextX, c);
 
         c.gridx = 1;
-        this.add(this.unitSpinner, c);
+        this.add(this.unitSpinnerX, c);
+
+        c.gridx = 2;
+        this.add(this.unitTextY, c);
+
+        c.gridx = 3;
+        this.add(this.unitSpinnerY, c);
 
         c.gridx = 0;
         c.gridy = 1;

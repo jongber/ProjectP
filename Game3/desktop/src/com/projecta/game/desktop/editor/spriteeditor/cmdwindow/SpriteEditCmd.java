@@ -1,10 +1,12 @@
 package com.projecta.game.desktop.editor.spriteeditor.cmdwindow;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.projecta.game.core.util.Struct2;
-import com.projecta.game.core.util.Struct3;
-import com.projecta.game.core.util.Tuple2;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import com.projecta.game.core.base.layer.GameLayer;
+import com.projecta.game.core.base.layer.GameLayerMessage;
+import com.projecta.game.desktop.common.Adjuster;
+import com.projecta.game.desktop.common.Env;
 import com.projecta.game.desktop.editor.spriteeditor.panel.HUDSpriteEditPanel;
 
 import java.awt.GridBagConstraints;
@@ -78,10 +80,19 @@ public class SpriteEditCmd extends JFrame {
     }
 
     public void receiveCreate(String imagePath,
-                              Struct2<Integer, Integer> pivot,
-                              int pixelUnit,
-                              Struct2<Integer, Integer> indexRange,
-                              int frame) {
+                              Vector2 pivot,
+                              int pixelUnitX,
+                              int pixelUnitY,
+                              int from, int to,
+                              int frameMS) {
+
+        this.hud.postMessage(new GameLayerMessage() {
+            @Override
+            public void handle(GameLayer layer) {
+                String path = Adjuster.adjustFilePath(imagePath);
+                SpriteEditCmd.this.hud.createSprite(path, pivot, pixelUnitX, pixelUnitY, from, to, frameMS);
+            }
+        });
     }
 
     public void onSave() {

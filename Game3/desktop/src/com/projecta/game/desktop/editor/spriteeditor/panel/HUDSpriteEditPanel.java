@@ -1,7 +1,14 @@
 package com.projecta.game.desktop.editor.spriteeditor.panel;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.projecta.game.desktop.common.Env;
 import com.projecta.game.desktop.common.panel.HUDPanel;
 import com.projecta.game.desktop.common.pipeline.PerfRender;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HUDSpriteEditPanel extends HUDPanel {
@@ -19,8 +26,15 @@ public class HUDSpriteEditPanel extends HUDPanel {
         this.init();
     }
 
-    private void init() {
-        this.addPipeline(new PerfRender());
+    public void createSprite(String imgPath, Vector2 pivot, int pixelUnitX, int pixelUnitY, int from, int to, int frameRate) {
+
+        Env.assetManager.load(imgPath, Texture.class);
+        Env.assetManager.finishLoading();
+        Texture t = Env.assetManager.get(imgPath);
+
+        List<TextureRegion> regions = new ArrayList<>();
+        int xIndex = t.getWidth() / pixelUnitX;
+        int yIndex = t.getHeight() / pixelUnitY;
     }
 
 //    private void init() {
@@ -88,5 +102,9 @@ public class HUDSpriteEditPanel extends HUDPanel {
     public void dispose() {
         super.dispose();
         //this.skin.dispose();
+    }
+
+    private void init() {
+        this.addPipeline(new PerfRender());
     }
 }
