@@ -1,15 +1,19 @@
 package com.projecta.game.desktop.editor.spriteeditor.cmdwindow;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.projecta.game.core.util.Struct2;
 import com.projecta.game.core.util.Struct3;
+import com.projecta.game.core.util.Tuple2;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -63,22 +67,70 @@ public class SpriteCreateDialog extends JDialog {
     }
 
     private void setListener() {
+        this.btOk.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                SpriteCreateDialog.this.onClickOK();
+            }
+        });
+    }
+
+    private void onClickOK() {
+        Tuple2<Boolean, String> validity = this.checkValidity();
+        if (validity.getItem1() == false) {
+            JOptionPane.showMessageDialog(null, validity.getItem2());
+            return;
+        }
+    }
+
+    private Tuple2<Boolean, String> checkValidity() {
+        String err = "";
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(this.imageArea.imageFile);
+        }
+        catch (Exception e) {
+            err = "invalid image!!";
+            return new Tuple2<>(false, err);
+        }
+
+        Struct3<Integer, Integer, Integer> values = this.regionArea.getValues();
+        int pixelUnit = values.item1;
+        int from = values.item2;
+        int to = values.item3;
+
+        if (pixelUnit == 0 || from > to) {
+            err = "pixel unit / from, to has problem";
+            return new Tuple2<>(false, err);
+        }
+
+        int xUnit = image.getWidth() / pixelUnit;
+        int yUnit = image.getHeight() / pixelUnit;
+
+        if (xUnit == 0 || yUnit == 0) {
+            err = "pixel unit too big";
+            return new Tuple2<>(false, err);
+        }
+
+        if (from < 0 || from >= xUnit * yUnit || to >= xUnit * yUnit) {
+            err = "index too big";
+            return new Tuple2<>(false, err);
+        }
+
+        return new Tuple2<>(true, err);
     }
 }
 
 class ImageLoadArea extends JPanel {
     public JLabel lbPath;
     public JButton btLoad;
+    public File imageFile;
 
     public ImageLoadArea() {
         this.setBorder(BorderFactory.createTitledBorder("Sprite sheet path"));
         this.setLayout(new GridBagLayout());
 
         this.init();
-    }
-
-    public String getImagePath() {
-        return this.lbPath.getText();
     }
 
     private void init() {
@@ -135,13 +187,14 @@ class ImageLoadArea extends JPanel {
                     return;
                 }
 
-                ImageLoadArea.this.onLoad(f.getAbsolutePath());
+                ImageLoadArea.this.onLoad(f);
             }
         });
     }
 
-    private void onLoad(String path) {
-        this.lbPath.setText(path);
+    private void onLoad(File f) {
+        this.lbPath.setText(f.getAbsolutePath());
+        this.imageFile = f;
     }
 }
 
