@@ -222,7 +222,7 @@ class PivotArea extends JPanel {
     }
 
     public Vector2 getPivot() {
-        return new Vector2((float)xSpinner.getValue(), (float)ySpinner.getValue());
+        return new Vector2((Integer)xSpinner.getValue(), (Integer)ySpinner.getValue());
     }
 
     private void init() {

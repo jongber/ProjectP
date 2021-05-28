@@ -1,8 +1,10 @@
 package com.projecta.game.desktop.editor.spriteeditor.panel;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.projecta.game.desktop.common.Env;
 import com.projecta.game.desktop.common.component.SpriteComponent;
 import com.projecta.game.desktop.common.component.TextureComponent;
@@ -16,7 +18,7 @@ import java.util.List;
 
 
 public class HUDSpriteEditPanel extends HUDPanel {
-    //private Skin skin;
+    private Skin skin;
 
     private SpriteFramePanel framePanel;
     private SpriteAnimatePanel animatePanel;
@@ -66,6 +68,7 @@ public class HUDSpriteEditPanel extends HUDPanel {
     private void putSprite(SpriteComponent c) {
         SpriteObject so = new SpriteObject();
         so.addComponent(SpriteComponent.class, c);
+        so.bindComponent();
 
         this.animatePanel.addObject(so);
     }
@@ -73,6 +76,7 @@ public class HUDSpriteEditPanel extends HUDPanel {
     private void putTexture(TextureComponent c) {
         TextureObject o = new TextureObject();
         o.addComponent(TextureComponent.class, c);
+        o.bindComponent();
 
         this.regionPanel.addObject(o);
     }
@@ -141,10 +145,11 @@ public class HUDSpriteEditPanel extends HUDPanel {
     @Override
     public void dispose() {
         super.dispose();
-        //this.skin.dispose();
+        this.skin.dispose();
     }
 
     private void init() {
         this.addPipeline(new PerfRender());
+        this.skin = new Skin(Gdx.files.internal("skin/holo/uiskin.json"));
     }
 }
