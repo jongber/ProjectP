@@ -93,6 +93,8 @@ public class SpriteEditCmd extends JFrame {
                 SpriteEditCmd.this.hud.createSprite(path, pivot, pixelUnitX, pixelUnitY, from, to, frameMS);
             }
         });
+
+        this.buttonArea.activate();
     }
 
     public void onSave() {
@@ -102,6 +104,8 @@ public class SpriteEditCmd extends JFrame {
     }
 
     public void onClear() {
+        this.hud.clearPanels();
+        this.inactivate();
     }
 
     public void inactivate() {

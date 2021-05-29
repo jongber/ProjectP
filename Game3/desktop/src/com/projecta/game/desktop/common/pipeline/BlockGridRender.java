@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.projecta.game.core.base.pipeline.GamePipeline;
 import com.projecta.game.desktop.common.data.MouseState;
@@ -26,9 +28,13 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
     private float lineWidth = 1.0f;
     private Color axisColor = Color.LIGHT_GRAY;
     private Color gridColor = Color.DARK_GRAY;
-    private float gridSize = 100.0f;
+    private Vector2 gridSize;
 
     public BlockGridRender(OrthographicCamera camera) {
+        this(camera, 100, 100);
+    }
+
+    public BlockGridRender(OrthographicCamera camera, int gridSizeX, int gridSizeY) {
 
         this.createShader();
         this.createQuad();
@@ -36,6 +42,12 @@ public class BlockGridRender extends GamePipeline implements GamePipeline.InputP
         this.camera = camera;
 
         this.worldTransform.idt();
+
+        this.gridSize = new Vector2(gridSizeX, gridSizeY);
+    }
+
+    public void setGridSize(int x, int y) {
+        this.gridSize.set(x, y);
     }
 
     @Override

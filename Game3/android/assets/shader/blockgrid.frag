@@ -7,7 +7,7 @@ uniform vec4 u_axisColor;
 uniform vec4 u_gridColor;
 
 uniform float u_lineWidth;
-uniform float u_gridSize;
+uniform vec2 u_gridSize;
 varying vec3 v_position;
 
 void main() {

@@ -61,8 +61,13 @@ public class HUDSpriteEditPanel extends HUDPanel {
         this.putSprite(c);
 
         // texture put
-        TextureComponent tc = new TextureComponent(new TextureRegion(t));
-        this.putTexture(tc);
+        this.putTexture(t, pixelUnitX, pixelUnitY);
+    }
+
+    public void clearPanels() {
+        this.animatePanel.removeAllObjects();
+        this.regionPanel.removeAllObjects();
+        this.framePanel.removeAllObjects();
     }
 
     private void putSprite(SpriteComponent c) {
@@ -73,12 +78,8 @@ public class HUDSpriteEditPanel extends HUDPanel {
         this.animatePanel.addObject(so);
     }
 
-    private void putTexture(TextureComponent c) {
-        TextureObject o = new TextureObject();
-        o.addComponent(TextureComponent.class, c);
-        o.bindComponent();
-
-        this.regionPanel.addObject(o);
+    private void putTexture(Texture t, int gridX, int gridY) {
+        this.regionPanel.onLoadTexture(t, gridX, gridY);
     }
 
 //    private void init() {
