@@ -46,7 +46,7 @@ public class HUDSpriteEditPanel extends HUDPanel {
         int xUnit = t.getWidth() / pixelUnitX;
         for (int i = from; i <= to; ++i) {
             int x = (i % xUnit) * pixelUnitX;
-            int y = t.getHeight() - (i / xUnit + 1) * pixelUnitY;
+            int y = (i / xUnit) * pixelUnitY;
 
             TextureRegion r = new TextureRegion(t, x, y, pixelUnitX, pixelUnitY);
             regions.add(r);
