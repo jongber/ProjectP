@@ -104,8 +104,13 @@ public class SpriteEditCmd extends JFrame {
     }
 
     public void onClear() {
-        this.hud.clearPanels();
-        this.inactivate();
+        this.hud.postMessage(new GameLayerMessage() {
+            @Override
+            public void handle(GameLayer layer) {
+                SpriteEditCmd.this.hud.clearPanels();
+            }
+        });
+        //this.inactivate();
     }
 
     public void inactivate() {
@@ -156,6 +161,13 @@ class ButtonArea extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 ButtonArea.this.cmd.onCreate();
+            }
+        });
+
+        this.btClear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                ButtonArea.this.cmd.onClear();
             }
         });
     }

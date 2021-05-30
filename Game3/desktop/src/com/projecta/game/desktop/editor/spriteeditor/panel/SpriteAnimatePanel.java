@@ -3,6 +3,7 @@ package com.projecta.game.desktop.editor.spriteeditor.panel;
 import com.projecta.game.core.util.Tuple2;
 import com.projecta.game.desktop.common.panel.GamePanel;
 import com.projecta.game.desktop.common.pipeline.BlockGridRender;
+import com.projecta.game.desktop.editor.pipeline.SpritePlayer;
 
 public class SpriteAnimatePanel extends GamePanel {
 
@@ -13,6 +14,7 @@ public class SpriteAnimatePanel extends GamePanel {
     }
 
     private void init() {
+        this.addPipeline(new SpritePlayer(this.getCamera()));
         this.addPipeline(new BlockGridRender(this.getCamera()));
     }
 }

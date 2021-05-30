@@ -16,7 +16,7 @@ public class GameLayerController {
         }
 
         public void reserveRemove(GameObject obj) {
-            this.addCache.remove(obj);
+            this.removeCache.add(obj);
         }
 
         public void clear() {
