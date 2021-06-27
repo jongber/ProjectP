@@ -3,13 +3,14 @@ package com.projecta.game.desktop.common.component;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.projecta.game.core.base.object.GameObjectComponent;
+import com.projecta.game.core.util.Struct2;
 import com.projecta.game.core.util.Tuple2;
 
 import java.util.ArrayList;
 
 public class SpriteComponent extends GameObjectComponent {
     public Vector2 pivot;
-    public ArrayList<Tuple2<TextureRegion, Integer>> frames = new ArrayList<>();
+    public ArrayList<Struct2<TextureRegion, Integer>> frames = new ArrayList<>();
     public int currentFrame = 0;
     public int elapsedTime = 0;
 
@@ -21,8 +22,8 @@ public class SpriteComponent extends GameObjectComponent {
 
         this.elapsedTime += elapsed * 1000.0f;
 
-        Tuple2<TextureRegion, Integer> frame = this.frames.get(this.currentFrame);
-        int curDuration = frame.getItem2();
+        Struct2<TextureRegion, Integer> frame = this.frames.get(this.currentFrame);
+        int curDuration = frame.item2;
         while (this.elapsedTime > curDuration) {
             this.elapsedTime -= curDuration;
             this.currentFrame++;
@@ -37,14 +38,14 @@ public class SpriteComponent extends GameObjectComponent {
             }
 
             frame = this.frames.get(this.currentFrame);
-            curDuration = frame.getItem2();
+            curDuration = frame.item2;
         }
 
-        return frame.getItem1();
+        return frame.item1;
     }
 
     public TextureRegion getCurrent() {
-        return this.frames.get(this.currentFrame).getItem1();
+        return this.frames.get(this.currentFrame).item1;
     }
 
     public void setPivot(Vector2 pivot) {
@@ -52,6 +53,15 @@ public class SpriteComponent extends GameObjectComponent {
     }
 
     public void addFrame(TextureRegion r, int frameInterval) {
-        this.frames.add(new Tuple2<>(r, frameInterval));
+        this.frames.add(new Struct2<>(r, frameInterval));
+    }
+
+    public void setFrameInterval(int frameIndex, int frameInterval)
+    {
+        if (frameIndex < 0 || this.frames.size() >= frameIndex) {
+            return;
+        }
+
+        this.frames.get(frameIndex).item2 = frameInterval;
     }
 }
