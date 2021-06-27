@@ -48,6 +48,11 @@ public class SpriteComponent extends GameObjectComponent {
         return this.frames.get(this.currentFrame).item1;
     }
 
+    public void rewind() {
+        this.currentFrame = 0;
+        this.elapsedTime = 0;
+    }
+
     public void setPivot(Vector2 pivot) {
         this.pivot = new Vector2(pivot);
     }
@@ -56,8 +61,7 @@ public class SpriteComponent extends GameObjectComponent {
         this.frames.add(new Struct2<>(r, frameInterval));
     }
 
-    public void setFrameInterval(int frameIndex, int frameInterval)
-    {
+    public void setFrameInterval(int frameIndex, int frameInterval) {
         if (frameIndex < 0 || this.frames.size() >= frameIndex) {
             return;
         }
